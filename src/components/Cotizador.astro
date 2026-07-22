@@ -1,0 +1,80 @@
+---
+---
+
+<section style="padding:88px var(--pad-x);background:oklch(20% 0.025 155);color:oklch(94% 0.01 85);">
+  <div style="max-width:760px;margin:0 auto;text-align:center;">
+    <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(72% 0.1 80);margin:0 0 14px;">Cotizador simple</p>
+    <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:500;margin:0 0 12px;color:oklch(98% 0.004 85);">Estima tu departamento</h2>
+    <p style="font-size:15px;color:oklch(80% 0.01 70);margin:0 0 40px;">Selecciona tipología y rango de piso para ver una referencia de metraje. El valor final depende de la unidad específica.</p>
+  </div>
+
+  <div style="max-width:760px;margin:0 auto;background:oklch(97% 0.008 85);border:1px solid oklch(38% 0.025 130);padding:clamp(20px, 5vw, 40px);color:oklch(25% 0.03 155);">
+    <div style="margin-bottom:28px;">
+      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.02 100);margin-bottom:12px;">Tipología</div>
+      <div class="cotiz-group" style="display:flex;gap:12px;" data-group="tipologia">
+        <button class="cotiz-btn active" data-value="studio">Studio</button>
+        <button class="cotiz-btn" data-value="1d">1 Dormitorio</button>
+      </div>
+    </div>
+    <div style="margin-bottom:32px;">
+      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.02 100);margin-bottom:12px;">Rango de piso</div>
+      <div class="cotiz-group" style="display:flex;gap:12px;" data-group="piso">
+        <button class="cotiz-btn active" data-value="bajo">Pisos 2–3</button>
+        <button class="cotiz-btn" data-value="alto">Pisos 4–5</button>
+      </div>
+    </div>
+    <div style="background:oklch(94% 0.01 85);padding:28px;text-align:center;">
+      <div style="font-size:13px;color:oklch(45% 0.02 100);margin-bottom:8px;">Metraje estimado</div>
+      <div id="m2-text" style="font-family:'Lora',serif;font-size:32px;color:oklch(62% 0.1 80);margin-bottom:12px;">15 – 18 m²</div>
+      <div style="font-size:14px;color:oklch(45% 0.02 100);">Precio: consulta con nuestro equipo de ventas</div>
+    </div>
+    <a href="/contacto" style="display:block;text-align:center;margin-top:24px;background:oklch(62% 0.1 80);color:oklch(98% 0.004 85);padding:14px 28px;font-size:15px;font-weight:500;">Solicitar cotización personalizada</a>
+  </div>
+</section>
+
+<style>
+  .cotiz-btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 15px;
+    font-family: 'Work Sans', sans-serif;
+    border: 1px solid oklch(84% 0.01 85);
+    cursor: pointer;
+    background: oklch(97% 0.008 85);
+    color: oklch(25% 0.03 155);
+  }
+  .cotiz-btn.active {
+    border: 1px solid oklch(62% 0.1 80);
+    background: oklch(62% 0.1 80);
+    color: oklch(98% 0.004 85);
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  const ranges: Record<string, string> = {
+    'studio-bajo': '15 – 18 m²',
+    'studio-alto': '19 – 22 m²',
+    '1d-bajo': '28 – 32 m²',
+    '1d-alto': '33 – 38 m²',
+  };
+
+  const state = { tipologia: 'studio', piso: 'bajo' };
+  const m2Text = document.getElementById('m2-text');
+
+  function update() {
+    if (m2Text) m2Text.textContent = ranges[`${state.tipologia}-${state.piso}`];
+  }
+
+  document.querySelectorAll<HTMLElement>('.cotiz-group').forEach((group) => {
+    const key = group.dataset.group as 'tipologia' | 'piso';
+    group.querySelectorAll<HTMLButtonElement>('.cotiz-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state[key] = btn.dataset.value!;
+        group.querySelectorAll('.cotiz-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        update();
+      });
+    });
+  });
+</script>

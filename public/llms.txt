@@ -1,0 +1,19 @@
+# Patio Riquelme
+
+> Proyecto inmobiliario en construcción en Santo Domingo, Santiago Centro (Chile): studios y departamentos de 1 dormitorio dentro de dos fachadas patrimoniales restauradas —Guardia Marina Ernesto Riquelme 536 y Santo Domingo 1720—, a una cuadra del Metro Santa Ana.
+
+## Datos clave
+
+- Ubicación: Santo Domingo, Santiago Centro, Chile. A 1 cuadra del Metro Santa Ana, 15 minutos caminando de Plaza de Armas.
+- Tipologías: Studio (15–22 m² aprox. según piso) y 1 Dormitorio (28–38 m² aprox. según piso).
+- Edificio: 5 pisos, 2 accesos patrimoniales restaurados.
+- Estado de obra: excavación completada, permiso de edificación aprobado, obras en curso.
+- Entrega estimada: fines de 2027 – inicios de 2028.
+- Contacto: contacto@patioriquelme.cl
+
+## Páginas
+
+- [Inicio](/): presentación del proyecto, avance de obra, galería de renders.
+- [Tipologías](/tipologias): detalle de Studio y 1 Dormitorio, cotizador de metraje por piso.
+- [Ubicación](/ubicacion): mapa y conectividad del barrio Santo Domingo / Barrio Brasil.
+- [Contacto](/contacto): formulario de contacto y preguntas frecuentes.

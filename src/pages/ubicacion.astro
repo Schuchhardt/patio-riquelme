@@ -1,0 +1,100 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import renderFachadaPalma from '../assets/render-fachada-palma.png';
+import logoPatioRiquelme from '../assets/logo-patio-riquelme.png';
+import { breadcrumbJsonLd } from '../lib/schema';
+
+const title = 'Ubicación — Santo Domingo, Santiago Centro | Patio Riquelme';
+const description =
+  'Patio Riquelme está en Santo Domingo, a 1 cuadra del Metro Santa Ana y 15 minutos caminando de Plaza de Armas, Santiago Centro.';
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: 'Inicio', path: '/' },
+  { name: 'Ubicación', path: '/ubicacion/' },
+]);
+
+const placeJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Place',
+  name: 'Patio Riquelme',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Guardia Marina Ernesto Riquelme 536 / Santo Domingo 1720',
+    addressLocality: 'Santiago',
+    addressRegion: 'Región Metropolitana',
+    addressCountry: 'CL',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: -33.44,
+    longitude: -70.6718,
+  },
+};
+---
+
+<BaseLayout title={title} description={description} path="/ubicacion/">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(placeJsonLd)} />
+
+  <Header current="ubicacion" />
+
+  <main>
+  <section style="padding:80px var(--pad-x) 48px;max-width:760px;">
+    <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(62% 0.1 80);margin:0 0 14px;">Ubicación y conectividad</p>
+    <h1 style="font-family:'Lora',serif;font-size:42px;font-weight:500;margin:0 0 20px;line-height:1.15;">Santo Domingo, a pasos de todo</h1>
+    <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.025 130);margin:0;">Un barrio tranquilo e histórico con excelente conectividad hacia el resto de la ciudad.</p>
+  </section>
+
+  <section style="padding:0 var(--pad-x) 56px;max-width:1200px;margin:0 auto;">
+    <div style="border:1px solid oklch(88% 0.01 85);height:420px;overflow:hidden;">
+      <iframe
+        title="Ubicación Patio Riquelme"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=-70.6828%2C-33.4460%2C-70.6608%2C-33.4340&layer=mapnik&marker=-33.4400%2C-70.6718"
+        loading="lazy"
+        style="width:100%;height:100%;border:0;"
+      ></iframe>
+    </div>
+    <p style="font-size:13px;color:oklch(45% 0.02 100);margin-top:12px;">Guardia Marina Ernesto Riquelme 536 y Santo Domingo 1720, Santiago Centro.</p>
+  </section>
+
+  <section style="padding:24px var(--pad-x) 88px;display:grid;grid-template-columns:var(--cols-2-loc);gap:40px;max-width:1200px;margin:0 auto;align-items:start;">
+    <div>
+      <h2 style="font-family:'Lora',serif;font-size:28px;font-weight:500;margin:0 0 28px;">Conectividad</h2>
+      <div style="display:flex;flex-direction:column;gap:22px;">
+        <div style="display:flex;gap:16px;padding-bottom:20px;border-bottom:1px solid oklch(88% 0.01 85);">
+          <div style="font-family:'Lora',serif;font-size:20px;color:oklch(62% 0.1 80);min-width:56px;">1 cdra</div>
+          <div><div style="font-weight:600;font-size:15px;">Metro Santa Ana</div><div style="font-size:14px;color:oklch(45% 0.02 100);">A una cuadra caminando</div></div>
+        </div>
+        <div style="display:flex;gap:16px;padding-bottom:20px;border-bottom:1px solid oklch(88% 0.01 85);">
+          <div style="font-family:'Lora',serif;font-size:20px;color:oklch(62% 0.1 80);min-width:56px;">15 min</div>
+          <div><div style="font-weight:600;font-size:15px;">Plaza de Armas y centro histórico</div><div style="font-size:14px;color:oklch(45% 0.02 100);">Caminando</div></div>
+        </div>
+        <div style="display:flex;gap:16px;">
+          <div style="font-family:'Lora',serif;font-size:20px;color:oklch(62% 0.1 80);min-width:56px;">min</div>
+          <div><div style="font-weight:600;font-size:15px;">Barrio Brasil</div><div style="font-size:14px;color:oklch(45% 0.02 100);">A pocos minutos, con su vida de plazas, cafés y cultura</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="border:1px solid oklch(88% 0.01 85);">
+      <Image src={renderFachadaPalma} alt="Entorno del proyecto Patio Riquelme" style="width:100%;display:block;" />
+    </div>
+  </section>
+
+  <section style="padding:88px var(--pad-x);background:oklch(94% 0.01 85);">
+    <div style="max-width:760px;margin:0 auto;text-align:center;">
+      <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(62% 0.1 80);margin:0 0 14px;">El barrio</p>
+      <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:500;margin:0 0 20px;">Santo Domingo y Barrio Brasil</h2>
+      <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.025 130);margin:0;">Un sector residencial tranquilo dentro del centro histórico de Santiago, reconocido por su arquitectura patrimonial, sus plazas y una vida de barrio que convive con la mejor conectividad de la ciudad.</p>
+    </div>
+  </section>
+
+  <section style="padding:80px var(--pad-x);background:oklch(97% 0.008 85);text-align:center;">
+    <Image src={logoPatioRiquelme} alt="Patio Riquelme" style="max-width:340px;width:100%;height:auto;display:inline-block;" />
+  </section>
+  </main>
+
+  <Footer variant="simple" />
+</BaseLayout>

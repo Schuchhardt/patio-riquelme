@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import iconLogo from '../assets/icon-logo.png';
+
+interface Props {
+  current?: 'inicio' | 'tipologias' | 'ubicacion' | 'contacto';
+}
+
+const { current } = Astro.props;
+
+const linkStyle = (id: string) =>
+  current === id
+    ? "color:oklch(62% 0.1 80);font-size:15px;font-weight:600;"
+    : "color:oklch(25% 0.03 155);font-size:15px;";
+---
+
+<header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px var(--pad-x-header);background:oklch(97% 0.01 75 / 0.92);backdrop-filter:blur(8px);border-bottom:1px solid oklch(88% 0.01 85);flex-wrap:wrap;">
+  <a href="/" style="display:flex;align-items:center;gap:12px;font-family:'Lora',serif;font-size:19px;font-weight:600;color:oklch(25% 0.03 155);letter-spacing:2px;text-transform:uppercase;">
+    <Image src={iconLogo} alt="" width={36} height={36} style="height:36px;width:auto;" loading="eager" />Patio Riquelme
+  </a>
+
+  <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links" style="color:oklch(25% 0.03 155);">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 5H18M2 10H18M2 15H18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <nav id="nav-links" class="nav-links" aria-label="Navegación principal" style="display:flex;align-items:center;gap:28px;flex-wrap:wrap;">
+    <a href="/" style={linkStyle('inicio')}>Inicio</a>
+    <a href="/tipologias" style={linkStyle('tipologias')}>Tipologías</a>
+    <a href="/ubicacion" style={linkStyle('ubicacion')}>Ubicación</a>
+    <a href="/contacto" style={linkStyle('contacto')}>Contacto</a>
+    <a href="/contacto" style="background:oklch(62% 0.1 80);color:oklch(98% 0.004 85);padding:10px 20px;border-radius:2px;font-size:14px;font-weight:500;">Agendar visita</a>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const links = document.getElementById('nav-links');
+  toggle?.addEventListener('click', () => {
+    const isOpen = links?.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(Boolean(isOpen)));
+  });
+  links?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      links.classList.remove('is-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    })
+  );
+</script>

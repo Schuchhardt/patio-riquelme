@@ -1,0 +1,38 @@
+---
+interface Props {
+  variant?: 'full' | 'simple';
+}
+
+const { variant = 'full' } = Astro.props;
+---
+
+{variant === 'full' ? (
+  <footer style="background:oklch(20% 0.025 155);color:oklch(80% 0.01 70);padding:56px var(--pad-x) 28px;">
+    <div style="display:grid;grid-template-columns:var(--cols-footer);gap:48px;max-width:1200px;margin:0 auto;">
+      <div>
+        <div style="font-family:'Lora',serif;font-size:20px;color:oklch(98% 0.004 85);margin-bottom:12px;">Patio Riquelme</div>
+        <p style="font-size:14px;line-height:1.6;color:oklch(65% 0.02 100);max-width:320px;">Guardia Marina Ernesto Riquelme 536 y Santo Domingo 1720, Santiago Centro.</p>
+      </div>
+      <div>
+        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(65% 0.02 100);margin-bottom:14px;">Navegación</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+          <a href="/tipologias" style="color:oklch(88% 0.01 85);">Tipologías</a>
+          <a href="/ubicacion" style="color:oklch(88% 0.01 85);">Ubicación</a>
+          <a href="/contacto" style="color:oklch(88% 0.01 85);">Contacto</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(65% 0.02 100);margin-bottom:14px;">Contacto</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+          <a href="mailto:contacto@patioriquelme.cl" style="color:oklch(88% 0.01 85);">contacto@patioriquelme.cl</a>
+          <span style="color:oklch(88% 0.01 85);">@patioriquelme — Instagram / TikTok</span>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1200px;margin:40px auto 0;padding-top:20px;border-top:1px solid oklch(38% 0.025 130);font-size:12px;color:oklch(58% 0.02 100);">Proyecto en etapa de construcción. Imágenes y renders referenciales, sujetos a modificaciones durante la obra.</div>
+  </footer>
+) : (
+  <footer style="background:oklch(20% 0.025 155);color:oklch(80% 0.01 70);padding:40px var(--pad-x);text-align:center;font-size:13px;border-top:1px solid oklch(38% 0.025 130);">
+    <a href="/" style="color:oklch(88% 0.01 85);">Patio Riquelme</a> — Guardia Marina Ernesto Riquelme 536 / Santo Domingo 1720, Santiago Centro
+  </footer>
+)}

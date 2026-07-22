@@ -1,0 +1,62 @@
+---
+import Seo from '../components/Seo.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const { title, description, path, image, type } = Astro.props;
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateAgent',
+  name: 'Patio Riquelme',
+  description:
+    'Proyecto inmobiliario en construcción en Santo Domingo, Santiago Centro: studios y departamentos de 1 dormitorio dentro de dos fachadas patrimoniales restauradas.',
+  url: 'https://patioriquelme.cl',
+  logo: 'https://patioriquelme.cl/og-image.jpg',
+  image: 'https://patioriquelme.cl/og-image.jpg',
+  email: 'contacto@patioriquelme.cl',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Santo Domingo 1720',
+    addressLocality: 'Santiago',
+    addressRegion: 'Región Metropolitana',
+    addressCountry: 'CL',
+  },
+  sameAs: ['https://www.instagram.com/patioriquelme', 'https://www.tiktok.com/@patioriquelme'],
+};
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <Seo title={title} description={description} path={path} image={image} type={type} />
+
+  <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+  <slot name="head" />
+
+  <style>
+    html { overflow-x: hidden; }
+    body { margin: 0; background: oklch(97% 0.008 85); overflow-x: hidden; }
+    a { color: oklch(50% 0.1 80); text-decoration: none; }
+    a:hover { color: oklch(43% 0.1 80); }
+    ::selection { background: oklch(88% 0.08 80); }
+  </style>
+</head>
+<body>
+  <div style="font-family:'Work Sans',sans-serif;color:oklch(25% 0.03 155);background:oklch(97% 0.008 85);">
+    <slot />
+  </div>
+</body>
+</html>

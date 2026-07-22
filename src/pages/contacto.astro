@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ContactPageForm from '../components/ContactPageForm.astro';
+import Faq from '../components/Faq.astro';
+import logoPatioRiquelme from '../assets/logo-patio-riquelme.png';
+import { faqs } from '../data/faqs';
+import { faqPageJsonLd, breadcrumbJsonLd } from '../lib/schema';
+
+const title = 'Contacto — Agenda una visita | Patio Riquelme';
+const description =
+  'Agenda una visita, pide el brochure o cotiza tu departamento en Patio Riquelme, Santo Domingo, Santiago Centro. Te respondemos a la brevedad.';
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: 'Inicio', path: '/' },
+  { name: 'Contacto', path: '/contacto/' },
+]);
+
+const faqJsonLd = faqPageJsonLd(faqs);
+---
+
+<BaseLayout title={title} description={description} path="/contacto/">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <Header current="contacto" />
+
+  <main>
+  <section style="padding:80px var(--pad-x) 24px;max-width:760px;">
+    <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(62% 0.1 80);margin:0 0 14px;">Contacto</p>
+    <h1 style="font-family:'Lora',serif;font-size:42px;font-weight:500;margin:0 0 20px;line-height:1.15;">Hablemos de tu departamento</h1>
+    <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.025 130);margin:0;">Agenda una visita, pide el brochure o resuelve tus dudas. Te respondemos a la brevedad.</p>
+  </section>
+
+  <section style="padding:40px var(--pad-x) 88px;display:grid;grid-template-columns:var(--cols-2);gap:40px;max-width:1200px;margin:0 auto;align-items:start;">
+    <ContactPageForm />
+
+    <div style="display:flex;flex-direction:column;gap:28px;">
+      <div style="border:1px solid oklch(88% 0.01 85);padding:28px;">
+        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.02 100);margin-bottom:16px;">Contacto directo</div>
+        <div style="display:flex;flex-direction:column;gap:14px;font-size:15px;">
+          <a href="mailto:contacto@patioriquelme.cl" style="color:oklch(25% 0.03 155);">contacto@patioriquelme.cl</a>
+          <a href="https://wa.me/56900000000" style="color:oklch(25% 0.03 155);">WhatsApp ventas</a>
+          <span style="color:oklch(25% 0.03 155);">@patioriquelme — Instagram / TikTok</span>
+        </div>
+      </div>
+      <div style="border:1px solid oklch(88% 0.01 85);padding:28px;">
+        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.02 100);margin-bottom:16px;">Sala de ventas</div>
+        <p style="font-size:15px;line-height:1.6;margin:0;">Santo Domingo 1720, Santiago Centro</p>
+      </div>
+    </div>
+  </section>
+
+  <Faq />
+
+  <section style="padding:80px var(--pad-x);background:oklch(97% 0.008 85);text-align:center;">
+    <Image src={logoPatioRiquelme} alt="Patio Riquelme" style="max-width:340px;width:100%;height:auto;display:inline-block;" />
+  </section>
+  </main>
+
+  <Footer variant="simple" />
+</BaseLayout>
