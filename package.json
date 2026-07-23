@@ -12,5 +12,8 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
     "astro": "^4.16.0"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.3.0"
   }
 }

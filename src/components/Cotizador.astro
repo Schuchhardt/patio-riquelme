@@ -44,7 +44,7 @@ const data = Object.fromEntries(
       <div id="m2-text" style="font-family:'Lora',serif;font-size:32px;color:oklch(58% 0.09 75);margin-bottom:12px;">{data['E'].m2}</div>
       <div id="detalle-text" style="font-size:14px;color:oklch(45% 0.025 75);">{data['E'].count} unidad{data['E'].count === 1 ? '' : 'es'} disponible{data['E'].count === 1 ? '' : 's'} en {data['E'].pisos}</div>
     </div>
-    <a href="/contacto" style="display:block;text-align:center;margin-top:24px;background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;">Solicitar cotización personalizada</a>
+    <a id="cotizar-link" href="/contacto?tipologia=E" style="display:block;text-align:center;margin-top:24px;background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;">Solicitar cotización personalizada</a>
   </div>
 </section>
 
@@ -69,14 +69,18 @@ const data = Object.fromEntries(
 </style>
 
 <script define:vars={{ data }}>
+  const tipologiaParam = { E: 'E', '1D': '1D', '1D 1/2': 'Duplex', L: 'Local' };
+
   const m2Text = document.getElementById('m2-text');
   const detalleText = document.getElementById('detalle-text');
+  const cotizarLink = document.getElementById('cotizar-link');
 
   function update(value) {
     const d = data[value];
     if (m2Text) m2Text.textContent = d.m2;
     const unidad = d.count === 1 ? 'unidad disponible' : 'unidades disponibles';
     if (detalleText) detalleText.textContent = `${d.count} ${unidad} en ${d.pisos}`;
+    if (cotizarLink) cotizarLink.setAttribute('href', `/contacto?tipologia=${tipologiaParam[value]}`);
   }
 
   document.querySelectorAll('.cotiz-group').forEach((group) => {

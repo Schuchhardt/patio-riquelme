@@ -1,4 +1,5 @@
 ---
+import { FORMSPREE_ENDPOINT } from '../lib/config';
 ---
 
 <section style="padding:96px var(--pad-x);text-align:center;">
@@ -7,19 +8,39 @@
   <div id="form-enviado" style="display:none;max-width:420px;margin:0 auto;padding:24px;border:1px solid oklch(58% 0.09 75);background:oklch(94% 0.014 75);">
     <p style="margin:0;font-size:15px;">Gracias, recibimos tus datos. Te contactaremos a la brevedad.</p>
   </div>
-  <form id="contacto-form" style="max-width:520px;margin:0 auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
-    <input type="text" required placeholder="Nombre" style="flex:1;min-width:140px;padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);" />
-    <input type="email" required placeholder="Email" style="flex:1;min-width:140px;padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);" />
+  <div id="form-error" style="display:none;max-width:420px;margin:0 auto 20px;padding:16px;background:oklch(94% 0.014 75);border:1px solid oklch(55% 0.15 30);">
+    <p style="margin:0;font-size:14px;">Hubo un problema al enviar tu solicitud. Intenta de nuevo o escríbenos directo a <a href="mailto:contacto@patioriquelme.cl" style="color:oklch(25% 0.035 75);">contacto@patioriquelme.cl</a>.</p>
+  </div>
+  <form id="contacto-form" action={FORMSPREE_ENDPOINT} method="POST" style="max-width:520px;margin:0 auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+    <input type="hidden" name="_subject" value="Nueva consulta — Patio Riquelme (Home)" />
+    <input type="text" name="nombre" required placeholder="Nombre" style="flex:1;min-width:140px;padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);" />
+    <input type="email" name="email" required placeholder="Email" style="flex:1;min-width:140px;padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);" />
     <button type="submit" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);border:none;padding:14px 28px;font-size:15px;font-weight:500;cursor:pointer;">Quiero más información</button>
   </form>
 </section>
 
 <script>
-  const form = document.getElementById('contacto-form');
+  const form = document.getElementById('contacto-form') as HTMLFormElement | null;
   const enviado = document.getElementById('form-enviado');
-  form?.addEventListener('submit', (e) => {
+  const error = document.getElementById('form-error');
+
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    (form as HTMLElement).style.display = 'none';
-    (enviado as HTMLElement).style.display = 'block';
+    if (error) error.style.display = 'none';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        if (enviado) enviado.style.display = 'block';
+      } else if (error) {
+        error.style.display = 'block';
+      }
+    } catch {
+      if (error) error.style.display = 'block';
+    }
   });
 </script>
