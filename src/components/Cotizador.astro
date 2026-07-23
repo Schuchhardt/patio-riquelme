@@ -1,32 +1,48 @@
 ---
+import { summaries, formatM2 } from '../lib/unidades';
+
+const options = [
+  { value: 'E', label: 'E · Estudio' },
+  { value: '1D', label: '1D · 1 Dormitorio' },
+  { value: '1D 1/2', label: 'Duplex 1D 1/2' },
+  { value: 'L', label: 'Locales Comerciales' },
+];
+
+const pisosText: Record<string, string> = {
+  E: 'pisos 2 y 3',
+  '1D': 'todos los pisos',
+  '1D 1/2': 'piso 3',
+  L: 'primer piso',
+};
+
+const data = Object.fromEntries(
+  options.map(({ value }) => [
+    value,
+    { m2: formatM2(summaries[value]), count: summaries[value].count, pisos: pisosText[value] },
+  ])
+);
 ---
 
 <section style="padding:88px var(--pad-x);background:oklch(19% 0.03 75);color:oklch(94% 0.014 75);">
   <div style="max-width:760px;margin:0 auto;text-align:center;">
     <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(68% 0.09 75);margin:0 0 14px;">Cotizador simple</p>
     <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:500;margin:0 0 12px;color:oklch(98% 0.006 75);">Estima tu departamento</h2>
-    <p style="font-size:15px;color:oklch(80% 0.014 75);margin:0 0 40px;">Selecciona tipología y rango de piso para ver una referencia de metraje. El valor final depende de la unidad específica.</p>
+    <p style="font-size:15px;color:oklch(80% 0.014 75);margin:0 0 40px;">Selecciona una tipología para ver su metraje y disponibilidad real. El valor final depende de la unidad específica.</p>
   </div>
 
   <div style="max-width:760px;margin:0 auto;background:oklch(97% 0.01 75);border:1px solid oklch(38% 0.03 75);padding:clamp(20px, 5vw, 40px);color:oklch(25% 0.035 75);">
     <div style="margin-bottom:28px;">
       <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.025 75);margin-bottom:12px;">Tipología</div>
-      <div class="cotiz-group" style="display:flex;gap:12px;" data-group="tipologia">
-        <button class="cotiz-btn active" data-value="studio">Studio</button>
-        <button class="cotiz-btn" data-value="1d">1 Dormitorio</button>
-      </div>
-    </div>
-    <div style="margin-bottom:32px;">
-      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.025 75);margin-bottom:12px;">Rango de piso</div>
-      <div class="cotiz-group" style="display:flex;gap:12px;" data-group="piso">
-        <button class="cotiz-btn active" data-value="bajo">Pisos 2–3</button>
-        <button class="cotiz-btn" data-value="alto">Pisos 4–5</button>
+      <div class="cotiz-group" style="display:flex;gap:12px;flex-wrap:wrap;" data-group="tipologia">
+        {options.map(({ value, label }, i) => (
+          <button class={`cotiz-btn${i === 0 ? ' active' : ''}`} data-value={value}>{label}</button>
+        ))}
       </div>
     </div>
     <div style="background:oklch(94% 0.014 75);padding:28px;text-align:center;">
-      <div style="font-size:13px;color:oklch(45% 0.025 75);margin-bottom:8px;">Metraje estimado</div>
-      <div id="m2-text" style="font-family:'Lora',serif;font-size:32px;color:oklch(58% 0.09 75);margin-bottom:12px;">15 – 18 m²</div>
-      <div style="font-size:14px;color:oklch(45% 0.025 75);">Precio: consulta con nuestro equipo de ventas</div>
+      <div style="font-size:13px;color:oklch(45% 0.025 75);margin-bottom:8px;">Metraje</div>
+      <div id="m2-text" style="font-family:'Lora',serif;font-size:32px;color:oklch(58% 0.09 75);margin-bottom:12px;">{data['E'].m2}</div>
+      <div id="detalle-text" style="font-size:14px;color:oklch(45% 0.025 75);">{data['E'].count} unidad{data['E'].count === 1 ? '' : 'es'} disponible{data['E'].count === 1 ? '' : 's'} en {data['E'].pisos}</div>
     </div>
     <a href="/contacto" style="display:block;text-align:center;margin-top:24px;background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;">Solicitar cotización personalizada</a>
   </div>
@@ -35,6 +51,7 @@
 <style>
   .cotiz-btn {
     flex: 1;
+    min-width: 130px;
     padding: 14px;
     font-size: 15px;
     font-family: 'Work Sans', sans-serif;
@@ -51,29 +68,23 @@
   }
 </style>
 
-<script>
-  const ranges: Record<string, string> = {
-    'studio-bajo': '15 – 18 m²',
-    'studio-alto': '19 – 22 m²',
-    '1d-bajo': '28 – 32 m²',
-    '1d-alto': '33 – 38 m²',
-  };
-
-  const state = { tipologia: 'studio', piso: 'bajo' };
+<script define:vars={{ data }}>
   const m2Text = document.getElementById('m2-text');
+  const detalleText = document.getElementById('detalle-text');
 
-  function update() {
-    if (m2Text) m2Text.textContent = ranges[`${state.tipologia}-${state.piso}`];
+  function update(value) {
+    const d = data[value];
+    if (m2Text) m2Text.textContent = d.m2;
+    const unidad = d.count === 1 ? 'unidad disponible' : 'unidades disponibles';
+    if (detalleText) detalleText.textContent = `${d.count} ${unidad} en ${d.pisos}`;
   }
 
-  document.querySelectorAll<HTMLElement>('.cotiz-group').forEach((group) => {
-    const key = group.dataset.group as 'tipologia' | 'piso';
-    group.querySelectorAll<HTMLButtonElement>('.cotiz-btn').forEach((btn) => {
+  document.querySelectorAll('.cotiz-group').forEach((group) => {
+    group.querySelectorAll('.cotiz-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
-        state[key] = btn.dataset.value!;
         group.querySelectorAll('.cotiz-btn').forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
-        update();
+        update(btn.dataset.value);
       });
     });
   });

@@ -14,10 +14,14 @@ import fachadaCalleReferencia from '../assets/fachada-calle-referencia.jpeg';
 import renderBimAvance from '../assets/render-bim-avance.png';
 import renderFachadaPalma from '../assets/render-fachada-palma.png';
 import logoPatioRiquelme from '../assets/logo-patio-riquelme.png';
+import footerImg from '../assets/footer.png';
+import { summaries } from '../lib/unidades';
+
+const minM2Residencial = Math.min(summaries['E'].minM2, summaries['1D'].minM2);
 
 const title = 'Patio Riquelme — Departamentos en el centro de Santiago';
 const description =
-  'Studios y departamentos de 1 dormitorio en fachadas patrimoniales restauradas, Santo Domingo, Santiago Centro. A 1 cuadra del Metro Santa Ana. Entrega 2027–28.';
+  'Estudios, 1 dormitorio, duplex y locales comerciales en fachadas patrimoniales restauradas, Santo Domingo, Santiago Centro. A 1 cuadra del Metro Santa Ana.';
 
 const apartmentComplexJsonLd = {
   '@context': 'https://schema.org',
@@ -55,7 +59,7 @@ const apartmentComplexJsonLd = {
       <h1 style="font-family:'Lora',serif;font-size:clamp(38px,5.5vw,62px);line-height:1.1;letter-spacing:4px;text-transform:uppercase;color:oklch(98% 0.006 75);margin:0 0 20px;font-weight:500;">Patio Riquelme</h1>
       <div style="width:56px;height:1px;background:oklch(68% 0.09 75);margin:0 0 20px;"></div>
       <p style="font-size:15px;letter-spacing:2px;text-transform:uppercase;color:oklch(74% 0.09 75);margin:0 0 14px;">Vive el centro. Con historia.</p>
-      <p style="font-size:19px;line-height:1.5;color:oklch(94% 0.014 75);max-width:640px;margin:0 0 32px;">Studios y departamentos de 1 dormitorio dentro de dos fachadas patrimoniales restauradas, a una cuadra del Metro Santa Ana.</p>
+      <p style="font-size:19px;line-height:1.5;color:oklch(94% 0.014 75);max-width:640px;margin:0 0 32px;">Estudios, departamentos de 1 dormitorio y duplex dentro de dos fachadas patrimoniales restauradas, a una cuadra del Metro Santa Ana.</p>
       <div style="display:flex;gap:16px;flex-wrap:wrap;">
         <a href="/contacto" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;border-radius:2px;">Agendar visita</a>
         <a href="/contacto" style="border:1px solid oklch(94% 0.014 75 / 0.6);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;border-radius:2px;">Descargar brochure</a>
@@ -73,7 +77,7 @@ const apartmentComplexJsonLd = {
       <div style="font-size:13px;color:oklch(45% 0.025 75);margin-top:4px;">accesos patrimoniales</div>
     </div>
     <div style="padding:32px 24px;text-align:center;border-right:1px solid oklch(87% 0.014 75);">
-      <div style="font-family:'Lora',serif;font-size:30px;color:oklch(58% 0.09 75);">15 m²</div>
+      <div style="font-family:'Lora',serif;font-size:30px;color:oklch(58% 0.09 75);">{Math.floor(minM2Residencial)} m²</div>
       <div style="font-size:13px;color:oklch(45% 0.025 75);margin-top:4px;">desde</div>
     </div>
     <div style="padding:32px 24px;text-align:center;">
@@ -86,7 +90,7 @@ const apartmentComplexJsonLd = {
     <div style="padding:88px var(--pad-x);display:flex;flex-direction:column;justify-content:center;max-width:560px;">
       <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(58% 0.09 75);margin:0 0 14px;">El proyecto</p>
       <h2 style="font-family:'Lora',serif;font-size:36px;font-weight:500;margin:0 0 20px;line-height:1.15;">Fachada patrimonial, vida nueva por dentro</h2>
-      <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.03 75);margin:0 0 16px;">Patio Riquelme conserva y restaura las fachadas históricas de sus dos accesos —Guardia Marina Ernesto Riquelme 536 y Santo Domingo 1720— declaradas parte del patrimonio del barrio. Por dentro, un edificio nuevo de 5 pisos con departamentos studio y de 1 dormitorio, pensados para quienes valoran vivir en el centro con carácter propio.</p>
+      <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.03 75);margin:0 0 16px;">Patio Riquelme conserva y restaura las fachadas históricas de sus dos accesos —Guardia Marina Ernesto Riquelme 536 y Santo Domingo 1720— declaradas parte del patrimonio del barrio. Por dentro, un edificio nuevo de 5 pisos con departamentos estudio, 1 dormitorio y duplex, además de 6 locales comerciales en el primer piso, pensados para quienes valoran vivir en el centro con carácter propio.</p>
       <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.03 75);margin:0;">Es lo que distingue a Patio Riquelme de otros proyectos del sector: no borramos la historia del barrio, construimos sobre ella.</p>
     </div>
     <div style="min-height:480px;">
@@ -178,7 +182,7 @@ const apartmentComplexJsonLd = {
   <ContactForm />
 
   <section style="padding:80px var(--pad-x);background:oklch(97% 0.01 75);text-align:center;">
-    <Image src={logoPatioRiquelme} alt="Patio Riquelme" style="max-width:340px;width:100%;height:auto;display:inline-block;" />
+    <Image src={footerImg} alt="Patio Riquelme" style="max-width:340px;width:100%;height:auto;display:inline-block;" />
   </section>
   </main>
 
