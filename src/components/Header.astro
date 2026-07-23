@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import iconLogo from '../assets/icon-logo.png';
+import iconLogo from '../assets/logo-transparent.png';
 
 interface Props {
   current?: 'inicio' | 'tipologias' | 'ubicacion' | 'contacto';
@@ -10,16 +10,16 @@ const { current } = Astro.props;
 
 const linkStyle = (id: string) =>
   current === id
-    ? "color:oklch(62% 0.1 80);font-size:15px;font-weight:600;"
-    : "color:oklch(25% 0.03 155);font-size:15px;";
+    ? "color:oklch(58% 0.09 75);font-size:15px;font-weight:600;"
+    : "color:oklch(25% 0.035 75);font-size:15px;";
 ---
 
-<header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px var(--pad-x-header);background:oklch(97% 0.01 75 / 0.92);backdrop-filter:blur(8px);border-bottom:1px solid oklch(88% 0.01 85);flex-wrap:wrap;">
-  <a href="/" style="display:flex;align-items:center;gap:12px;font-family:'Lora',serif;font-size:19px;font-weight:600;color:oklch(25% 0.03 155);letter-spacing:2px;text-transform:uppercase;">
+<header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px var(--pad-x-header);background:oklch(97% 0.014 75 / 0.92);backdrop-filter:blur(8px);border-bottom:1px solid oklch(87% 0.014 75);flex-wrap:wrap;">
+  <a href="/" style="display:flex;align-items:center;gap:12px;font-family:'Lora',serif;font-size:19px;font-weight:600;color:oklch(25% 0.035 75);letter-spacing:2px;text-transform:uppercase;">
     <Image src={iconLogo} alt="" width={36} height={36} style="height:36px;width:auto;" loading="eager" />Patio Riquelme
   </a>
 
-  <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links" style="color:oklch(25% 0.03 155);">
+  <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links" style="color:oklch(25% 0.035 75);">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M2 5H18M2 10H18M2 15H18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
     </svg>
@@ -30,7 +30,7 @@ const linkStyle = (id: string) =>
     <a href="/tipologias" style={linkStyle('tipologias')}>Tipologías</a>
     <a href="/ubicacion" style={linkStyle('ubicacion')}>Ubicación</a>
     <a href="/contacto" style={linkStyle('contacto')}>Contacto</a>
-    <a href="/contacto" style="background:oklch(62% 0.1 80);color:oklch(98% 0.004 85);padding:10px 20px;border-radius:2px;font-size:14px;font-weight:500;">Agendar visita</a>
+    <a href="/contacto" class="nav-cta" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:10px 20px;border-radius:2px;font-size:14px;font-weight:500;">Agendar visita</a>
   </nav>
 </header>
 

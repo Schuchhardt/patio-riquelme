@@ -41,6 +41,11 @@ const organizationJsonLd = {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
   <Seo title={title} description={description} path={path} image={image} type={type} />
 
   <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
@@ -48,14 +53,11 @@ const organizationJsonLd = {
 
   <style>
     html { overflow-x: hidden; }
-    body { margin: 0; background: oklch(97% 0.008 85); overflow-x: hidden; }
-    a { color: oklch(50% 0.1 80); text-decoration: none; }
-    a:hover { color: oklch(43% 0.1 80); }
-    ::selection { background: oklch(88% 0.08 80); }
+    body { margin: 0; background: oklch(97% 0.01 75); overflow-x: hidden; }
   </style>
 </head>
 <body>
-  <div style="font-family:'Work Sans',sans-serif;color:oklch(25% 0.03 155);background:oklch(97% 0.008 85);">
+  <div style="font-family:'Work Sans',sans-serif;color:oklch(25% 0.035 75);background:oklch(97% 0.01 75);">
     <slot />
   </div>
 </body>

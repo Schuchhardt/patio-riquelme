@@ -6,7 +6,7 @@ import { faqs } from '../data/faqs';
   <h2 style="font-family:'Lora',serif;font-size:28px;font-weight:500;margin:0 0 32px;text-align:center;">Preguntas frecuentes</h2>
   <div class="faq-list" style="display:flex;flex-direction:column;">
     {faqs.map((faq, i) => (
-      <div class="faq-item" style="border-bottom:1px solid oklch(88% 0.01 85);">
+      <div class="faq-item" style="border-bottom:1px solid oklch(87% 0.014 75);">
         <h3 style="margin:0;">
           <button
             class="faq-toggle"
@@ -14,11 +14,11 @@ import { faqs } from '../data/faqs';
             aria-controls={`faq-answer-${i}`}
             style="width:100%;text-align:left;background:none;border:none;padding:22px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Work Sans',sans-serif;"
           >
-            <span style="font-size:16px;font-weight:500;color:oklch(25% 0.03 155);">{faq.q}</span>
-            <span class="faq-sign" aria-hidden="true" style="font-size:20px;color:oklch(62% 0.1 80);">+</span>
+            <span style="font-size:16px;font-weight:500;color:oklch(25% 0.035 75);">{faq.q}</span>
+            <span class="faq-sign" aria-hidden="true" style="font-size:20px;color:oklch(58% 0.09 75);">+</span>
           </button>
         </h3>
-        <p id={`faq-answer-${i}`} class="faq-answer" style="display:none;font-size:15px;line-height:1.7;color:oklch(45% 0.02 100);margin:0 0 22px;max-width:640px;">{faq.a}</p>
+        <p id={`faq-answer-${i}`} class="faq-answer" style="display:none;font-size:15px;line-height:1.7;color:oklch(45% 0.025 75);margin:0 0 22px;max-width:640px;">{faq.a}</p>
       </div>
     ))}
   </div>

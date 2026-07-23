@@ -38,6 +38,34 @@ img {
   max-width: 100%;
 }
 
+a {
+  color: oklch(48% 0.09 75);
+  text-decoration: none;
+}
+
+a:hover {
+  color: oklch(40% 0.09 75);
+}
+
+::selection {
+  background: oklch(85% 0.07 75);
+}
+
+/* Navbar links */
+.nav-links a {
+  letter-spacing: 0.2px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.nav-links a:not(.nav-cta):hover {
+  color: oklch(58% 0.09 75) !important;
+}
+
+.nav-cta:hover {
+  background: oklch(52% 0.09 75);
+}
+
 /* Mobile nav */
 .nav-toggle {
   display: none;
@@ -51,7 +79,7 @@ img {
     width: 40px;
     height: 40px;
     background: none;
-    border: 1px solid oklch(84% 0.01 85);
+    border: 1px solid oklch(83% 0.014 75);
     border-radius: 2px;
     cursor: pointer;
     padding: 0;
@@ -66,7 +94,7 @@ img {
     align-items: stretch !important;
     gap: 0 !important;
     background: oklch(97% 0.01 75);
-    border-bottom: 1px solid oklch(88% 0.01 85);
+    border-bottom: 1px solid oklch(87% 0.014 75);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease;
@@ -78,6 +106,6 @@ img {
 
   .nav-links a {
     padding: 16px 20px !important;
-    border-bottom: 1px solid oklch(92% 0.01 85);
+    border-bottom: 1px solid oklch(91% 0.014 75);
   }
 }

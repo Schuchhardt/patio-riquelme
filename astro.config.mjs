@@ -7,4 +7,7 @@ export const SITE_URL = 'https://patioriquelme.cl';
 export default defineConfig({
   site: SITE_URL,
   integrations: [sitemap()],
+  server: {
+    port: process.env.PORT ? Number(process.env.PORT) : 4321,
+  },
 });
