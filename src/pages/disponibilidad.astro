@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BuscadorUnidades from '../components/BuscadorUnidades.astro';
+import logoPatioRiquelme from '../assets/logo-patio-riquelme.png';
+import { breadcrumbJsonLd } from '../lib/schema';
+import { unidadesPublicas, rangoUF, formatUF } from '../lib/unidades';
+
+const title = 'Disponibilidad — Busca tu unidad y cotiza | Patio Riquelme';
+const description =
+  'Revisa las unidades disponibles en Patio Riquelme: filtra por tipología, piso y precio en UF, y solicita la cotización de la unidad que te interesa.';
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: 'Inicio', path: '/' },
+  { name: 'Disponibilidad', path: '/disponibilidad/' },
+]);
+
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Unidades disponibles — Patio Riquelme',
+  numberOfItems: unidadesPublicas.length,
+  itemListElement: unidadesPublicas.map((u, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Product',
+      name: `Unidad ${u.nombre} — ${u.tipologiaLabel}`,
+      category: u.tipologiaLabel,
+      additionalProperty: [
+        { '@type': 'PropertyValue', name: 'Superficie total', value: `${u.m2} m²` },
+        { '@type': 'PropertyValue', name: 'Piso', value: u.pisoLabel },
+      ],
+      offers: {
+        '@type': 'Offer',
+        availability: 'https://schema.org/PreOrder',
+        price: u.uf,
+        priceCurrency: 'CLF',
+        url: 'https://patioriquelme.cl/disponibilidad/',
+        seller: { '@type': 'RealEstateAgent', name: 'Patio Riquelme' },
+      },
+    },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} path="/disponibilidad/">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
+
+  <Header current="disponibilidad" />
+
+  <main>
+  <section style="padding:80px var(--pad-x) 48px;max-width:820px;">
+    <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(58% 0.09 75);margin:0 0 14px;">Disponibilidad</p>
+    <h1 style="font-family:'Lora',serif;font-size:42px;font-weight:500;margin:0 0 20px;line-height:1.15;">Encuentra tu unidad y cotízala</h1>
+    <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.03 75);margin:0 0 16px;">{unidadesPublicas.length} unidades disponibles, desde {formatUF(rangoUF.min)}. Filtra por tipología, piso y rango de precio, y solicita la cotización de la unidad que te interese: te contactamos con el detalle y los pasos para la promesa de compraventa.</p>
+    <p style="font-size:14px;line-height:1.7;color:oklch(45% 0.025 75);margin:0;">Los valores son estimados en UF y están sujetos a confirmación al momento de la reserva. Las superficies incluyen terraza cuando corresponde.</p>
+  </section>
+
+  <BuscadorUnidades />
+
+  <section style="padding:80px var(--pad-x);background:oklch(97% 0.01 75);text-align:center;">
+    <Image src={logoPatioRiquelme} alt="Patio Riquelme" style="max-width:340px;width:100%;height:auto;display:inline-block;" />
+  </section>
+  </main>
+
+  <Footer variant="simple" />
+</BaseLayout>

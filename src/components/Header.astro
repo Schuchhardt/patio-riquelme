@@ -4,7 +4,7 @@ import iconLogo from '../assets/logo-transparent.png';
 import wordmark from '../assets/patio-riquelme-transparent.png';
 
 interface Props {
-  current?: 'inicio' | 'tipologias' | 'ubicacion' | 'contacto';
+  current?: 'inicio' | 'tipologias' | 'disponibilidad' | 'ubicacion' | 'contacto';
 }
 
 const { current } = Astro.props;
@@ -30,6 +30,7 @@ const linkStyle = (id: string) =>
   <nav id="nav-links" class="nav-links" aria-label="Navegación principal" style="display:flex;align-items:center;gap:28px;flex-wrap:wrap;">
     <a href="/" style={linkStyle('inicio')}>Inicio</a>
     <a href="/tipologias" style={linkStyle('tipologias')}>Tipologías</a>
+    <a href="/disponibilidad" style={linkStyle('disponibilidad')}>Disponibilidad</a>
     <a href="/ubicacion" style={linkStyle('ubicacion')}>Ubicación</a>
     <a href="/contacto" style={linkStyle('contacto')}>Contacto</a>
     <a href="/contacto" class="nav-cta" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:10px 20px;border-radius:2px;font-size:14px;font-weight:500;">Agendar visita</a>

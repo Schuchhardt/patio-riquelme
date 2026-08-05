@@ -1,5 +1,5 @@
 ---
-import { summaries, formatM2 } from '../lib/unidades';
+import { summaries, formatM2, formatUF } from '../lib/unidades';
 
 const options = [
   { value: 'E', label: 'E · Estudio' },
@@ -18,7 +18,12 @@ const pisosText: Record<string, string> = {
 const data = Object.fromEntries(
   options.map(({ value }) => [
     value,
-    { m2: formatM2(summaries[value]), count: summaries[value].count, pisos: pisosText[value] },
+    {
+      m2: formatM2(summaries[value]),
+      count: summaries[value].count,
+      pisos: pisosText[value],
+      desde: formatUF(summaries[value].minUF),
+    },
   ])
 );
 ---
@@ -42,9 +47,14 @@ const data = Object.fromEntries(
     <div style="background:oklch(94% 0.014 75);padding:28px;text-align:center;">
       <div style="font-size:13px;color:oklch(45% 0.025 75);margin-bottom:8px;">Metraje</div>
       <div id="m2-text" style="font-family:'Lora',serif;font-size:32px;color:oklch(58% 0.09 75);margin-bottom:12px;">{data['E'].m2}</div>
-      <div id="detalle-text" style="font-size:14px;color:oklch(45% 0.025 75);">{data['E'].count} unidad{data['E'].count === 1 ? '' : 'es'} disponible{data['E'].count === 1 ? '' : 's'} en {data['E'].pisos}</div>
+      <div id="detalle-text" style="font-size:14px;color:oklch(45% 0.025 75);margin-bottom:14px;">{data['E'].count} unidad{data['E'].count === 1 ? '' : 'es'} disponible{data['E'].count === 1 ? '' : 's'} en {data['E'].pisos}</div>
+      <div style="padding-top:14px;border-top:1px solid oklch(87% 0.014 75);">
+        <span style="font-size:13px;color:oklch(45% 0.025 75);">Desde </span>
+        <span id="uf-text" style="font-family:'Lora',serif;font-size:22px;color:oklch(48% 0.09 75);">{data['E'].desde}</span>
+      </div>
     </div>
-    <a id="cotizar-link" href="/contacto?tipologia=E" style="display:block;text-align:center;margin-top:24px;background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;">Solicitar cotización personalizada</a>
+    <a id="cotizar-link" href="/disponibilidad?tipologia=E" style="display:block;text-align:center;margin-top:24px;background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;">Ver unidades y cotizar</a>
+    <a id="contacto-link" href="/contacto?tipologia=E" style="display:block;text-align:center;margin-top:14px;font-size:14px;font-weight:500;">Prefiero que me contacten →</a>
   </div>
 </section>
 
@@ -73,14 +83,19 @@ const data = Object.fromEntries(
 
   const m2Text = document.getElementById('m2-text');
   const detalleText = document.getElementById('detalle-text');
+  const ufText = document.getElementById('uf-text');
   const cotizarLink = document.getElementById('cotizar-link');
+  const contactoLink = document.getElementById('contacto-link');
 
   function update(value) {
     const d = data[value];
     if (m2Text) m2Text.textContent = d.m2;
     const unidad = d.count === 1 ? 'unidad disponible' : 'unidades disponibles';
     if (detalleText) detalleText.textContent = `${d.count} ${unidad} en ${d.pisos}`;
-    if (cotizarLink) cotizarLink.setAttribute('href', `/contacto?tipologia=${tipologiaParam[value]}`);
+    if (ufText) ufText.textContent = d.desde;
+    const param = tipologiaParam[value];
+    if (cotizarLink) cotizarLink.setAttribute('href', `/disponibilidad?tipologia=${param}`);
+    if (contactoLink) contactoLink.setAttribute('href', `/contacto?tipologia=${param}`);
   }
 
   document.querySelectorAll('.cotiz-group').forEach((group) => {

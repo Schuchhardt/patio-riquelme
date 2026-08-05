@@ -101,7 +101,7 @@ a:hover {
   }
 
   .nav-links.is-open {
-    max-height: 400px;
+    max-height: 480px;
   }
 
   .nav-links a {
