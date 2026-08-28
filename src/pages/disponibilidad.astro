@@ -6,7 +6,14 @@ import Footer from '../components/Footer.astro';
 import BuscadorUnidades from '../components/BuscadorUnidades.astro';
 import logoPatioRiquelme from '../assets/logo-patio-riquelme.png';
 import { breadcrumbJsonLd } from '../lib/schema';
-import { unidadesPublicas, rangoUF, formatUF } from '../lib/unidades';
+import {
+  unidadesPublicas,
+  departamentos,
+  locales,
+  desdeDepartamentos,
+  desdeLocales,
+  formatUF,
+} from '../lib/unidades';
 
 const title = 'Disponibilidad — Busca tu unidad y cotiza | Patio Riquelme';
 const description =
@@ -30,8 +37,11 @@ const itemListJsonLd = {
       name: `Unidad ${u.nombre} — ${u.tipologiaLabel}`,
       category: u.tipologiaLabel,
       additionalProperty: [
-        { '@type': 'PropertyValue', name: 'Superficie total', value: `${u.m2} m²` },
+        { '@type': 'PropertyValue', name: 'Superficie útil', value: `${u.m2Util} m²` },
+        { '@type': 'PropertyValue', name: 'Superficie terraza', value: `${u.m2Terraza} m²` },
+        { '@type': 'PropertyValue', name: 'Superficie total', value: `${u.m2Total} m²` },
         { '@type': 'PropertyValue', name: 'Piso', value: u.pisoLabel },
+        { '@type': 'PropertyValue', name: 'Cuerpo', value: u.cuerpoLabel },
       ],
       offers: {
         '@type': 'Offer',
@@ -56,8 +66,8 @@ const itemListJsonLd = {
   <section style="padding:80px var(--pad-x) 48px;max-width:820px;">
     <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(58% 0.09 75);margin:0 0 14px;">Disponibilidad</p>
     <h1 style="font-family:'Lora',serif;font-size:42px;font-weight:500;margin:0 0 20px;line-height:1.15;">Encuentra tu unidad y cotízala</h1>
-    <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.03 75);margin:0 0 16px;">{unidadesPublicas.length} unidades disponibles, desde {formatUF(rangoUF.min)}. Filtra por tipología, piso y rango de precio, y solicita la cotización de la unidad que te interese: te contactamos con el detalle y los pasos para la promesa de compraventa.</p>
-    <p style="font-size:14px;line-height:1.7;color:oklch(45% 0.025 75);margin:0;">Los valores son estimados en UF y están sujetos a confirmación al momento de la reserva. Las superficies incluyen terraza cuando corresponde.</p>
+    <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.03 75);margin:0 0 16px;">{departamentos.length} departamentos desde {formatUF(desdeDepartamentos)} y {locales.length} locales comerciales desde {formatUF(desdeLocales)}. Filtra por tipología, piso, cuerpo y rango de precio, y solicita la cotización de la unidad que te interese: te contactamos con el detalle y los pasos para la promesa de compraventa.</p>
+    <p style="font-size:14px;line-height:1.7;color:oklch(45% 0.025 75);margin:0;">Cada unidad muestra su <strong>superficie útil</strong> (interior), su <strong>terraza</strong> cuando la tiene, y la <strong>superficie total</strong> —la suma de ambas— que es la superficie sobre la que se cotiza. Dentro de una misma planta el precio sube con la altura, así que dos unidades idénticas en distintos pisos no valen lo mismo. Los valores son estimados en UF y están sujetos a confirmación al momento de la reserva.</p>
   </section>
 
   <BuscadorUnidades />

@@ -16,12 +16,18 @@ import renderFachadaPalma from '../assets/render-fachada-palma.png';
 import logoPatioRiquelme from '../assets/logo-patio-riquelme.png';
 import footerImg from '../assets/footer.png';
 import { summaries } from '../lib/unidades';
+import {
+  ENTREGA_ESTIMADA,
+  ENTREGA_ESTIMADA_CORTA,
+  METRO_FRASE,
+  METRO_FRASE_CORTA,
+} from '../lib/config';
 
 const minM2Residencial = Math.min(summaries['E'].minM2, summaries['1D'].minM2);
 
 const title = 'Patio Riquelme — Departamentos en el centro de Santiago';
 const description =
-  'Estudios, 1 dormitorio, duplex y locales comerciales en fachadas patrimoniales restauradas, Santo Domingo, Santiago Centro. A 1 cuadra del Metro Santa Ana.';
+  `Estudios, 1 dormitorio, duplex y locales comerciales en fachadas patrimoniales restauradas, Santo Domingo, Santiago Centro. ${METRO_FRASE_CORTA}.`;
 
 const apartmentComplexJsonLd = {
   '@context': 'https://schema.org',
@@ -39,7 +45,7 @@ const apartmentComplexJsonLd = {
   },
   amenityFeature: [
     { '@type': 'LocationFeatureSpecification', name: 'Fachadas patrimoniales restauradas', value: true },
-    { '@type': 'LocationFeatureSpecification', name: 'A 1 cuadra del Metro Santa Ana', value: true },
+    { '@type': 'LocationFeatureSpecification', name: METRO_FRASE_CORTA, value: true },
   ],
   numberOfFloors: 5,
 };
@@ -59,10 +65,10 @@ const apartmentComplexJsonLd = {
       <h1 style="font-family:'Lora',serif;font-size:clamp(38px,5.5vw,62px);line-height:1.1;letter-spacing:4px;text-transform:uppercase;color:oklch(98% 0.006 75);margin:0 0 20px;font-weight:500;">Patio Riquelme</h1>
       <div style="width:56px;height:1px;background:oklch(68% 0.09 75);margin:0 0 20px;"></div>
       <p style="font-size:15px;letter-spacing:2px;text-transform:uppercase;color:oklch(74% 0.09 75);margin:0 0 14px;">Vive el centro. Con historia.</p>
-      <p style="font-size:19px;line-height:1.5;color:oklch(94% 0.014 75);max-width:640px;margin:0 0 32px;">Estudios, departamentos de 1 dormitorio y duplex dentro de dos fachadas patrimoniales restauradas, a una cuadra del Metro Santa Ana.</p>
+      <p style="font-size:19px;line-height:1.5;color:oklch(94% 0.014 75);max-width:640px;margin:0 0 32px;">Estudios, departamentos de 1 dormitorio y duplex dentro de dos fachadas patrimoniales restauradas, {METRO_FRASE}.</p>
       <div style="display:flex;gap:16px;flex-wrap:wrap;">
-        <a href="/contacto" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;border-radius:2px;">Agendar visita</a>
-        <a href="/brochure.pdf" download target="_blank" style="border:1px solid oklch(94% 0.014 75 / 0.6);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;border-radius:2px;">Descargar brochure</a>
+        <a href="/contacto" data-track="agendar_visita" data-track-label="hero" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;border-radius:2px;">Agendar visita</a>
+        <a href="/brochure.pdf" download target="_blank" rel="noopener" data-track="descargar_brochure" data-track-label="hero" style="border:1px solid oklch(94% 0.014 75 / 0.6);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;border-radius:2px;">Descargar brochure</a>
       </div>
     </div>
   </section>
@@ -81,7 +87,7 @@ const apartmentComplexJsonLd = {
       <div style="font-size:13px;color:oklch(45% 0.025 75);margin-top:4px;">desde</div>
     </div>
     <div style="padding:32px 24px;text-align:center;">
-      <div style="font-family:'Lora',serif;font-size:30px;color:oklch(58% 0.09 75);">2027–28</div>
+      <div style="font-family:'Lora',serif;font-size:30px;color:oklch(58% 0.09 75);">{ENTREGA_ESTIMADA_CORTA}</div>
       <div style="font-size:13px;color:oklch(45% 0.025 75);margin-top:4px;">entrega estimada</div>
     </div>
   </section>
@@ -149,7 +155,7 @@ const apartmentComplexJsonLd = {
           </div>
           <div style="display:flex;gap:16px;padding-left:20px;margin-left:6px;position:relative;">
             <div style="position:absolute;left:-7px;top:0;width:12px;height:12px;border-radius:50%;background:oklch(87% 0.014 75);border:2px solid oklch(58% 0.09 75);"></div>
-            <div><div style="font-weight:600;font-size:15px;">Entrega estimada</div><div style="font-size:14px;color:oklch(45% 0.025 75);">Fines de 2027 – inicios de 2028</div></div>
+            <div><div style="font-weight:600;font-size:15px;">Entrega estimada</div><div style="font-size:14px;color:oklch(45% 0.025 75);">{ENTREGA_ESTIMADA}</div></div>
           </div>
         </div>
       </div>
@@ -165,11 +171,11 @@ const apartmentComplexJsonLd = {
       <div>
         <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(68% 0.09 75);margin:0 0 14px;">El barrio</p>
         <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:500;margin:0 0 20px;color:oklch(98% 0.006 75);">Barrio Santo Domingo, en el corazón de Santiago</h2>
-        <p style="font-size:16px;line-height:1.7;color:oklch(87% 0.014 75);margin:0 0 28px;">Un sector tranquilo e histórico con excelente conectividad: a pasos del Metro, caminando al centro, y a minutos del Barrio Brasil.</p>
+        <p style="font-size:16px;line-height:1.7;color:oklch(87% 0.014 75);margin:0 0 28px;">Un sector tranquilo e histórico con excelente conectividad: a pasos del Metro, caminando al centro, y a 10 minutos del Barrio Brasil.</p>
         <div style="display:flex;flex-direction:column;gap:14px;">
-          <div style="display:flex;gap:12px;align-items:baseline;"><span style="color:oklch(68% 0.09 75);font-family:'Lora',serif;">—</span><span style="font-size:15px;">1 cuadra del Metro Santa Ana</span></div>
+          <div style="display:flex;gap:12px;align-items:baseline;"><span style="color:oklch(68% 0.09 75);font-family:'Lora',serif;">—</span><span style="font-size:15px;">2 minutos caminando del Metro Santa Ana</span></div>
           <div style="display:flex;gap:12px;align-items:baseline;"><span style="color:oklch(68% 0.09 75);font-family:'Lora',serif;">—</span><span style="font-size:15px;">15 minutos a pie de Plaza de Armas y el centro histórico</span></div>
-          <div style="display:flex;gap:12px;align-items:baseline;"><span style="color:oklch(68% 0.09 75);font-family:'Lora',serif;">—</span><span style="font-size:15px;">A minutos del Barrio Brasil</span></div>
+          <div style="display:flex;gap:12px;align-items:baseline;"><span style="color:oklch(68% 0.09 75);font-family:'Lora',serif;">—</span><span style="font-size:15px;">A 10 minutos caminando del Barrio Brasil</span></div>
         </div>
         <a href="/ubicacion" style="display:inline-block;margin-top:28px;color:oklch(74% 0.09 75);font-size:15px;border-bottom:1px solid oklch(74% 0.09 75);">Ver mapa y conectividad completa →</a>
       </div>

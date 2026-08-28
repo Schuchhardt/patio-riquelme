@@ -2,24 +2,31 @@
 import {
   unidadesPublicas,
   pisosDisponibles,
+  cuerposDisponibles,
   pisoLabel,
+  NIVEL_DESCRIPCIONES,
   rangoUF,
   formatUF,
-  TIPOLOGIA_LABELS,
+  formatM2Valor,
+  FAMILIA_LABELS,
+  CUERPO_LABELS,
 } from '../lib/unidades';
-import { FORMSPREE_ENDPOINT, CONTACT_EMAIL } from '../lib/config';
+import { TIPOLOGIAS_COMERCIALES } from '../lib/tipologiasComerciales';
+import { FORMSPREE_ENDPOINT, CONTACT_EMAIL, TIENE_WHATSAPP, whatsappUrl } from '../lib/config';
 
-const tipologias = ['E', '1D', '1D 1/2', 'L'].filter((t) =>
-  unidadesPublicas.some((u) => u.tipologia === t)
+// Se filtra por familia, no por la columna `tipologia` del CSV: así el chip
+// "Duplex" incluye a 302 C, que el CSV marca como 1D pese a ser un duplex.
+const familias = (['E', '1D', 'Duplex', 'L'] as const).filter((f) =>
+  unidadesPublicas.some((u) => u.familia === f)
 );
 
 const grupos = pisosDisponibles.map((piso) => ({
   piso,
   label: pisoLabel(piso),
+  nota: NIVEL_DESCRIPCIONES[piso],
   unidades: unidadesPublicas.filter((u) => u.piso === piso),
 }));
 
-const m2Fmt = new Intl.NumberFormat('es-CL', { maximumFractionDigits: 2 });
 const total = unidadesPublicas.length;
 
 const inputStyle =
@@ -29,84 +36,117 @@ const inputStyle =
 <section id="unidades" style="padding:0 var(--pad-x) 88px;max-width:1200px;margin:0 auto;">
   <!-- Filtros -->
   <div style="border:1px solid oklch(87% 0.014 75);background:oklch(97% 0.01 75);padding:clamp(20px, 4vw, 32px);margin-bottom:40px;">
-    <div style="margin-bottom:26px;">
-      <div class="filtro-label">Tipología</div>
-      <div class="chip-group" data-filter="tipologia">
-        <button class="chip active" data-value="">Todas</button>
-        {tipologias.map((t) => <button class="chip" data-value={t}>{TIPOLOGIA_LABELS[t]}</button>)}
+    <fieldset style="border:0;padding:0;margin:0 0 26px;">
+      <legend class="filtro-label" style="padding:0;">Tipología</legend>
+      <div class="chip-group" data-filter="familia" role="group" aria-label="Filtrar por tipología">
+        <button type="button" class="chip active" data-value="" aria-pressed="true">Todas</button>
+        {familias.map((f) => (
+          <button type="button" class="chip" data-value={f} aria-pressed="false">{FAMILIA_LABELS[f]}</button>
+        ))}
       </div>
-    </div>
+    </fieldset>
 
-    <div style="margin-bottom:26px;">
-      <div class="filtro-label">Piso</div>
-      <div class="chip-group" data-filter="piso">
-        <button class="chip active" data-value="">Todos</button>
-        {pisosDisponibles.map((p) => <button class="chip" data-value={String(p)}>{p === -1 ? 'Piso -1' : `Piso ${p}`}</button>)}
+    <fieldset style="border:0;padding:0;margin:0 0 26px;">
+      <legend class="filtro-label" style="padding:0;">Piso</legend>
+      <div class="chip-group" data-filter="piso" role="group" aria-label="Filtrar por piso">
+        <button type="button" class="chip active" data-value="" aria-pressed="true">Todos</button>
+        {pisosDisponibles.map((p) => (
+          <button type="button" class="chip" data-value={String(p)} aria-pressed="false">{pisoLabel(p)}</button>
+        ))}
       </div>
-    </div>
+    </fieldset>
 
-    <div>
-      <div class="filtro-label">Precio estimado (UF)</div>
+    <fieldset style="border:0;padding:0;margin:0 0 26px;">
+      <legend class="filtro-label" style="padding:0;">Cuerpo</legend>
+      <div class="chip-group" data-filter="cuerpo" role="group" aria-label="Filtrar por cuerpo del edificio">
+        <button type="button" class="chip active" data-value="" aria-pressed="true">Todos</button>
+        {cuerposDisponibles.map((c) => (
+          <button type="button" class="chip" data-value={c} aria-pressed="false">{CUERPO_LABELS[c] ?? `Cuerpo ${c}`}</button>
+        ))}
+      </div>
+      <p style="margin:12px 0 0;font-size:13px;line-height:1.6;color:oklch(45% 0.025 75);">
+        El edificio se organiza en tres cuerpos (A, B y C) en torno al patio central. La letra al final de cada
+        unidad — por ejemplo <strong>201 B</strong> — indica a cuál pertenece.
+      </p>
+    </fieldset>
+
+    <fieldset style="border:0;padding:0;margin:0;">
+      <legend class="filtro-label" style="padding:0;">Precio estimado (UF)</legend>
       <div style="display:flex;align-items:baseline;gap:8px;font-size:15px;margin-bottom:14px;">
         <span id="precio-desde" style="font-family:'Lora',serif;font-size:22px;color:oklch(48% 0.09 75);">{formatUF(rangoUF.min)}</span>
         <span style="color:oklch(45% 0.025 75);">—</span>
         <span id="precio-hasta" style="font-family:'Lora',serif;font-size:22px;color:oklch(48% 0.09 75);">{formatUF(rangoUF.max)}</span>
       </div>
       <div style="display:grid;grid-template-columns:var(--cols-form);gap:16px;">
-        <label style="font-size:13px;color:oklch(45% 0.025 75);">
-          Desde
-          <input type="range" id="uf-min" min={rangoUF.min} max={rangoUF.max} step="100" value={rangoUF.min} style="width:100%;accent-color:oklch(58% 0.09 75);margin-top:6px;" />
-        </label>
-        <label style="font-size:13px;color:oklch(45% 0.025 75);">
-          Hasta
-          <input type="range" id="uf-max" min={rangoUF.min} max={rangoUF.max} step="100" value={rangoUF.max} style="width:100%;accent-color:oklch(58% 0.09 75);margin-top:6px;" />
-        </label>
+        <div>
+          <label for="uf-min" style="display:block;font-size:13px;color:oklch(45% 0.025 75);">Desde</label>
+          <input type="range" id="uf-min" min={rangoUF.min} max={rangoUF.max} step="100" value={rangoUF.min}
+            aria-label="Precio mínimo en UF"
+            style="width:100%;accent-color:oklch(58% 0.09 75);margin-top:6px;" />
+        </div>
+        <div>
+          <label for="uf-max" style="display:block;font-size:13px;color:oklch(45% 0.025 75);">Hasta</label>
+          <input type="range" id="uf-max" min={rangoUF.min} max={rangoUF.max} step="100" value={rangoUF.max}
+            aria-label="Precio máximo en UF"
+            style="width:100%;accent-color:oklch(58% 0.09 75);margin-top:6px;" />
+        </div>
       </div>
-    </div>
+    </fieldset>
+  </div>
+
+  <div id="filtro-planta" style="display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding:14px 18px;border:1px solid oklch(58% 0.09 75);background:oklch(94% 0.014 75);">
+    <span style="font-size:14px;color:oklch(30% 0.035 75);">Mostrando solo la planta <strong id="filtro-planta-nombre"></strong></span>
+    <button type="button" id="quitar-planta" style="background:none;border:none;padding:0;font-size:14px;font-weight:500;color:oklch(48% 0.09 75);cursor:pointer;border-bottom:1px solid oklch(48% 0.09 75);font-family:'Work Sans',sans-serif;">Ver todas las unidades</button>
   </div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px;">
-    <p id="resultado-count" style="margin:0;font-size:15px;color:oklch(38% 0.03 75);">{total} unidades disponibles</p>
-    <button id="limpiar-filtros" style="background:none;border:none;padding:0;font-size:14px;font-weight:500;color:oklch(48% 0.09 75);cursor:pointer;border-bottom:1px solid oklch(48% 0.09 75);font-family:'Work Sans',sans-serif;">Limpiar filtros</button>
+    <p id="resultado-count" aria-live="polite" style="margin:0;font-size:15px;color:oklch(38% 0.03 75);">{total} unidades disponibles</p>
+    <button type="button" id="limpiar-filtros" style="background:none;border:none;padding:0;font-size:14px;font-weight:500;color:oklch(48% 0.09 75);cursor:pointer;border-bottom:1px solid oklch(48% 0.09 75);font-family:'Work Sans',sans-serif;">Limpiar filtros</button>
   </div>
 
-  {grupos.map(({ piso, label, unidades }) => (
+  {grupos.map(({ piso, label, nota, unidades }) => (
     <div class="piso-group" data-piso={String(piso)} style="margin-bottom:48px;">
-      <h2 style="font-family:'Lora',serif;font-size:24px;font-weight:500;margin:0 0 20px;padding-bottom:12px;border-bottom:1px solid oklch(87% 0.014 75);">
+      <h2 style={`font-family:'Lora',serif;font-size:24px;font-weight:500;margin:0 0 ${nota ? '10px' : '20px'};padding-bottom:12px;border-bottom:1px solid oklch(87% 0.014 75);`}>
         {label}
         <span class="piso-count" style="font-family:'Work Sans',sans-serif;font-size:14px;font-weight:400;color:oklch(45% 0.025 75);margin-left:10px;">{unidades.length} unidades</span>
       </h2>
+      {nota && (
+        <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:oklch(45% 0.025 75);max-width:720px;">{nota}</p>
+      )}
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
         {unidades.map((u) => (
           <article
             class="unidad-card"
-            data-tipologia={u.tipologia}
+            data-familia={u.familia}
+            data-tc={u.tc}
+            data-tc-nombre={u.tcNombre}
             data-piso={String(u.piso)}
+            data-cuerpo={u.cuerpo}
             data-uf={String(u.uf)}
             style="border:1px solid oklch(87% 0.014 75);background:oklch(97% 0.01 75);padding:24px;display:flex;flex-direction:column;gap:14px;"
           >
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
               <h3 style="font-family:'Lora',serif;font-size:22px;font-weight:500;margin:0;">{u.nombre}</h3>
-              <span style="font-size:11px;letter-spacing:0.5px;text-transform:uppercase;background:oklch(91% 0.03 75);color:oklch(40% 0.06 75);padding:5px 9px;white-space:nowrap;">{u.tipologia}</span>
+              <span title={`Planta ${u.tc} · ${u.tcNombre}`} style="font-size:11px;letter-spacing:0.5px;text-transform:uppercase;background:oklch(91% 0.03 75);color:oklch(40% 0.06 75);padding:5px 9px;white-space:nowrap;">{u.tc === 'LOCAL' ? 'Local' : `Tipo ${u.tc}`}</span>
             </div>
 
             <dl style="margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;color:oklch(45% 0.025 75);">
-              <dt>Superficie</dt>
-              <dd style="margin:0;color:oklch(25% 0.035 75);">{m2Fmt.format(u.m2)} m²</dd>
-              {u.m2Terraza > 0 && (
-                <>
-                  <dt>Terraza</dt>
-                  <dd style="margin:0;color:oklch(25% 0.035 75);">{m2Fmt.format(u.m2Terraza)} m²</dd>
-                </>
-              )}
+              <dt>Superficie útil</dt>
+              <dd style="margin:0;color:oklch(25% 0.035 75);">{formatM2Valor(u.m2Util)}</dd>
+              <dt>Terraza</dt>
+              <dd style="margin:0;color:oklch(25% 0.035 75);">{u.m2Terraza > 0 ? formatM2Valor(u.m2Terraza) : '—'}</dd>
+              <dt style="font-weight:600;color:oklch(30% 0.035 75);">Superficie total</dt>
+              <dd style="margin:0;font-weight:600;color:oklch(25% 0.035 75);">{formatM2Valor(u.m2Total)}</dd>
               {u.orientacion && (
                 <>
                   <dt>Orientación</dt>
                   <dd style="margin:0;color:oklch(25% 0.035 75);">{u.orientacion}</dd>
                 </>
               )}
+              <dt>Planta</dt>
+              <dd style="margin:0;color:oklch(25% 0.035 75);">{u.tcNombre}</dd>
               <dt>Ubicación</dt>
-              <dd style="margin:0;color:oklch(25% 0.035 75);">{u.pisoLabel}{u.duplex ? ' · Duplex' : ''}</dd>
+              <dd style="margin:0;color:oklch(25% 0.035 75);">{u.pisoLabel} · {u.cuerpoLabel}{u.duplex ? ' · Duplex' : ''}</dd>
             </dl>
 
             <div style="margin-top:auto;padding-top:12px;border-top:1px solid oklch(91% 0.014 75);">
@@ -115,12 +155,20 @@ const inputStyle =
             </div>
 
             <button
+              type="button"
               class="cotizar-btn"
               data-unidad={u.nombre}
-              data-tipologia-label={u.tipologiaLabel}
+              data-unidad-id={u.id}
+              data-tipologia-label={`${u.tcNombre} (Tipo ${u.tc})`}
               data-piso-label={u.pisoLabel}
-              data-m2={m2Fmt.format(u.m2)}
+              data-cuerpo-label={u.cuerpoLabel}
+              data-util={formatM2Valor(u.m2Util)}
+              data-terraza={u.m2Terraza > 0 ? formatM2Valor(u.m2Terraza) : 'Sin terraza'}
+              data-total={formatM2Valor(u.m2Total)}
               data-precio={formatUF(u.uf)}
+              data-precio-base={formatUF(u.ufBase)}
+              data-precio-escala={u.ufEscala > 0 ? `+${formatUF(u.ufEscala)}` : '—'}
+              aria-label={`Cotizar la unidad ${u.nombre}`}
             >Cotizar esta unidad</button>
           </article>
         ))}
@@ -134,11 +182,14 @@ const inputStyle =
 </section>
 
 <dialog id="cotizar-dialog" aria-labelledby="cotizar-titulo">
-  <button id="cerrar-dialog" aria-label="Cerrar" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:oklch(45% 0.025 75);">×</button>
+  <button type="button" id="cerrar-dialog" aria-label="Cerrar" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:oklch(45% 0.025 75);">×</button>
 
   <div id="cotizar-ok" style="display:none;">
     <h2 style="font-family:'Lora',serif;font-size:26px;font-weight:500;margin:0 0 12px;">Solicitud enviada</h2>
     <p style="margin:0;font-size:15px;line-height:1.7;color:oklch(38% 0.03 75);">Recibimos tu interés por la unidad <strong id="ok-unidad"></strong>. Nuestro equipo te contactará con el detalle de la cotización y los pasos para firmar la promesa de compraventa.</p>
+    {TIENE_WHATSAPP && (
+      <p style="margin:18px 0 0;font-size:15px;">¿Prefieres hablar ahora? <a href={whatsappUrl()} target="_blank" rel="noopener" data-track="whatsapp_modal" style="color:oklch(40% 0.09 75);border-bottom:1px solid oklch(48% 0.09 75);">Escríbenos por WhatsApp</a></p>
+    )}
   </div>
 
   <div id="cotizar-body">
@@ -146,27 +197,47 @@ const inputStyle =
     <h2 id="cotizar-titulo" style="font-family:'Lora',serif;font-size:28px;font-weight:500;margin:0 0 6px;"></h2>
     <p id="cotizar-detalle" style="margin:0 0 22px;font-size:15px;color:oklch(45% 0.025 75);"></p>
 
-    <div id="cotizar-error" style="display:none;margin-bottom:18px;padding:16px;background:oklch(94% 0.014 75);border:1px solid oklch(55% 0.15 30);">
-      <p style="margin:0;font-size:14px;">Hubo un problema al enviar tu solicitud. Intenta de nuevo o escríbenos directo a <a href={`mailto:${CONTACT_EMAIL}`} style="color:oklch(25% 0.035 75);">{CONTACT_EMAIL}</a>.</p>
+    <div id="cotizar-error" role="alert" style="display:none;margin-bottom:18px;padding:16px;background:oklch(94% 0.014 75);border:1px solid oklch(55% 0.15 30);">
+      <p id="cotizar-error-texto" style="margin:0;font-size:14px;">Hubo un problema al enviar tu solicitud. Intenta de nuevo o escríbenos directo a <a href={`mailto:${CONTACT_EMAIL}`} style="color:oklch(25% 0.035 75);">{CONTACT_EMAIL}</a>.</p>
     </div>
 
-    <form id="cotizar-form" action={FORMSPREE_ENDPOINT} method="POST" style="display:flex;flex-direction:column;gap:16px;">
+    <form id="cotizar-form" action={FORMSPREE_ENDPOINT} method="POST" novalidate style="display:flex;flex-direction:column;gap:16px;">
       <input type="hidden" name="_subject" id="campo-subject" />
       <input type="hidden" name="unidad" id="campo-unidad" />
+      <input type="hidden" name="unidad_id" id="campo-unidad-id" />
       <input type="hidden" name="tipologia" id="campo-tipologia" />
       <input type="hidden" name="piso" id="campo-piso" />
-      <input type="hidden" name="superficie" id="campo-superficie" />
+      <input type="hidden" name="cuerpo" id="campo-cuerpo" />
+      <input type="hidden" name="superficie_util" id="campo-util" />
+      <input type="hidden" name="superficie_terraza" id="campo-terraza" />
+      <input type="hidden" name="superficie_total" id="campo-total" />
       <input type="hidden" name="precio_estimado_uf" id="campo-precio" />
+      <input type="hidden" name="precio_base_uf" id="campo-precio-base" />
+      <input type="hidden" name="sobreprecio_altura_uf" id="campo-precio-escala" />
       <input type="hidden" name="resumen" id="campo-resumen" />
+      <!-- Honeypot anti-spam: Formspree descarta el envío si viene relleno. -->
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
 
       <div style="display:grid;grid-template-columns:var(--cols-form);gap:16px;">
-        <input type="text" name="nombre" required placeholder="Nombre y apellido" style={inputStyle} />
-        <input type="tel" name="telefono" placeholder="Teléfono" style={inputStyle} />
+        <div>
+          <label for="cotizar-nombre" style="display:block;font-size:13px;color:oklch(45% 0.025 75);margin-bottom:6px;">Nombre y apellido</label>
+          <input type="text" id="cotizar-nombre" name="nombre" required autocomplete="name" placeholder="Nombre y apellido" style={inputStyle} />
+        </div>
+        <div>
+          <label for="cotizar-telefono" style="display:block;font-size:13px;color:oklch(45% 0.025 75);margin-bottom:6px;">Teléfono</label>
+          <input type="tel" id="cotizar-telefono" name="telefono" autocomplete="tel" inputmode="tel" placeholder="+56 9 1234 5678" style={inputStyle} />
+        </div>
       </div>
-      <input type="email" name="email" required placeholder="Email" style={inputStyle} />
-      <textarea name="mensaje" rows="3" placeholder="Mensaje (opcional)" style={inputStyle + 'resize:vertical;'}></textarea>
+      <div>
+        <label for="cotizar-email" style="display:block;font-size:13px;color:oklch(45% 0.025 75);margin-bottom:6px;">Email</label>
+        <input type="email" id="cotizar-email" name="email" required autocomplete="email" placeholder="tu@email.cl" style={inputStyle} />
+      </div>
+      <div>
+        <label for="cotizar-mensaje" style="display:block;font-size:13px;color:oklch(45% 0.025 75);margin-bottom:6px;">Mensaje (opcional)</label>
+        <textarea id="cotizar-mensaje" name="mensaje" rows="3" placeholder="Cuéntanos qué necesitas saber" style={inputStyle + 'resize:vertical;'}></textarea>
+      </div>
       <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:oklch(38% 0.03 75);"><input type="checkbox" name="visita" value="Sí" /> Quiero agendar una visita presencial</label>
-      <button type="submit" id="cotizar-submit" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);border:none;padding:16px 28px;font-size:15px;font-weight:500;cursor:pointer;font-family:'Work Sans',sans-serif;margin-top:4px;">Enviar solicitud de cotización</button>
+      <button type="submit" id="cotizar-submit" data-track="cotizar_enviar" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);border:none;padding:16px 28px;font-size:15px;font-weight:500;cursor:pointer;font-family:'Work Sans',sans-serif;margin-top:4px;">Enviar solicitud de cotización</button>
       <p style="margin:0;font-size:13px;line-height:1.6;color:oklch(45% 0.025 75);">Te contactaremos con la cotización formal y los pasos para la promesa de compraventa. Los precios son referenciales en UF y están sujetos a confirmación.</p>
     </form>
   </div>
@@ -233,6 +304,17 @@ const inputStyle =
     display: none;
   }
 
+  /* Foco visible y consistente en todos los controles del buscador y del modal. */
+  #unidades :is(button, input, a):focus-visible,
+  #cotizar-dialog :is(button, input, textarea, a):focus-visible {
+    outline: 2px solid oklch(48% 0.09 75);
+    outline-offset: 2px;
+  }
+
+  .campo-invalido {
+    border-color: oklch(55% 0.15 30) !important;
+  }
+
   #cotizar-dialog {
     position: fixed;
     inset: 0;
@@ -252,6 +334,9 @@ const inputStyle =
 </style>
 
 <script>
+  const track = (event: string, params?: Record<string, unknown>) =>
+    (window as any).track?.(event, params);
+
   const cards = Array.from(document.querySelectorAll<HTMLElement>('.unidad-card'));
   const grupos = Array.from(document.querySelectorAll<HTMLElement>('.piso-group'));
   const countEl = document.getElementById('resultado-count');
@@ -262,9 +347,20 @@ const inputStyle =
   const hastaEl = document.getElementById('precio-hasta');
 
   const ufFmt = new Intl.NumberFormat('es-CL', { maximumFractionDigits: 0 });
-  const formatUF = (n: number) => `${ufFmt.format(n)} UF`;
+  const formatUF = (n: number) => (Number.isFinite(n) ? `${ufFmt.format(n)} UF` : 'Consultar');
 
-  const filtros = { tipologia: '', piso: '' };
+  type FiltroKey = 'familia' | 'piso' | 'cuerpo';
+  const filtros: Record<FiltroKey, string> = { familia: '', piso: '', cuerpo: '' };
+  /** Filtro por planta comercial (B1, C2, …). Llega por ?tc= y no tiene chips. */
+  let planta = '';
+
+  const bannerPlanta = document.getElementById('filtro-planta');
+  const bannerNombre = document.getElementById('filtro-planta-nombre');
+
+  function pintarBannerPlanta() {
+    if (!bannerPlanta) return;
+    bannerPlanta.style.display = planta ? 'flex' : 'none';
+  }
 
   function aplicar() {
     const min = Number(ufMin?.value ?? 0);
@@ -274,8 +370,10 @@ const inputStyle =
     for (const card of cards) {
       const uf = Number(card.dataset.uf);
       const ok =
-        (!filtros.tipologia || card.dataset.tipologia === filtros.tipologia) &&
+        (!filtros.familia || card.dataset.familia === filtros.familia) &&
+        (!planta || card.dataset.tc === planta) &&
         (!filtros.piso || card.dataset.piso === filtros.piso) &&
+        (!filtros.cuerpo || card.dataset.cuerpo === filtros.cuerpo) &&
         uf >= min &&
         uf <= max;
       card.classList.toggle('oculta', !ok);
@@ -300,14 +398,22 @@ const inputStyle =
     if (hastaEl) hastaEl.textContent = formatUF(max);
   }
 
+  function activarChip(group: HTMLElement, chip: HTMLElement) {
+    group.querySelectorAll<HTMLElement>('.chip').forEach((c) => {
+      const activo = c === chip;
+      c.classList.toggle('active', activo);
+      c.setAttribute('aria-pressed', String(activo));
+    });
+  }
+
   document.querySelectorAll<HTMLElement>('.chip-group').forEach((group) => {
-    const key = group.dataset.filter as 'tipologia' | 'piso';
+    const key = group.dataset.filter as FiltroKey;
     group.querySelectorAll<HTMLButtonElement>('.chip').forEach((chip) => {
       chip.addEventListener('click', () => {
-        group.querySelectorAll('.chip').forEach((c) => c.classList.remove('active'));
-        chip.classList.add('active');
+        activarChip(group, chip);
         filtros[key] = chip.dataset.value ?? '';
         aplicar();
+        track('filtro_unidades', { filtro: key, valor: filtros[key] || 'todos' });
       });
     });
   });
@@ -321,37 +427,67 @@ const inputStyle =
     aplicar();
   });
 
+  document.getElementById('quitar-planta')?.addEventListener('click', () => {
+    planta = '';
+    pintarBannerPlanta();
+    aplicar();
+    track('quitar_filtro_planta');
+  });
+
   document.getElementById('limpiar-filtros')?.addEventListener('click', () => {
-    filtros.tipologia = '';
+    filtros.familia = '';
     filtros.piso = '';
+    filtros.cuerpo = '';
+    planta = '';
+    pintarBannerPlanta();
     document.querySelectorAll<HTMLElement>('.chip-group').forEach((group) => {
-      group.querySelectorAll('.chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+      const primero = group.querySelector<HTMLElement>('.chip');
+      if (primero) activarChip(group, primero);
     });
     if (ufMin) ufMin.value = ufMin.min;
     if (ufMax) ufMax.value = ufMax.max;
     aplicar();
+    track('limpiar_filtros');
   });
 
-  // Preselección desde la URL: /disponibilidad?tipologia=1D
-  const paramAlias: Record<string, string> = {
+  // Preselección desde la URL: /disponibilidad?tipologia=1D&cuerpo=B&piso=3
+  const params = new URLSearchParams(location.search);
+
+  const familiaAlias: Record<string, string> = {
     E: 'E',
     Estudio: 'E',
     '1D': '1D',
-    Duplex: '1D 1/2',
-    '1D 1/2': '1D 1/2',
+    Duplex: 'Duplex',
+    '1D 1/2': 'Duplex',
     Local: 'L',
     L: 'L',
   };
-  const tipologiaParam = new URLSearchParams(location.search).get('tipologia');
-  const tipologiaInicial = tipologiaParam ? paramAlias[tipologiaParam] : undefined;
-  if (tipologiaInicial) {
-    const grupo = document.querySelector<HTMLElement>('.chip-group[data-filter="tipologia"]');
-    const chip = grupo?.querySelector<HTMLButtonElement>(`.chip[data-value="${tipologiaInicial}"]`);
-    if (grupo && chip) {
-      grupo.querySelectorAll('.chip').forEach((c) => c.classList.remove('active'));
-      chip.classList.add('active');
-      filtros.tipologia = tipologiaInicial;
+
+  function preseleccionar(key: FiltroKey, valor: string | undefined) {
+    if (!valor) return;
+    const group = document.querySelector<HTMLElement>(`.chip-group[data-filter="${key}"]`);
+    const chip = group?.querySelector<HTMLElement>(`.chip[data-value="${CSS.escape(valor)}"]`);
+    if (group && chip) {
+      activarChip(group, chip);
+      filtros[key] = valor;
     }
+  }
+
+  const tipologiaParam = params.get('tipologia');
+  preseleccionar('familia', tipologiaParam ? familiaAlias[tipologiaParam] : undefined);
+  preseleccionar('piso', params.get('piso') ?? undefined);
+  preseleccionar('cuerpo', params.get('cuerpo')?.toUpperCase() ?? undefined);
+
+  // ?tc=B1 llega desde las fichas de planta de /tipologias.
+  const tcParam = params.get('tc')?.toUpperCase();
+  if (tcParam && cards.some((c) => c.dataset.tc === tcParam)) {
+    planta = tcParam;
+    const nombre = cards.find((c) => c.dataset.tc === tcParam)?.dataset.tcNombre ?? '';
+    if (bannerNombre) {
+      bannerNombre.textContent =
+        tcParam === 'LOCAL' ? 'Locales comerciales' : `Tipo ${tcParam} · ${nombre}`;
+    }
+    pintarBannerPlanta();
   }
 
   aplicar();
@@ -362,7 +498,9 @@ const inputStyle =
   const body = document.getElementById('cotizar-body');
   const ok = document.getElementById('cotizar-ok');
   const error = document.getElementById('cotizar-error');
+  const errorTexto = document.getElementById('cotizar-error-texto');
   const submit = document.getElementById('cotizar-submit') as HTMLButtonElement | null;
+  const errorHtmlOriginal = errorTexto?.innerHTML ?? '';
 
   const setValue = (id: string, value: string) => {
     const el = document.getElementById(id) as HTMLInputElement | null;
@@ -374,32 +512,45 @@ const inputStyle =
   };
 
   let unidadActual = '';
+  let ultimoDisparador: HTMLElement | null = null;
 
   document.querySelectorAll<HTMLButtonElement>('.cotizar-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const d = btn.dataset;
+      ultimoDisparador = btn;
       unidadActual = d.unidad ?? '';
-      const detalle = `${d.tipologiaLabel} · ${d.pisoLabel} · ${d.m2} m²`;
+      const terraza = d.terraza === 'Sin terraza' ? 'sin terraza' : `terraza ${d.terraza}`;
+      const detalle = `${d.tipologiaLabel} · ${d.pisoLabel} · ${d.cuerpoLabel} · ${d.total} totales (${d.util} útiles, ${terraza})`;
 
       setText('cotizar-titulo', `Unidad ${unidadActual}`);
       setText('cotizar-detalle', `${detalle} — ${d.precio}`);
 
       setValue('campo-subject', `Cotización unidad ${unidadActual} — ${d.precio}`);
       setValue('campo-unidad', unidadActual);
+      setValue('campo-unidad-id', d.unidadId ?? '');
       setValue('campo-tipologia', d.tipologiaLabel ?? '');
       setValue('campo-piso', d.pisoLabel ?? '');
-      setValue('campo-superficie', `${d.m2} m²`);
+      setValue('campo-cuerpo', d.cuerpoLabel ?? '');
+      setValue('campo-util', d.util ?? '');
+      setValue('campo-terraza', d.terraza ?? '');
+      setValue('campo-total', d.total ?? '');
       setValue('campo-precio', d.precio ?? '');
+      setValue('campo-precio-base', d.precioBase ?? '');
+      setValue('campo-precio-escala', d.precioEscala ?? '');
       setValue(
         'campo-resumen',
-        `Solicitud de cotización — Unidad ${unidadActual} (${d.tipologiaLabel}, ${d.pisoLabel}, ${d.m2} m²) por un valor estimado de ${d.precio}.`
+        `Solicitud de cotización — Unidad ${unidadActual} [${d.unidadId}] (${d.tipologiaLabel}, ${d.pisoLabel}, ${d.cuerpoLabel}, ${d.total} totales) por un valor estimado de ${d.precio}.`
       );
 
       if (body) body.style.display = 'block';
       if (ok) ok.style.display = 'none';
       if (error) error.style.display = 'none';
       form?.reset();
+      form?.querySelectorAll('.campo-invalido').forEach((el) => el.classList.remove('campo-invalido'));
       dialog?.showModal();
+      (document.getElementById('cotizar-nombre') as HTMLInputElement | null)?.focus();
+
+      track('cotizar_abrir', { unidad: unidadActual, unidad_id: d.unidadId, precio: d.precio });
     });
   });
 
@@ -407,10 +558,66 @@ const inputStyle =
   dialog?.addEventListener('click', (e) => {
     if (e.target === dialog) dialog.close();
   });
+  // El cierre con Esc lo entrega <dialog> de forma nativa; devolvemos el foco al origen.
+  dialog?.addEventListener('close', () => ultimoDisparador?.focus());
+
+  // ---- Validación ----
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+
+  /** Acepta formatos chilenos habituales: +56 9 1234 5678, 912345678, 22 123 4567. */
+  function telefonoValido(valor: string): boolean {
+    const limpio = valor.replace(/[\s().-]/g, '');
+    if (limpio === '') return true; // el teléfono es opcional
+    return /^(\+?56)?[2-9]\d{7,8}$/.test(limpio);
+  }
+
+  function marcar(el: HTMLInputElement | null, valido: boolean) {
+    el?.classList.toggle('campo-invalido', !valido);
+    el?.setAttribute('aria-invalid', String(!valido));
+  }
+
+  function mostrarError(mensaje?: string) {
+    if (!error || !errorTexto) return;
+    errorTexto.innerHTML = mensaje ?? errorHtmlOriginal;
+    error.style.display = 'block';
+  }
+
+  function validar(): boolean {
+    const nombre = document.getElementById('cotizar-nombre') as HTMLInputElement | null;
+    const email = document.getElementById('cotizar-email') as HTMLInputElement | null;
+    const telefono = document.getElementById('cotizar-telefono') as HTMLInputElement | null;
+
+    const nombreOk = (nombre?.value ?? '').trim().length >= 2;
+    const emailOk = EMAIL_RE.test((email?.value ?? '').trim());
+    const telefonoOk = telefonoValido(telefono?.value ?? '');
+
+    marcar(nombre, nombreOk);
+    marcar(email, emailOk);
+    marcar(telefono, telefonoOk);
+
+    if (!nombreOk) {
+      mostrarError('Escribe tu nombre y apellido.');
+      nombre?.focus();
+      return false;
+    }
+    if (!emailOk) {
+      mostrarError('Revisa tu email: no parece una dirección válida.');
+      email?.focus();
+      return false;
+    }
+    if (!telefonoOk) {
+      mostrarError('Revisa tu teléfono. Ejemplo: +56 9 1234 5678.');
+      telefono?.focus();
+      return false;
+    }
+    return true;
+  }
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (error) error.style.display = 'none';
+    if (!validar()) return;
+
     if (submit) {
       submit.disabled = true;
       submit.textContent = 'Enviando…';
@@ -425,11 +632,14 @@ const inputStyle =
         setText('ok-unidad', unidadActual);
         if (body) body.style.display = 'none';
         if (ok) ok.style.display = 'block';
-      } else if (error) {
-        error.style.display = 'block';
+        track('cotizar_enviado', { unidad: unidadActual });
+      } else {
+        mostrarError();
+        track('cotizar_error', { unidad: unidadActual, status: res.status });
       }
     } catch {
-      if (error) error.style.display = 'block';
+      mostrarError();
+      track('cotizar_error', { unidad: unidadActual, status: 'network' });
     } finally {
       if (submit) {
         submit.disabled = false;

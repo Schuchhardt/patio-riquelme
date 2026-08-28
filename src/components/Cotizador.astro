@@ -1,27 +1,21 @@
 ---
-import { summaries, formatM2, formatUF } from '../lib/unidades';
+import { summaries, formatM2, formatUF, formatPisos } from '../lib/unidades';
 
 const options = [
   { value: 'E', label: 'E · Estudio' },
   { value: '1D', label: '1D · 1 Dormitorio' },
-  { value: '1D 1/2', label: 'Duplex 1D 1/2' },
+  { value: 'Duplex', label: 'Duplex' },
   { value: 'L', label: 'Locales Comerciales' },
 ];
 
-const pisosText: Record<string, string> = {
-  E: 'pisos 2 y 3',
-  '1D': 'todos los pisos',
-  '1D 1/2': 'piso 3',
-  L: 'primer piso',
-};
-
+// Todo se deriva del CSV: no hay textos de pisos ni precios escritos a mano.
 const data = Object.fromEntries(
   options.map(({ value }) => [
     value,
     {
       m2: formatM2(summaries[value]),
       count: summaries[value].count,
-      pisos: pisosText[value],
+      pisos: formatPisos(summaries[value].pisos),
       desde: formatUF(summaries[value].minUF),
     },
   ])
@@ -40,7 +34,7 @@ const data = Object.fromEntries(
       <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.025 75);margin-bottom:12px;">Tipología</div>
       <div class="cotiz-group" style="display:flex;gap:12px;flex-wrap:wrap;" data-group="tipologia">
         {options.map(({ value, label }, i) => (
-          <button class={`cotiz-btn${i === 0 ? ' active' : ''}`} data-value={value}>{label}</button>
+          <button type="button" class={`cotiz-btn${i === 0 ? ' active' : ''}`} data-value={value} aria-pressed={i === 0 ? 'true' : 'false'}>{label}</button>
         ))}
       </div>
     </div>
@@ -53,8 +47,8 @@ const data = Object.fromEntries(
         <span id="uf-text" style="font-family:'Lora',serif;font-size:22px;color:oklch(48% 0.09 75);">{data['E'].desde}</span>
       </div>
     </div>
-    <a id="cotizar-link" href="/disponibilidad?tipologia=E" style="display:block;text-align:center;margin-top:24px;background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;">Ver unidades y cotizar</a>
-    <a id="contacto-link" href="/contacto?tipologia=E" style="display:block;text-align:center;margin-top:14px;font-size:14px;font-weight:500;">Prefiero que me contacten →</a>
+    <a id="cotizar-link" href="/disponibilidad?tipologia=E" data-track="cotizador_ver_unidades" style="display:block;text-align:center;margin-top:24px;background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;">Ver unidades y cotizar</a>
+    <a id="contacto-link" href="/contacto?tipologia=E" data-track="cotizador_contacto" style="display:block;text-align:center;margin-top:14px;font-size:14px;font-weight:500;">Prefiero que me contacten →</a>
   </div>
 </section>
 
@@ -70,6 +64,13 @@ const data = Object.fromEntries(
     background: oklch(97% 0.01 75);
     color: oklch(25% 0.035 75);
   }
+  .cotiz-btn:focus-visible,
+  #cotizar-link:focus-visible,
+  #contacto-link:focus-visible {
+    outline: 2px solid oklch(48% 0.09 75);
+    outline-offset: 2px;
+  }
+
   .cotiz-btn.active {
     border: 1px solid oklch(58% 0.09 75);
     background: oklch(58% 0.09 75);
@@ -79,7 +80,7 @@ const data = Object.fromEntries(
 </style>
 
 <script define:vars={{ data }}>
-  const tipologiaParam = { E: 'E', '1D': '1D', '1D 1/2': 'Duplex', L: 'Local' };
+  const tipologiaParam = { E: 'E', '1D': '1D', Duplex: 'Duplex', L: 'Local' };
 
   const m2Text = document.getElementById('m2-text');
   const detalleText = document.getElementById('detalle-text');
@@ -101,9 +102,13 @@ const data = Object.fromEntries(
   document.querySelectorAll('.cotiz-group').forEach((group) => {
     group.querySelectorAll('.cotiz-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
-        group.querySelectorAll('.cotiz-btn').forEach((b) => b.classList.remove('active'));
-        btn.classList.add('active');
+        group.querySelectorAll('.cotiz-btn').forEach((b) => {
+          const activo = b === btn;
+          b.classList.toggle('active', activo);
+          b.setAttribute('aria-pressed', String(activo));
+        });
         update(btn.dataset.value);
+        window.track?.('cotizador_tipologia', { tipologia: btn.dataset.value });
       });
     });
   });

@@ -1,5 +1,6 @@
 ---
 import Seo from '../components/Seo.astro';
+import WhatsappFab from '../components/WhatsappFab.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -51,6 +52,24 @@ const organizationJsonLd = {
   <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
   <slot name="head" />
 
+  <!--
+    Capa de analytics agnóstica: empuja eventos a window.dataLayer.
+    Si mañana se conecta GTM o GA4, los eventos ya están emitidos y nombrados.
+  -->
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    window.track = function (event, params) {
+      window.dataLayer.push(Object.assign({ event: event }, params || {}));
+    };
+    document.addEventListener('click', function (e) {
+      var el = e.target instanceof Element ? e.target.closest('[data-track]') : null;
+      if (!el) return;
+      window.track(el.getAttribute('data-track'), {
+        label: el.getAttribute('data-track-label') || el.textContent.trim().slice(0, 80),
+      });
+    });
+  </script>
+
   <style>
     html { overflow-x: hidden; }
     body { margin: 0; background: oklch(97% 0.01 75); overflow-x: hidden; }
@@ -60,5 +79,6 @@ const organizationJsonLd = {
   <div style="font-family:'Work Sans',sans-serif;color:oklch(25% 0.035 75);background:oklch(97% 0.01 75);">
     <slot />
   </div>
+  <WhatsappFab />
 </body>
 </html>

@@ -46,15 +46,24 @@ const assets = (name) => {
   return `file://${path.join(tmpImgDir, candidate)}`;
 };
 
-// --- parse unidades_cotizador.csv (same logic as src/lib/unidades.ts) ---
+// --- parse unidades_cotizador.csv (misma lógica que src/lib/unidades.ts) ---
+// El CSV es CRLF: hay que partir con /\r?\n/ y limpiar las cabeceras, o la
+// última columna queda como `precio_estimado_uf\r` y su valor sale NaN.
 const csvText = fs.readFileSync(path.join(root, 'unidades_cotizador.csv'), 'utf-8');
-const [headerLine, ...lines] = csvText.trim().split('\n');
-const headers = headerLine.split(',');
+const [headerLine, ...lines] = csvText
+  .replace(/^\ufeff/, '')
+  .split(/\r?\n/)
+  .filter((line) => line.trim() !== '');
+const headers = headerLine.split(',').map((h) => h.trim());
 const unidades = lines.map((line) => {
   const cells = line.split(',');
   const row = {};
-  headers.forEach((h, i) => (row[h] = cells[i]));
+  headers.forEach((h, i) => (row[h] = (cells[i] ?? '').trim()));
   row.superficie_total_venta_m2 = Number(row.superficie_total_venta_m2);
+  row.precio_estimado_uf = Number(row.precio_estimado_uf);
+  if (!Number.isFinite(row.superficie_total_venta_m2) || !Number.isFinite(row.precio_estimado_uf)) {
+    throw new Error(`[brochure] Datos inválidos para la unidad ${row.id_unidad}`);
+  }
   return row;
 });
 
@@ -128,7 +137,7 @@ const html = `<!DOCTYPE html>
       <h1 style="font-size: 44px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 14px;">Patio Riquelme</h1>
       <div style="width: 40px; height: 1px; background: oklch(68% 0.09 75); margin-bottom: 14px;"></div>
       <p style="font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: oklch(74% 0.09 75); margin: 0 0 10px;">Vive el centro. Con historia.</p>
-      <p style="font-size: 15px; line-height: 1.5; max-width: 120mm; color: oklch(94% 0.014 75);">Estudios, departamentos de 1 dormitorio y duplex dentro de dos fachadas patrimoniales restauradas, a una cuadra del Metro Santa Ana.</p>
+      <p style="font-size: 15px; line-height: 1.5; max-width: 120mm; color: oklch(94% 0.014 75);">Estudios, departamentos de 1 dormitorio y duplex dentro de dos fachadas patrimoniales restauradas, a 2 minutos caminando del Metro Santa Ana.</p>
     </div>
   </div>
 
@@ -223,11 +232,11 @@ const html = `<!DOCTYPE html>
     <div class="pad" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
       <p class="eyebrow" style="color: oklch(68% 0.09 75);">Ubicación y conectividad</p>
       <h2 style="font-size: 26px; color: oklch(98% 0.006 75); margin-bottom: 8mm;">Santo Domingo, a pasos de todo</h2>
-      <p style="font-size: 12px; line-height: 1.7; color: oklch(87% 0.014 75); margin-bottom: 10mm; max-width: 110mm;">Un barrio tranquilo e histórico con excelente conectividad hacia el resto de la ciudad: a pasos del Metro, caminando al centro, y a minutos del Barrio Brasil.</p>
+      <p style="font-size: 12px; line-height: 1.7; color: oklch(87% 0.014 75); margin-bottom: 10mm; max-width: 110mm;">Un barrio tranquilo e histórico con excelente conectividad hacia el resto de la ciudad: a pasos del Metro, caminando al centro, y a 10 minutos del Barrio Brasil.</p>
       <div style="display: flex; flex-direction: column; gap: 4mm; margin-bottom: 10mm;">
-        <div style="font-size: 13px;"><span style="color: oklch(68% 0.09 75); font-family: 'Lora', serif;">—</span> 1 cuadra del Metro Santa Ana</div>
+        <div style="font-size: 13px;"><span style="color: oklch(68% 0.09 75); font-family: 'Lora', serif;">—</span> 2 minutos caminando del Metro Santa Ana</div>
         <div style="font-size: 13px;"><span style="color: oklch(68% 0.09 75); font-family: 'Lora', serif;">—</span> 15 minutos a pie de Plaza de Armas y el centro histórico</div>
-        <div style="font-size: 13px;"><span style="color: oklch(68% 0.09 75); font-family: 'Lora', serif;">—</span> A minutos del Barrio Brasil</div>
+        <div style="font-size: 13px;"><span style="color: oklch(68% 0.09 75); font-family: 'Lora', serif;">—</span> A 10 minutos caminando del Barrio Brasil</div>
       </div>
       <img src="${assets('render-fachada-palma.png')}" style="width: 100%; height: 90mm; object-fit: cover; border: 1px solid oklch(38% 0.03 75);" />
     </div>

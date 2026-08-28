@@ -1,50 +1,125 @@
 ---
-import { FORMSPREE_ENDPOINT } from '../lib/config';
+import { FORMSPREE_ENDPOINT, CONTACT_EMAIL } from '../lib/config';
+
+const inputStyle =
+  "padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);width:100%;";
+const labelStyle = 'display:block;font-size:13px;color:oklch(45% 0.025 75);margin-bottom:6px;';
 ---
 
 <div style="border:1px solid oklch(87% 0.014 75);padding:clamp(20px, 5vw, 40px);background:oklch(97% 0.01 75);">
   <div id="form-enviado" style="display:none;padding:24px;background:oklch(94% 0.014 75);border:1px solid oklch(58% 0.09 75);">
     <p style="margin:0;font-size:16px;">Gracias por tu interés en Patio Riquelme. Recibimos tu solicitud y te contactaremos pronto.</p>
   </div>
-  <div id="form-error" style="display:none;margin-bottom:18px;padding:16px;background:oklch(94% 0.014 75);border:1px solid oklch(55% 0.15 30);">
-    <p style="margin:0;font-size:14px;">Hubo un problema al enviar tu solicitud. Intenta de nuevo o escríbenos directo a <a href="mailto:contacto@patioriquelme.cl" style="color:oklch(25% 0.035 75);">contacto@patioriquelme.cl</a>.</p>
+  <div id="form-error" role="alert" style="display:none;margin-bottom:18px;padding:16px;background:oklch(94% 0.014 75);border:1px solid oklch(55% 0.15 30);">
+    <p id="form-error-texto" style="margin:0;font-size:14px;">Hubo un problema al enviar tu solicitud. Intenta de nuevo o escríbenos directo a <a href={`mailto:${CONTACT_EMAIL}`} style="color:oklch(25% 0.035 75);">{CONTACT_EMAIL}</a>.</p>
   </div>
-  <form id="contacto-page-form" action={FORMSPREE_ENDPOINT} method="POST" style="display:flex;flex-direction:column;gap:18px;">
+
+  <form id="contacto-page-form" action={FORMSPREE_ENDPOINT} method="POST" novalidate style="display:flex;flex-direction:column;gap:18px;">
     <input type="hidden" name="_subject" value="Nueva consulta — Patio Riquelme (Contacto)" />
+    <!-- Honeypot anti-spam: Formspree descarta el envío si viene relleno. -->
+    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
+
     <div style="display:grid;grid-template-columns:var(--cols-form);gap:18px;">
-      <input type="text" name="nombre" required placeholder="Nombre" style="padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);" />
-      <input type="tel" name="telefono" placeholder="Teléfono" style="padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);" />
+      <div>
+        <label for="cp-nombre" style={labelStyle}>Nombre</label>
+        <input type="text" id="cp-nombre" name="nombre" required autocomplete="name" placeholder="Nombre y apellido" style={inputStyle} />
+      </div>
+      <div>
+        <label for="cp-telefono" style={labelStyle}>Teléfono</label>
+        <input type="tel" id="cp-telefono" name="telefono" autocomplete="tel" inputmode="tel" placeholder="+56 9 1234 5678" style={inputStyle} />
+      </div>
     </div>
-    <input type="email" name="email" required placeholder="Email" style="padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);" />
-    <select id="tipologia-select" name="tipologia" style="padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);color:oklch(25% 0.035 75);">
-      <option value="E">E · Estudio</option>
-      <option value="1D">1D · 1 Dormitorio</option>
-      <option value="Duplex">Duplex 1D 1/2</option>
-      <option value="Local">Local comercial</option>
-      <option value="">Aún no estoy seguro</option>
-    </select>
-    <textarea name="mensaje" placeholder="Mensaje (opcional)" rows="4" style="padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);resize:vertical;"></textarea>
-    <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:oklch(38% 0.03 75);"><input type="checkbox" name="visita" /> Quiero agendar una visita presencial</label>
-    <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:oklch(38% 0.03 75);"><input type="checkbox" name="brochure" /> Enviarme el brochure en PDF</label>
-    <button type="submit" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);border:none;padding:16px 28px;font-size:15px;font-weight:500;cursor:pointer;margin-top:8px;">Enviar solicitud</button>
+
+    <div>
+      <label for="cp-email" style={labelStyle}>Email</label>
+      <input type="email" id="cp-email" name="email" required autocomplete="email" placeholder="tu@email.cl" style={inputStyle} />
+    </div>
+
+    <div>
+      <label for="tipologia-select" style={labelStyle}>Tipología de interés</label>
+      <select id="tipologia-select" name="tipologia" style={inputStyle + 'color:oklch(25% 0.035 75);'}>
+        <option value="E">E · Estudio</option>
+        <option value="1D">1D · 1 Dormitorio</option>
+        <option value="Duplex">Duplex 1D 1/2</option>
+        <option value="Local">Local comercial</option>
+        <option value="">Aún no estoy seguro</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="cp-mensaje" style={labelStyle}>Mensaje (opcional)</label>
+      <textarea id="cp-mensaje" name="mensaje" placeholder="Cuéntanos qué necesitas saber" rows="4" style={inputStyle + 'resize:vertical;'}></textarea>
+    </div>
+
+    <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:oklch(38% 0.03 75);"><input type="checkbox" name="visita" value="Sí" /> Quiero agendar una visita presencial</label>
+    <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:oklch(38% 0.03 75);"><input type="checkbox" id="cp-brochure" name="brochure" value="Sí" /> Enviarme el brochure en PDF</label>
+    <button type="submit" id="cp-submit" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);border:none;padding:16px 28px;font-size:15px;font-weight:500;cursor:pointer;margin-top:8px;font-family:'Work Sans',sans-serif;">Enviar solicitud</button>
   </form>
 </div>
 
+<style>
+  #contacto-page-form :is(input, select, textarea, button):focus-visible {
+    outline: 2px solid oklch(48% 0.09 75);
+    outline-offset: 2px;
+  }
+  .campo-invalido {
+    border-color: oklch(55% 0.15 30) !important;
+  }
+</style>
+
 <script>
+  import { emailValido, telefonoValido, nombreValido, primerError } from '../lib/formValidacion';
+
   const params = new URLSearchParams(location.search);
-  const tipologia = params.get('tipologia');
   const select = document.getElementById('tipologia-select') as HTMLSelectElement | null;
+  const tipologia = params.get('tipologia');
   if (select && tipologia && [...select.options].some((o) => o.value === tipologia)) {
     select.value = tipologia;
+  }
+  // /contacto?brochure=1 llega desde el CTA "Solicitar brochure".
+  if (params.get('brochure')) {
+    const brochure = document.getElementById('cp-brochure') as HTMLInputElement | null;
+    if (brochure) brochure.checked = true;
   }
 
   const form = document.getElementById('contacto-page-form') as HTMLFormElement | null;
   const enviado = document.getElementById('form-enviado');
   const error = document.getElementById('form-error');
+  const errorTexto = document.getElementById('form-error-texto');
+  const submit = document.getElementById('cp-submit') as HTMLButtonElement | null;
+  const errorHtmlOriginal = errorTexto?.innerHTML ?? '';
+
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement | null;
+
+  function mostrarError(mensaje?: string) {
+    if (!error || !errorTexto) return;
+    errorTexto.innerHTML = mensaje ?? errorHtmlOriginal;
+    error.style.display = 'block';
+  }
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (error) error.style.display = 'none';
+
+    const nombre = $('cp-nombre');
+    const email = $('cp-email');
+    const telefono = $('cp-telefono');
+
+    const fallo = primerError([
+      { el: nombre, ok: nombreValido(nombre?.value ?? ''), mensaje: 'Escribe tu nombre y apellido.' },
+      { el: email, ok: emailValido(email?.value ?? ''), mensaje: 'Revisa tu email: no parece una dirección válida.' },
+      { el: telefono, ok: telefonoValido(telefono?.value ?? ''), mensaje: 'Revisa tu teléfono. Ejemplo: +56 9 1234 5678.' },
+    ]);
+    if (fallo) {
+      mostrarError(fallo.mensaje);
+      fallo.el?.focus();
+      return;
+    }
+
+    if (submit) {
+      submit.disabled = true;
+      submit.textContent = 'Enviando…';
+    }
     try {
       const res = await fetch(form.action, {
         method: 'POST',
@@ -54,11 +129,19 @@ import { FORMSPREE_ENDPOINT } from '../lib/config';
       if (res.ok) {
         form.style.display = 'none';
         if (enviado) enviado.style.display = 'block';
-      } else if (error) {
-        error.style.display = 'block';
+        (window as any).track?.('contacto_enviado', { origen: 'pagina_contacto' });
+      } else {
+        mostrarError();
+        (window as any).track?.('contacto_error', { origen: 'pagina_contacto', status: res.status });
       }
     } catch {
-      if (error) error.style.display = 'block';
+      mostrarError();
+      (window as any).track?.('contacto_error', { origen: 'pagina_contacto', status: 'network' });
+    } finally {
+      if (submit) {
+        submit.disabled = false;
+        submit.textContent = 'Enviar solicitud';
+      }
     }
   });
 </script>

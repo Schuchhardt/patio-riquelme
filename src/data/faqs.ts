@@ -1,3 +1,5 @@
+import { ENTREGA_ESTIMADA, METRO_FRASE } from '../lib/config';
+
 export interface Faq {
   q: string;
   a: string;
@@ -6,7 +8,7 @@ export interface Faq {
 export const faqs: Faq[] = [
   {
     q: '¿Cuándo se entrega el proyecto?',
-    a: 'La entrega estimada es para fines de 2027 e inicios de 2028. La excavación ya está terminada y el permiso de edificación aprobado.',
+    a: `La entrega estimada es ${ENTREGA_ESTIMADA.toLowerCase()}. La excavación ya está terminada y el permiso de edificación aprobado.`,
   },
   {
     q: '¿Qué pasa con las fachadas históricas?',
@@ -22,6 +24,6 @@ export const faqs: Faq[] = [
   },
   {
     q: '¿Dónde está ubicado exactamente el proyecto?',
-    a: 'En Santo Domingo, a una cuadra del Metro Santa Ana, a 15 minutos caminando de Plaza de Armas y a minutos del Barrio Brasil.',
+    a: `En Santo Domingo, ${METRO_FRASE}, a 15 minutos caminando de Plaza de Armas y a 10 del Barrio Brasil.`,
   },
 ];

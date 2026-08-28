@@ -10,7 +10,17 @@ import planoEstudio from '../assets/Estudio.png';
 import planoDuplex from '../assets/Duplex.png';
 import planoLocal from '../assets/Local.png';
 import { breadcrumbJsonLd } from '../lib/schema';
-import { summaries, formatM2 } from '../lib/unidades';
+import {
+  summaries,
+  formatM2,
+  formatPisos,
+  formatUF,
+  formatRangoM2,
+  formatRangoUF,
+  resumenComerciales,
+  nivelCorto,
+} from '../lib/unidades';
+import { ESCALA_POR_NIVEL } from '../lib/pricing';
 
 const title = 'Tipologías — Estudio, 1D, Duplex y Locales | Patio Riquelme';
 const description =
@@ -22,7 +32,10 @@ const breadcrumbs = breadcrumbJsonLd([
 ]);
 
 const seller = { '@type': 'RealEstateAgent', name: 'Patio Riquelme' };
-const { E, ['1D']: d1, ['1D 1/2']: duplex, L } = summaries;
+const { E, ['1D']: d1, Duplex: duplex, L } = summaries;
+
+// Las plantas residenciales, sin los locales (que tienen su propia ficha).
+const plantas = resumenComerciales.filter((t) => t.familia !== 'L');
 
 const studioJsonLd = {
   '@context': 'https://schema.org',
@@ -60,7 +73,7 @@ const duplexJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   name: 'Duplex 1D 1/2 — Patio Riquelme',
-  description: `${formatM2(duplex)}. Departamento de 1 dormitorio + medio en dos niveles, unidad única disponible. El segundo ambiente independiente es ideal como home office o dormitorio adicional.`,
+  description: `${formatM2(duplex)}. ${duplex.count} departamentos en dos niveles: uno de 1 dormitorio y otro de 1 dormitorio + medio, con un segundo ambiente independiente ideal como home office.`,
   category: 'Duplex de 1 dormitorio + medio',
   additionalProperty: [{ '@type': 'PropertyValue', name: 'Superficie', value: formatM2(duplex) }],
   offers: {
@@ -112,8 +125,8 @@ const localesJsonLd = {
       </div>
       <div style="padding:32px;">
         <h3 style="font-family:'Lora',serif;font-size:24px;font-weight:500;margin:0 0 10px;">E · Estudio</h3>
-        <p style="font-size:15px;color:oklch(45% 0.025 75);line-height:1.6;margin:0 0 18px;">Aprox. {formatM2(E)}. Living-dormitorio integrado, kitchenette y baño. {E.count} unidades disponibles en pisos 2 y 3.</p>
-        <a href="/disponibilidad?tipologia=E" style="font-size:14px;font-weight:500;border-bottom:1px solid oklch(48% 0.09 75);">Ver unidades disponibles →</a>
+        <p style="font-size:15px;color:oklch(45% 0.025 75);line-height:1.6;margin:0 0 18px;">Aprox. {formatM2(E)}. Living-dormitorio integrado, kitchenette y baño. {E.count} unidades disponibles en {formatPisos(E.pisos)}.</p>
+        <a href="/disponibilidad?tipologia=E" data-track="ver_unidades" data-track-label="E" style="font-size:14px;font-weight:500;border-bottom:1px solid oklch(48% 0.09 75);">Ver unidades disponibles →</a>
       </div>
     </div>
     <div style="border:1px solid oklch(87% 0.014 75);background:oklch(97% 0.01 75);">
@@ -122,8 +135,8 @@ const localesJsonLd = {
       </div>
       <div style="padding:32px;">
         <h3 style="font-family:'Lora',serif;font-size:24px;font-weight:500;margin:0 0 10px;">1D · 1 Dormitorio</h3>
-        <p style="font-size:15px;color:oklch(45% 0.025 75);line-height:1.6;margin:0 0 18px;">Aprox. {formatM2(d1)} según unidad y piso. Dormitorio separado, living-comedor, cocina y baño. {d1.count} unidades disponibles en todos los pisos.</p>
-        <a href="/disponibilidad?tipologia=1D" style="font-size:14px;font-weight:500;border-bottom:1px solid oklch(48% 0.09 75);">Ver unidades disponibles →</a>
+        <p style="font-size:15px;color:oklch(45% 0.025 75);line-height:1.6;margin:0 0 18px;">{d1.count} unidades en {formatPisos(d1.pisos)}, repartidas en {plantas.filter((t) => t.familia === '1D').length} plantas distintas de {formatM2(d1)}. Dormitorio separado, living-comedor, cocina y baño. Revisa el detalle de cada planta más abajo.</p>
+        <a href="/disponibilidad?tipologia=1D" data-track="ver_unidades" data-track-label="1D" style="font-size:14px;font-weight:500;border-bottom:1px solid oklch(48% 0.09 75);">Ver unidades disponibles →</a>
       </div>
     </div>
     <div style="border:1px solid oklch(87% 0.014 75);background:oklch(97% 0.01 75);">
@@ -132,8 +145,8 @@ const localesJsonLd = {
       </div>
       <div style="padding:32px;">
         <h3 style="font-family:'Lora',serif;font-size:24px;font-weight:500;margin:0 0 10px;">Duplex 1D 1/2 · 1 Dormitorio + Medio</h3>
-        <p style="font-size:15px;color:oklch(45% 0.025 75);line-height:1.6;margin:0 0 18px;">{formatM2(duplex)}. Departamento en dos niveles con dormitorio principal y un segundo ambiente independiente, ideal como home office o dormitorio adicional. Unidad única, en piso 3.</p>
-        <a href="/disponibilidad?tipologia=Duplex" style="font-size:14px;font-weight:500;border-bottom:1px solid oklch(48% 0.09 75);">Ver unidades disponibles →</a>
+        <p style="font-size:15px;color:oklch(45% 0.025 75);line-height:1.6;margin:0 0 18px;">{formatM2(duplex)}. Departamentos en dos niveles con dormitorio principal; el 1D + ½ suma un segundo ambiente independiente, ideal como home office. {duplex.count === 1 ? 'Unidad única' : `${duplex.count} unidades`}, en {formatPisos(duplex.pisos)}.</p>
+        <a href="/disponibilidad?tipologia=Duplex" data-track="ver_unidades" data-track-label="Duplex" style="font-size:14px;font-weight:500;border-bottom:1px solid oklch(48% 0.09 75);">Ver unidades disponibles →</a>
       </div>
     </div>
     <div style="border:1px solid oklch(87% 0.014 75);background:oklch(97% 0.01 75);">
@@ -142,10 +155,63 @@ const localesJsonLd = {
       </div>
       <div style="padding:32px;">
         <h3 style="font-family:'Lora',serif;font-size:24px;font-weight:500;margin:0 0 10px;">{L.count} Locales Comerciales</h3>
-        <p style="font-size:15px;color:oklch(45% 0.025 75);line-height:1.6;margin:0 0 18px;">{formatM2(L)} según local, en el primer piso. Ideales para cafés, tiendas de barrio o servicios.</p>
-        <a href="/disponibilidad?tipologia=Local" style="font-size:14px;font-weight:500;border-bottom:1px solid oklch(48% 0.09 75);">Ver unidades disponibles →</a>
+        <p style="font-size:15px;color:oklch(45% 0.025 75);line-height:1.6;margin:0 0 18px;">{formatM2(L)} según local, en {formatPisos(L.pisos)}. Ideales para cafés, tiendas de barrio o servicios.</p>
+        <a href="/disponibilidad?tipologia=Local" data-track="ver_unidades" data-track-label="Local" style="font-size:14px;font-weight:500;border-bottom:1px solid oklch(48% 0.09 75);">Ver unidades disponibles →</a>
       </div>
     </div>
+  </section>
+
+
+  <section id="plantas" style="padding:0 var(--pad-x) 88px;max-width:1200px;margin:0 auto;">
+    <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(58% 0.09 75);margin:0 0 14px;">Plantas</p>
+    <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:500;margin:0 0 16px;">Las {plantas.length} plantas del proyecto</h2>
+    <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.03 75);margin:0 0 32px;max-width:760px;">
+      Cada planta se repite en varios niveles. Dos de ellas —<strong>B1</strong> y <strong>B2</strong>— concentran
+      {plantas.filter((t) => t.codigo === 'B1' || t.codigo === 'B2').reduce((n, t) => n + t.count, 0)} de
+      los {plantas.reduce((n, t) => n + t.count, 0)} departamentos. La superficie total es útil más terraza:
+      es la superficie sobre la que se cotiza. Dentro de una misma planta el precio varía según el nivel
+      —{(ESCALA_POR_NIVEL * 100).toFixed(0)}% por piso—, así que la columna de precio muestra el rango.
+    </p>
+
+    <div style="overflow-x:auto;border:1px solid oklch(87% 0.014 75);">
+      <table style="width:100%;min-width:720px;border-collapse:collapse;font-size:14px;background:oklch(97% 0.01 75);">
+        <thead>
+          <tr style="background:oklch(94% 0.014 75);text-align:left;">
+            <th scope="col" style="padding:14px 16px;font-weight:600;">Planta</th>
+            <th scope="col" style="padding:14px 16px;font-weight:600;">Uds.</th>
+            <th scope="col" style="padding:14px 16px;font-weight:600;">Útil</th>
+            <th scope="col" style="padding:14px 16px;font-weight:600;">Terraza</th>
+            <th scope="col" style="padding:14px 16px;font-weight:600;">Total</th>
+            <th scope="col" style="padding:14px 16px;font-weight:600;">Precio</th>
+            <th scope="col" style="padding:14px 16px;font-weight:600;">Niveles</th>
+            <th scope="col" style="padding:14px 16px;"><span class="sr-only">Ver unidades</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {plantas.map((t) => (
+            <tr style="border-top:1px solid oklch(87% 0.014 75);">
+              <th scope="row" style="padding:14px 16px;text-align:left;font-weight:500;">
+                <span style="font-family:'Lora',serif;font-size:17px;color:oklch(40% 0.09 75);">Tipo {t.codigo}</span>
+                <span style="display:block;font-size:13px;font-weight:400;color:oklch(45% 0.025 75);margin-top:2px;">{t.nombre}</span>
+              </th>
+              <td style="padding:14px 16px;">{t.count}</td>
+              <td style="padding:14px 16px;color:oklch(45% 0.025 75);">{formatRangoM2(t.minUtil, t.maxUtil)}</td>
+              <td style="padding:14px 16px;color:oklch(45% 0.025 75);">{t.maxTerraza > 0 ? formatRangoM2(t.minTerraza, t.maxTerraza) : '—'}</td>
+              <td style="padding:14px 16px;font-weight:600;">{formatRangoM2(t.minM2, t.maxM2)}</td>
+              <td style="padding:14px 16px;font-family:'Lora',serif;color:oklch(48% 0.09 75);white-space:nowrap;">{formatRangoUF(t.minUF, t.maxUF)}</td>
+              <td style="padding:14px 16px;color:oklch(45% 0.025 75);white-space:nowrap;">{t.pisos.map(nivelCorto).join(', ')}</td>
+              <td style="padding:14px 16px;white-space:nowrap;">
+                <a href={`/disponibilidad?tc=${t.codigo}`} data-track="ver_planta" data-track-label={t.codigo} style="font-size:14px;font-weight:500;border-bottom:1px solid oklch(48% 0.09 75);">Ver →</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:13px;line-height:1.6;color:oklch(45% 0.025 75);margin:14px 0 0;">
+      Los {L.count} locales comerciales del primer piso ({formatRangoM2(L.minM2, L.maxM2)}, desde {formatUF(L.minUF)}) se detallan en la ficha de arriba.
+    </p>
   </section>
 
   <Cotizador />
@@ -156,4 +222,23 @@ const localesJsonLd = {
   </main>
 
   <Footer variant="simple" />
+
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  #plantas a:focus-visible {
+    outline: 2px solid oklch(48% 0.09 75);
+    outline-offset: 2px;
+  }
+</style>
 </BaseLayout>

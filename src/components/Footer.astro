@@ -1,39 +1,92 @@
 ---
+import Disclaimer from './Disclaimer.astro';
+import {
+  CONTACT_EMAIL,
+  CREDITOS,
+  SALA_VENTAS_DIRECCION,
+  SALA_VENTAS_HORARIO,
+  TIENE_WHATSAPP,
+  WHATSAPP_DISPLAY,
+  whatsappUrl,
+} from '../lib/config';
+
 interface Props {
   variant?: 'full' | 'simple';
 }
 
 const { variant = 'full' } = Astro.props;
+
+const linkColor = 'oklch(87% 0.014 75)';
 ---
 
-{variant === 'full' ? (
-  <footer style="background:oklch(19% 0.03 75);color:oklch(80% 0.014 75);padding:56px var(--pad-x) 28px;">
-    <div style="display:grid;grid-template-columns:var(--cols-footer);gap:48px;max-width:1200px;margin:0 auto;">
-      <div>
-        <div style="font-family:'Lora',serif;font-size:20px;color:oklch(98% 0.006 75);margin-bottom:12px;">Patio Riquelme</div>
-        <p style="font-size:14px;line-height:1.6;color:oklch(65% 0.025 75);max-width:320px;">Guardia Marina Ernesto Riquelme 536 y Santo Domingo 1720, Santiago Centro.</p>
-      </div>
-      <div>
-        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(65% 0.025 75);margin-bottom:14px;">Navegación</div>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
-          <a href="/tipologias" style="color:oklch(87% 0.014 75);">Tipologías</a>
-          <a href="/disponibilidad" style="color:oklch(87% 0.014 75);">Disponibilidad</a>
-          <a href="/ubicacion" style="color:oklch(87% 0.014 75);">Ubicación</a>
-          <a href="/contacto" style="color:oklch(87% 0.014 75);">Contacto</a>
+<footer style="background:oklch(19% 0.03 75);color:oklch(80% 0.014 75);">
+  {variant === 'full' && (
+    <div style="padding:56px var(--pad-x) 0;">
+      <div style="display:grid;grid-template-columns:var(--cols-footer);gap:48px;max-width:1200px;margin:0 auto;">
+        <div>
+          <div style="font-family:'Lora',serif;font-size:20px;color:oklch(98% 0.006 75);margin-bottom:12px;">Patio Riquelme</div>
+          <p style="font-size:14px;line-height:1.6;color:oklch(65% 0.025 75);max-width:320px;">Guardia Marina Ernesto Riquelme 536 y Santo Domingo 1720, Santiago Centro.</p>
+        </div>
+        <div>
+          <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(65% 0.025 75);margin-bottom:14px;">Navegación</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+            <a href="/tipologias" style={`color:${linkColor};`}>Tipologías</a>
+            <a href="/disponibilidad" style={`color:${linkColor};`}>Disponibilidad</a>
+            <a href="/ubicacion" style={`color:${linkColor};`}>Ubicación</a>
+            <a href="/contacto" style={`color:${linkColor};`}>Contacto</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(65% 0.025 75);margin-bottom:14px;">Contacto</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+            <a href={`mailto:${CONTACT_EMAIL}`} style={`color:${linkColor};`} data-track="email_footer">{CONTACT_EMAIL}</a>
+            {TIENE_WHATSAPP && (
+              <a href={whatsappUrl()} target="_blank" rel="noopener" style={`color:${linkColor};`} data-track="whatsapp_footer">WhatsApp {WHATSAPP_DISPLAY}</a>
+            )}
+            <span style={`color:${linkColor};`}>@patioriquelme — Instagram / TikTok</span>
+            {SALA_VENTAS_HORARIO && (
+              <span style="color:oklch(65% 0.025 75);line-height:1.5;">Sala de ventas: {SALA_VENTAS_DIRECCION}<br />{SALA_VENTAS_HORARIO}</span>
+            )}
+          </div>
         </div>
       </div>
-      <div>
-        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(65% 0.025 75);margin-bottom:14px;">Contacto</div>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
-          <a href="mailto:contacto@patioriquelme.cl" style="color:oklch(87% 0.014 75);">contacto@patioriquelme.cl</a>
-          <span style="color:oklch(87% 0.014 75);">@patioriquelme — Instagram / TikTok</span>
+
+      {CREDITOS.length > 0 && (
+        <div style="max-width:1200px;margin:44px auto 0;padding-top:28px;border-top:1px solid oklch(38% 0.03 75);">
+          <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(65% 0.025 75);margin-bottom:20px;">Créditos del proyecto</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:28px;align-items:start;">
+            {CREDITOS.map((c) => (
+              <div>
+                <div style="font-size:12px;text-transform:uppercase;letter-spacing:1px;color:oklch(58% 0.025 75);margin-bottom:8px;">{c.rol}</div>
+                {c.logo ? (
+                  <img src={c.logo} alt={`${c.rol}: ${c.nombre}`} loading="lazy" style="max-height:44px;width:auto;max-width:100%;display:block;margin-bottom:6px;" />
+                ) : null}
+                {c.url ? (
+                  <a href={c.url} target="_blank" rel="noopener" style={`color:${linkColor};font-size:15px;`}>{c.nombre}</a>
+                ) : (
+                  <div style={`color:${linkColor};font-size:15px;`}>{c.nombre}</div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
-    <div style="max-width:1200px;margin:40px auto 0;padding-top:20px;border-top:1px solid oklch(38% 0.03 75);font-size:12px;color:oklch(58% 0.025 75);">Proyecto en etapa de construcción. Imágenes y renders referenciales, sujetos a modificaciones durante la obra.</div>
-  </footer>
-) : (
-  <footer style="background:oklch(19% 0.03 75);color:oklch(80% 0.014 75);padding:40px var(--pad-x);text-align:center;font-size:13px;border-top:1px solid oklch(38% 0.03 75);">
-    <a href="/" style="color:oklch(87% 0.014 75);">Patio Riquelme</a> — Guardia Marina Ernesto Riquelme 536 / Santo Domingo 1720, Santiago Centro
-  </footer>
-)}
+  )}
+
+  {variant === 'simple' && (
+    <div style="padding:40px var(--pad-x) 0;text-align:center;font-size:13px;">
+      <a href="/" style={`color:${linkColor};`}>Patio Riquelme</a> — Guardia Marina Ernesto Riquelme 536 / Santo Domingo 1720, Santiago Centro
+      {TIENE_WHATSAPP && (
+        <>
+          {' · '}
+          <a href={whatsappUrl()} target="_blank" rel="noopener" style={`color:${linkColor};`} data-track="whatsapp_footer">WhatsApp {WHATSAPP_DISPLAY}</a>
+        </>
+      )}
+    </div>
+  )}
+
+  <div style="margin-top:36px;">
+    <Disclaimer tone="dark" />
+  </div>
+</footer>

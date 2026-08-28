@@ -6,10 +6,17 @@ import Footer from '../components/Footer.astro';
 import renderFachadaPalma from '../assets/render-fachada-palma.png';
 import logoPatioRiquelme from '../assets/logo-patio-riquelme.png';
 import { breadcrumbJsonLd } from '../lib/schema';
+import {
+  COORDENADAS,
+  HITOS,
+  MAPA_EMBED_URL,
+  MAPA_LINK_EXTERNO,
+  METRO_FRASE_CORTA,
+} from '../lib/config';
 
 const title = 'Ubicación — Santo Domingo, Santiago Centro | Patio Riquelme';
 const description =
-  'Patio Riquelme está en Santo Domingo, a 1 cuadra del Metro Santa Ana y 15 minutos caminando de Plaza de Armas, Santiago Centro.';
+  `Patio Riquelme está en Santo Domingo. ${METRO_FRASE_CORTA}, 15 minutos caminando de Plaza de Armas y 10 del Barrio Brasil, Santiago Centro.`;
 
 const breadcrumbs = breadcrumbJsonLd([
   { name: 'Inicio', path: '/' },
@@ -29,8 +36,8 @@ const placeJsonLd = {
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: -33.44,
-    longitude: -70.6718,
+    latitude: COORDENADAS.lat,
+    longitude: COORDENADAS.lng,
   },
 };
 ---
@@ -51,31 +58,33 @@ const placeJsonLd = {
   <section style="padding:0 var(--pad-x) 56px;max-width:1200px;margin:0 auto;">
     <div style="border:1px solid oklch(87% 0.014 75);height:420px;overflow:hidden;">
       <iframe
-        title="Ubicación Patio Riquelme"
-        src="https://www.openstreetmap.org/export/embed.html?bbox=-70.6828%2C-33.4460%2C-70.6608%2C-33.4340&layer=mapnik&marker=-33.4400%2C-70.6718"
+        title="Mapa de ubicación de Patio Riquelme"
+        src={MAPA_EMBED_URL}
         loading="lazy"
         style="width:100%;height:100%;border:0;"
       ></iframe>
     </div>
-    <p style="font-size:13px;color:oklch(45% 0.025 75);margin-top:12px;">Guardia Marina Ernesto Riquelme 536 y Santo Domingo 1720, Santiago Centro.</p>
+    <p style="font-size:13px;color:oklch(45% 0.025 75);margin-top:12px;">
+      Guardia Marina Ernesto Riquelme 536 y Santo Domingo 1720, Santiago Centro.
+      <a href={MAPA_LINK_EXTERNO} target="_blank" rel="noopener" data-track="abrir_mapa" style="color:oklch(40% 0.09 75);border-bottom:1px solid oklch(48% 0.09 75);margin-left:6px;">Abrir en Google Maps →</a>
+    </p>
   </section>
 
   <section style="padding:24px var(--pad-x) 88px;display:grid;grid-template-columns:var(--cols-2-loc);gap:40px;max-width:1200px;margin:0 auto;align-items:start;">
     <div>
       <h2 style="font-family:'Lora',serif;font-size:28px;font-weight:500;margin:0 0 28px;">Conectividad</h2>
       <div style="display:flex;flex-direction:column;gap:22px;">
-        <div style="display:flex;gap:16px;padding-bottom:20px;border-bottom:1px solid oklch(87% 0.014 75);">
-          <div style="font-family:'Lora',serif;font-size:20px;color:oklch(58% 0.09 75);min-width:56px;">1 cdra</div>
-          <div><div style="font-weight:600;font-size:15px;">Metro Santa Ana</div><div style="font-size:14px;color:oklch(45% 0.025 75);">A una cuadra caminando</div></div>
-        </div>
-        <div style="display:flex;gap:16px;padding-bottom:20px;border-bottom:1px solid oklch(87% 0.014 75);">
-          <div style="font-family:'Lora',serif;font-size:20px;color:oklch(58% 0.09 75);min-width:56px;">15 min</div>
-          <div><div style="font-weight:600;font-size:15px;">Plaza de Armas y centro histórico</div><div style="font-size:14px;color:oklch(45% 0.025 75);">Caminando</div></div>
-        </div>
-        <div style="display:flex;gap:16px;">
-          <div style="font-family:'Lora',serif;font-size:20px;color:oklch(58% 0.09 75);min-width:56px;">min</div>
-          <div><div style="font-weight:600;font-size:15px;">Barrio Brasil</div><div style="font-size:14px;color:oklch(45% 0.025 75);">A pocos minutos, con su vida de plazas, cafés y cultura</div></div>
-        </div>
+        {HITOS.map((h, i) => (
+          <div style={`display:flex;gap:16px;${i < HITOS.length - 1 ? 'padding-bottom:20px;border-bottom:1px solid oklch(87% 0.014 75);' : ''}`}>
+            {h.valor && (
+              <div style="font-family:'Lora',serif;font-size:20px;color:oklch(58% 0.09 75);min-width:56px;">{h.valor}</div>
+            )}
+            <div>
+              <div style="font-weight:600;font-size:15px;">{h.nombre}</div>
+              <div style="font-size:14px;color:oklch(45% 0.025 75);">{h.detalle}</div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
     <div style="border:1px solid oklch(87% 0.014 75);">
