@@ -16,6 +16,7 @@ npm install       # instala dependencias
 npm run dev       # servidor de desarrollo en http://localhost:4321
 npm run build     # build de producción a ./dist
 npm run preview   # sirve el build de ./dist localmente
+npm test          # build + suite de tests (ver «Tests»)
 ```
 
 ## Estructura
@@ -45,6 +46,7 @@ public/
 ├── llms.txt           # resumen del sitio para crawlers de IA / answer engines
 ├── og-image.jpg       # imagen para Open Graph / Twitter Card
 └── brochure.pdf       # brochure descargable (generado con scripts/generate-brochure.mjs)
+tests/                  # tests del buscador (node --test + puppeteer-core sobre ./dist)
 unidades_cotizador.csv  # inventario real de unidades (tipología, m², piso, precio) — fuente de verdad para tipologías.astro y el cotizador
 ```
 
@@ -95,6 +97,37 @@ Cada unidad expone `uf` (precio de lista, el que se publica), `ufBase` (el del C
 Además, `formatUF()` degrada a `"Consultar"` ante cualquier valor no publicable, como segunda red de seguridad en runtime.
 
 > El CSV viene con saltos de línea CRLF. El parser los normaliza explícitamente: sin eso, la última cabecera queda como `precio_estimado_uf\r` y **todos** los precios del sitio salen `NaN`.
+
+## Tests
+
+```bash
+npm test        # build + tests
+npm run test:only   # tests sobre el ./dist ya construido
+```
+
+Corren con el runner de Node (`node --test`, sin dependencias nuevas) y apuntan
+al **build real** de `./dist`, no al código fuente: los tests levantan un
+servidor estático sobre `dist/` y abren `/disponibilidad` en Chromium
+(`puppeteer-core`, el mismo que usa el brochure). Si Chrome no está en una ruta
+conocida, apunta `CHROME_PATH` al ejecutable.
+
+- [`tests/buscador.test.mjs`](tests/buscador.test.mjs) — el filtro de
+  `/disponibilidad`: preselección por `?tipologia=`, `?piso=`, `?cuerpo=` y
+  `?tc=`, los chips, el cruce entre filtros, el rango de precio y «Limpiar
+  filtros». La aserción central es que **lo que se renderiza** es exactamente lo
+  que cumple el filtro, y que el contador coincide con lo que se ve.
+- [`tests/ocultamiento.test.mjs`](tests/ocultamiento.test.mjs) — guarda estática
+  sobre el HTML construido, sin navegador.
+
+> **Por qué se mide lo renderizado y no la clase `oculta`.** El buscador oculta
+> unidades agregando `.oculta`, pero las tarjetas traían `display:flex` en un
+> atributo `style` inline, que le gana por cascada a
+> `.unidad-card.oculta {display:none}`. El JS marcaba bien las tarjetas y el
+> contador decía «3 unidades disponibles», mientras en pantalla seguían
+> apareciendo las 1D. Un test que comprobara la clase habría dado verde con el
+> bug vivo. Por eso la presentación de la tarjeta vive en el bloque `<style>`
+> del componente y ningún elemento que se oculte por clase puede declarar
+> `display` inline.
 
 ## Tipologías comerciales
 
