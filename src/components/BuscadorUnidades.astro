@@ -105,7 +105,7 @@ const inputStyle =
   </div>
 
   {grupos.map(({ piso, label, nota, unidades }) => (
-    <div class="piso-group" data-piso={String(piso)} style="margin-bottom:48px;">
+    <div class="piso-group" data-piso={String(piso)}>
       <h2 style={`font-family:'Lora',serif;font-size:24px;font-weight:500;margin:0 0 ${nota ? '10px' : '20px'};padding-bottom:12px;border-bottom:1px solid oklch(87% 0.014 75);`}>
         {label}
         <span class="piso-count" style="font-family:'Work Sans',sans-serif;font-size:14px;font-weight:400;color:oklch(45% 0.025 75);margin-left:10px;">{unidades.length} unidades</span>
@@ -113,7 +113,7 @@ const inputStyle =
       {nota && (
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:oklch(45% 0.025 75);max-width:720px;">{nota}</p>
       )}
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
+      <div class="unidad-grid">
         {unidades.map((u) => (
           <article
             class="unidad-card"
@@ -123,7 +123,6 @@ const inputStyle =
             data-piso={String(u.piso)}
             data-cuerpo={u.cuerpo}
             data-uf={String(u.uf)}
-            style="border:1px solid oklch(87% 0.014 75);background:oklch(97% 0.01 75);padding:24px;display:flex;flex-direction:column;gap:14px;"
           >
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
               <h3 style="font-family:'Lora',serif;font-size:22px;font-weight:500;margin:0;">{u.nombre}</h3>
@@ -299,9 +298,35 @@ const inputStyle =
     color: oklch(98% 0.006 75);
   }
 
+  .piso-group {
+    margin-bottom: 48px;
+  }
+
+  .unidad-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  /*
+   * La tarjeta declara su `display` aquí y NO en un atributo `style` inline:
+   * una declaración inline le gana a cualquier regla de la hoja de estilos, así
+   * que un `display:flex` inline dejaba a `.oculta` sin efecto y el buscador
+   * seguía mostrando todas las unidades aunque el contador dijera otra cosa.
+   */
+  .unidad-card {
+    border: 1px solid oklch(87% 0.014 75);
+    background: oklch(97% 0.01 75);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* `!important` como red de seguridad: ocultar es lo único que no puede fallar. */
   .unidad-card.oculta,
   .piso-group.oculta {
-    display: none;
+    display: none !important;
   }
 
   /* Foco visible y consistente en todos los controles del buscador y del modal. */
