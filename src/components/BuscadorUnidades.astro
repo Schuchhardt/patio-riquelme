@@ -30,12 +30,12 @@ const grupos = pisosDisponibles.map((piso) => ({
 const total = unidadesPublicas.length;
 
 const inputStyle =
-  "padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);width:100%;";
+  "padding:14px 16px;border:1px solid var(--c-line-strong);font-size:15px;font-family:var(--font-sans);background:var(--c-bg);width:100%;";
 ---
 
 <section id="unidades" style="padding:0 var(--pad-x) 88px;max-width:1200px;margin:0 auto;">
   <!-- Filtros -->
-  <div style="border:1px solid oklch(87% 0.014 75);background:oklch(97% 0.01 75);padding:clamp(20px, 4vw, 32px);margin-bottom:40px;">
+  <div style="border:1px solid var(--c-line);background:var(--c-bg);padding:clamp(20px, 4vw, 32px);margin-bottom:40px;">
     <fieldset style="border:0;padding:0;margin:0 0 26px;">
       <legend class="filtro-label" style="padding:0;">Tipología</legend>
       <div class="chip-group" data-filter="familia" role="group" aria-label="Filtrar por tipología">
@@ -64,7 +64,7 @@ const inputStyle =
           <button type="button" class="chip" data-value={c} aria-pressed="false">{CUERPO_LABELS[c] ?? `Cuerpo ${c}`}</button>
         ))}
       </div>
-      <p style="margin:12px 0 0;font-size:13px;line-height:1.6;color:oklch(45% 0.025 75);">
+      <p style="margin:12px 0 0;font-size:13px;line-height:1.6;color:var(--c-muted);">
         El edificio se organiza en tres cuerpos (A, B y C) en torno al patio central. La letra al final de cada
         unidad — por ejemplo <strong>201 B</strong> — indica a cuál pertenece.
       </p>
@@ -73,45 +73,45 @@ const inputStyle =
     <fieldset style="border:0;padding:0;margin:0;">
       <legend class="filtro-label" style="padding:0;">Precio estimado (UF)</legend>
       <div style="display:flex;align-items:baseline;gap:8px;font-size:15px;margin-bottom:14px;">
-        <span id="precio-desde" style="font-family:'Lora',serif;font-size:22px;color:oklch(48% 0.09 75);">{formatUF(rangoUF.min)}</span>
-        <span style="color:oklch(45% 0.025 75);">—</span>
-        <span id="precio-hasta" style="font-family:'Lora',serif;font-size:22px;color:oklch(48% 0.09 75);">{formatUF(rangoUF.max)}</span>
+        <span id="precio-desde" style="font-family:var(--font-serif);font-size:22px;color:var(--c-ink);">{formatUF(rangoUF.min)}</span>
+        <span style="color:var(--c-muted);">—</span>
+        <span id="precio-hasta" style="font-family:var(--font-serif);font-size:22px;color:var(--c-ink);">{formatUF(rangoUF.max)}</span>
       </div>
       <div style="display:grid;grid-template-columns:var(--cols-form);gap:16px;">
         <div>
-          <label for="uf-min" style="display:block;font-size:13px;color:oklch(45% 0.025 75);">Desde</label>
+          <label for="uf-min" style="display:block;font-size:13px;color:var(--c-muted);">Desde</label>
           <input type="range" id="uf-min" min={rangoUF.min} max={rangoUF.max} step="100" value={rangoUF.min}
             aria-label="Precio mínimo en UF"
-            style="width:100%;accent-color:oklch(58% 0.09 75);margin-top:6px;" />
+            style="width:100%;accent-color:var(--c-accent);margin-top:6px;" />
         </div>
         <div>
-          <label for="uf-max" style="display:block;font-size:13px;color:oklch(45% 0.025 75);">Hasta</label>
+          <label for="uf-max" style="display:block;font-size:13px;color:var(--c-muted);">Hasta</label>
           <input type="range" id="uf-max" min={rangoUF.min} max={rangoUF.max} step="100" value={rangoUF.max}
             aria-label="Precio máximo en UF"
-            style="width:100%;accent-color:oklch(58% 0.09 75);margin-top:6px;" />
+            style="width:100%;accent-color:var(--c-accent);margin-top:6px;" />
         </div>
       </div>
     </fieldset>
   </div>
 
-  <div id="filtro-planta" style="display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding:14px 18px;border:1px solid oklch(58% 0.09 75);background:oklch(94% 0.014 75);">
-    <span style="font-size:14px;color:oklch(30% 0.035 75);">Mostrando solo la planta <strong id="filtro-planta-nombre"></strong></span>
-    <button type="button" id="quitar-planta" style="background:none;border:none;padding:0;font-size:14px;font-weight:500;color:oklch(48% 0.09 75);cursor:pointer;border-bottom:1px solid oklch(48% 0.09 75);font-family:'Work Sans',sans-serif;">Ver todas las unidades</button>
+  <div id="filtro-planta" style="display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;padding:14px 18px;border:1px solid var(--c-accent);background:var(--c-surface);">
+    <span style="font-size:14px;color:var(--c-text);">Mostrando solo la planta <strong id="filtro-planta-nombre"></strong></span>
+    <button type="button" id="quitar-planta" style="background:none;border:none;padding:0;font-size:14px;font-weight:500;color:var(--c-ink);cursor:pointer;border-bottom:1px solid var(--c-ink);font-family:var(--font-sans);">Ver todas las unidades</button>
   </div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px;">
-    <p id="resultado-count" aria-live="polite" style="margin:0;font-size:15px;color:oklch(38% 0.03 75);">{total} unidades disponibles</p>
-    <button type="button" id="limpiar-filtros" style="background:none;border:none;padding:0;font-size:14px;font-weight:500;color:oklch(48% 0.09 75);cursor:pointer;border-bottom:1px solid oklch(48% 0.09 75);font-family:'Work Sans',sans-serif;">Limpiar filtros</button>
+    <p id="resultado-count" aria-live="polite" style="margin:0;font-size:15px;color:var(--c-text-2);">{total} unidades disponibles</p>
+    <button type="button" id="limpiar-filtros" style="background:none;border:none;padding:0;font-size:14px;font-weight:500;color:var(--c-ink);cursor:pointer;border-bottom:1px solid var(--c-ink);font-family:var(--font-sans);">Limpiar filtros</button>
   </div>
 
   {grupos.map(({ piso, label, nota, unidades }) => (
     <div class="piso-group" data-piso={String(piso)}>
-      <h2 style={`font-family:'Lora',serif;font-size:24px;font-weight:500;margin:0 0 ${nota ? '10px' : '20px'};padding-bottom:12px;border-bottom:1px solid oklch(87% 0.014 75);`}>
+      <h2 style={`font-family:var(--font-serif);font-size:24px;font-weight:400;margin:0 0 ${nota ? '10px' : '20px'};padding-bottom:12px;border-bottom:1px solid var(--c-line);`}>
         {label}
-        <span class="piso-count" style="font-family:'Work Sans',sans-serif;font-size:14px;font-weight:400;color:oklch(45% 0.025 75);margin-left:10px;">{unidades.length} unidades</span>
+        <span class="piso-count" style="font-family:var(--font-sans);font-size:14px;font-weight:400;color:var(--c-muted);margin-left:10px;">{unidades.length} unidades</span>
       </h2>
       {nota && (
-        <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:oklch(45% 0.025 75);max-width:720px;">{nota}</p>
+        <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:var(--c-muted);max-width:720px;">{nota}</p>
       )}
       <div class="unidad-grid">
         {unidades.map((u) => (
@@ -125,32 +125,32 @@ const inputStyle =
             data-uf={String(u.uf)}
           >
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
-              <h3 style="font-family:'Lora',serif;font-size:22px;font-weight:500;margin:0;">{u.nombre}</h3>
-              <span title={`Planta ${u.tc} · ${u.tcNombre}`} style="font-size:11px;letter-spacing:0.5px;text-transform:uppercase;background:oklch(91% 0.03 75);color:oklch(40% 0.06 75);padding:5px 9px;white-space:nowrap;">{u.tc === 'LOCAL' ? 'Local' : `Tipo ${u.tc}`}</span>
+              <h3 style="font-family:var(--font-serif);font-size:22px;font-weight:400;margin:0;">{u.nombre}</h3>
+              <span title={`Planta ${u.tc} · ${u.tcNombre}`} style="font-size:11px;letter-spacing:0.5px;text-transform:uppercase;background:var(--c-chip);color:var(--c-chip-ink);padding:5px 9px;white-space:nowrap;">{u.tc === 'LOCAL' ? 'Local' : `Tipo ${u.tc}`}</span>
             </div>
 
-            <dl style="margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;color:oklch(45% 0.025 75);">
+            <dl style="margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;color:var(--c-muted);">
               <dt>Superficie útil</dt>
-              <dd style="margin:0;color:oklch(25% 0.035 75);">{formatM2Valor(u.m2Util)}</dd>
+              <dd style="margin:0;color:var(--c-text);">{formatM2Valor(u.m2Util)}</dd>
               <dt>Terraza</dt>
-              <dd style="margin:0;color:oklch(25% 0.035 75);">{u.m2Terraza > 0 ? formatM2Valor(u.m2Terraza) : '—'}</dd>
-              <dt style="font-weight:600;color:oklch(30% 0.035 75);">Superficie total</dt>
-              <dd style="margin:0;font-weight:600;color:oklch(25% 0.035 75);">{formatM2Valor(u.m2Total)}</dd>
+              <dd style="margin:0;color:var(--c-text);">{u.m2Terraza > 0 ? formatM2Valor(u.m2Terraza) : '—'}</dd>
+              <dt style="font-weight:600;color:var(--c-text);">Superficie total</dt>
+              <dd style="margin:0;font-weight:600;color:var(--c-text);">{formatM2Valor(u.m2Total)}</dd>
               {u.orientacion && (
                 <>
                   <dt>Orientación</dt>
-                  <dd style="margin:0;color:oklch(25% 0.035 75);">{u.orientacion}</dd>
+                  <dd style="margin:0;color:var(--c-text);">{u.orientacion}</dd>
                 </>
               )}
               <dt>Planta</dt>
-              <dd style="margin:0;color:oklch(25% 0.035 75);">{u.tcNombre}</dd>
+              <dd style="margin:0;color:var(--c-text);">{u.tcNombre}</dd>
               <dt>Ubicación</dt>
-              <dd style="margin:0;color:oklch(25% 0.035 75);">{u.pisoLabel} · {u.cuerpoLabel}{u.duplex ? ' · Duplex' : ''}</dd>
+              <dd style="margin:0;color:var(--c-text);">{u.pisoLabel} · {u.cuerpoLabel}{u.duplex ? ' · Duplex' : ''}</dd>
             </dl>
 
-            <div style="margin-top:auto;padding-top:12px;border-top:1px solid oklch(91% 0.014 75);">
-              <div style="font-size:12px;color:oklch(45% 0.025 75);margin-bottom:2px;">Precio estimado</div>
-              <div style="font-family:'Lora',serif;font-size:26px;color:oklch(48% 0.09 75);">{formatUF(u.uf)}</div>
+            <div style="margin-top:auto;padding-top:12px;border-top:1px solid var(--c-line-soft);">
+              <div style="font-size:12px;color:var(--c-muted);margin-bottom:2px;">Precio estimado</div>
+              <div style="font-family:var(--font-serif);font-size:26px;color:var(--c-ink);">{formatUF(u.uf)}</div>
             </div>
 
             <button
@@ -175,29 +175,29 @@ const inputStyle =
     </div>
   ))}
 
-  <p id="sin-resultados" style="display:none;padding:48px 24px;text-align:center;font-size:16px;color:oklch(45% 0.025 75);border:1px solid oklch(87% 0.014 75);background:oklch(97% 0.01 75);">
+  <p id="sin-resultados" style="display:none;padding:48px 24px;text-align:center;font-size:16px;color:var(--c-muted);border:1px solid var(--c-line);background:var(--c-bg);">
     No hay unidades con esos filtros. Ajusta el rango de precio o escríbenos a <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
   </p>
 </section>
 
 <dialog id="cotizar-dialog" aria-labelledby="cotizar-titulo">
-  <button type="button" id="cerrar-dialog" aria-label="Cerrar" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:oklch(45% 0.025 75);">×</button>
+  <button type="button" id="cerrar-dialog" aria-label="Cerrar" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:24px;line-height:1;cursor:pointer;color:var(--c-muted);">×</button>
 
   <div id="cotizar-ok" style="display:none;">
-    <h2 style="font-family:'Lora',serif;font-size:26px;font-weight:500;margin:0 0 12px;">Solicitud enviada</h2>
-    <p style="margin:0;font-size:15px;line-height:1.7;color:oklch(38% 0.03 75);">Recibimos tu interés por la unidad <strong id="ok-unidad"></strong>. Nuestro equipo te contactará con el detalle de la cotización y los pasos para firmar la promesa de compraventa.</p>
+    <h2 style="font-family:var(--font-serif);font-size:26px;font-weight:400;margin:0 0 12px;">Solicitud enviada</h2>
+    <p style="margin:0;font-size:15px;line-height:1.7;color:var(--c-text-2);">Recibimos tu interés por la unidad <strong id="ok-unidad"></strong>. Nuestro equipo te contactará con el detalle de la cotización y los pasos para firmar la promesa de compraventa.</p>
     {TIENE_WHATSAPP && (
-      <p style="margin:18px 0 0;font-size:15px;">¿Prefieres hablar ahora? <a href={whatsappUrl()} target="_blank" rel="noopener" data-track="whatsapp_modal" style="color:oklch(40% 0.09 75);border-bottom:1px solid oklch(48% 0.09 75);">Escríbenos por WhatsApp</a></p>
+      <p style="margin:18px 0 0;font-size:15px;">¿Prefieres hablar ahora? <a href={whatsappUrl()} target="_blank" rel="noopener" data-track="whatsapp_modal" style="color:var(--c-ink);border-bottom:1px solid var(--c-ink);">Escríbenos por WhatsApp</a></p>
     )}
   </div>
 
   <div id="cotizar-body">
-    <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(58% 0.09 75);margin:0 0 10px;">Cotizar unidad</p>
-    <h2 id="cotizar-titulo" style="font-family:'Lora',serif;font-size:28px;font-weight:500;margin:0 0 6px;"></h2>
-    <p id="cotizar-detalle" style="margin:0 0 22px;font-size:15px;color:oklch(45% 0.025 75);"></p>
+    <p style="font-size:12px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--c-eyebrow);margin:0 0 10px;">Cotizar unidad</p>
+    <h2 id="cotizar-titulo" style="font-family:var(--font-serif);font-size:28px;font-weight:400;margin:0 0 6px;"></h2>
+    <p id="cotizar-detalle" style="margin:0 0 22px;font-size:15px;color:var(--c-muted);"></p>
 
-    <div id="cotizar-error" role="alert" style="display:none;margin-bottom:18px;padding:16px;background:oklch(94% 0.014 75);border:1px solid oklch(55% 0.15 30);">
-      <p id="cotizar-error-texto" style="margin:0;font-size:14px;">Hubo un problema al enviar tu solicitud. Intenta de nuevo o escríbenos directo a <a href={`mailto:${CONTACT_EMAIL}`} style="color:oklch(25% 0.035 75);">{CONTACT_EMAIL}</a>.</p>
+    <div id="cotizar-error" role="alert" style="display:none;margin-bottom:18px;padding:16px;background:var(--c-surface);border:1px solid var(--c-error);">
+      <p id="cotizar-error-texto" style="margin:0;font-size:14px;">Hubo un problema al enviar tu solicitud. Intenta de nuevo o escríbenos directo a <a href={`mailto:${CONTACT_EMAIL}`} style="color:var(--c-text);">{CONTACT_EMAIL}</a>.</p>
     </div>
 
     <form id="cotizar-form" action={FORMSPREE_ENDPOINT} method="POST" novalidate style="display:flex;flex-direction:column;gap:16px;">
@@ -219,25 +219,25 @@ const inputStyle =
 
       <div style="display:grid;grid-template-columns:var(--cols-form);gap:16px;">
         <div>
-          <label for="cotizar-nombre" style="display:block;font-size:13px;color:oklch(45% 0.025 75);margin-bottom:6px;">Nombre y apellido</label>
+          <label for="cotizar-nombre" style="display:block;font-size:13px;color:var(--c-muted);margin-bottom:6px;">Nombre y apellido</label>
           <input type="text" id="cotizar-nombre" name="nombre" required autocomplete="name" placeholder="Nombre y apellido" style={inputStyle} />
         </div>
         <div>
-          <label for="cotizar-telefono" style="display:block;font-size:13px;color:oklch(45% 0.025 75);margin-bottom:6px;">Teléfono</label>
+          <label for="cotizar-telefono" style="display:block;font-size:13px;color:var(--c-muted);margin-bottom:6px;">Teléfono</label>
           <input type="tel" id="cotizar-telefono" name="telefono" autocomplete="tel" inputmode="tel" placeholder="+56 9 1234 5678" style={inputStyle} />
         </div>
       </div>
       <div>
-        <label for="cotizar-email" style="display:block;font-size:13px;color:oklch(45% 0.025 75);margin-bottom:6px;">Email</label>
+        <label for="cotizar-email" style="display:block;font-size:13px;color:var(--c-muted);margin-bottom:6px;">Email</label>
         <input type="email" id="cotizar-email" name="email" required autocomplete="email" placeholder="tu@email.cl" style={inputStyle} />
       </div>
       <div>
-        <label for="cotizar-mensaje" style="display:block;font-size:13px;color:oklch(45% 0.025 75);margin-bottom:6px;">Mensaje (opcional)</label>
+        <label for="cotizar-mensaje" style="display:block;font-size:13px;color:var(--c-muted);margin-bottom:6px;">Mensaje (opcional)</label>
         <textarea id="cotizar-mensaje" name="mensaje" rows="3" placeholder="Cuéntanos qué necesitas saber" style={inputStyle + 'resize:vertical;'}></textarea>
       </div>
-      <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:oklch(38% 0.03 75);"><input type="checkbox" name="visita" value="Sí" /> Quiero agendar una visita presencial</label>
-      <button type="submit" id="cotizar-submit" data-track="cotizar_enviar" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);border:none;padding:16px 28px;font-size:15px;font-weight:500;cursor:pointer;font-family:'Work Sans',sans-serif;margin-top:4px;">Enviar solicitud de cotización</button>
-      <p style="margin:0;font-size:13px;line-height:1.6;color:oklch(45% 0.025 75);">Te contactaremos con la cotización formal y los pasos para la promesa de compraventa. Los precios son referenciales en UF y están sujetos a confirmación.</p>
+      <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--c-text-2);"><input type="checkbox" name="visita" value="Sí" /> Quiero agendar una visita presencial</label>
+      <button type="submit" id="cotizar-submit" data-track="cotizar_enviar" class="btn btn-dark" style="margin-top:4px;">Enviar solicitud de cotización</button>
+      <p style="margin:0;font-size:13px;line-height:1.6;color:var(--c-muted);">Te contactaremos con la cotización formal y los pasos para la promesa de compraventa. Los precios son referenciales en UF y están sujetos a confirmación.</p>
     </form>
   </div>
 </dialog>
@@ -248,7 +248,7 @@ const inputStyle =
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: oklch(45% 0.025 75);
+    color: var(--c-muted);
     margin-bottom: 12px;
   }
 
@@ -261,22 +261,22 @@ const inputStyle =
   .chip {
     padding: 10px 18px;
     font-size: 14px;
-    font-family: 'Work Sans', sans-serif;
-    border: 1px solid oklch(83% 0.014 75);
-    background: oklch(97% 0.01 75);
-    color: oklch(25% 0.035 75);
+    font-family: var(--font-sans);
+    border: 1px solid var(--c-line-strong);
+    background: var(--c-bg);
+    color: var(--c-text);
     cursor: pointer;
     transition: all 0.15s ease;
   }
 
   .chip:hover {
-    border-color: oklch(58% 0.09 75);
+    border-color: var(--c-accent);
   }
 
   .chip.active {
-    border-color: oklch(58% 0.09 75);
-    background: oklch(58% 0.09 75);
-    color: oklch(98% 0.006 75);
+    border-color: var(--c-accent);
+    background: var(--c-accent);
+    color: var(--c-on-dark);
     font-weight: 500;
   }
 
@@ -285,17 +285,17 @@ const inputStyle =
     padding: 12px;
     font-size: 14px;
     font-weight: 500;
-    font-family: 'Work Sans', sans-serif;
-    border: 1px solid oklch(58% 0.09 75);
-    background: oklch(97% 0.01 75);
-    color: oklch(40% 0.09 75);
+    font-family: var(--font-sans);
+    border: 1px solid var(--c-accent);
+    background: var(--c-bg);
+    color: var(--c-ink);
     cursor: pointer;
     transition: all 0.15s ease;
   }
 
   .cotizar-btn:hover {
-    background: oklch(58% 0.09 75);
-    color: oklch(98% 0.006 75);
+    background: var(--c-accent);
+    color: var(--c-on-dark);
   }
 
   .piso-group {
@@ -315,8 +315,8 @@ const inputStyle =
    * seguía mostrando todas las unidades aunque el contador dijera otra cosa.
    */
   .unidad-card {
-    border: 1px solid oklch(87% 0.014 75);
-    background: oklch(97% 0.01 75);
+    border: 1px solid var(--c-line);
+    background: var(--c-bg);
     padding: 24px;
     display: flex;
     flex-direction: column;
@@ -332,12 +332,12 @@ const inputStyle =
   /* Foco visible y consistente en todos los controles del buscador y del modal. */
   #unidades :is(button, input, a):focus-visible,
   #cotizar-dialog :is(button, input, textarea, a):focus-visible {
-    outline: 2px solid oklch(48% 0.09 75);
+    outline: 2px solid var(--c-ink);
     outline-offset: 2px;
   }
 
   .campo-invalido {
-    border-color: oklch(55% 0.15 30) !important;
+    border-color: var(--c-error) !important;
   }
 
   #cotizar-dialog {
@@ -347,14 +347,14 @@ const inputStyle =
     width: min(560px, calc(100vw - 32px));
     max-height: calc(100vh - 48px);
     padding: clamp(24px, 5vw, 40px);
-    border: 1px solid oklch(83% 0.014 75);
-    background: oklch(97% 0.01 75);
-    color: oklch(25% 0.035 75);
-    font-family: 'Work Sans', sans-serif;
+    border: 1px solid var(--c-line-strong);
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: var(--font-sans);
   }
 
   #cotizar-dialog::backdrop {
-    background: oklch(19% 0.03 75 / 0.6);
+    background: rgb(20 19 18 / 0.6);
   }
 </style>
 

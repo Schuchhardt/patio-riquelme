@@ -5,7 +5,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ContactPageForm from '../components/ContactPageForm.astro';
 import Faq from '../components/Faq.astro';
-import logoPatioRiquelme from '../assets/logo-patio-riquelme.png';
 import { faqs } from '../data/faqs';
 import { faqPageJsonLd, breadcrumbJsonLd } from '../lib/schema';
 import {
@@ -36,34 +35,34 @@ const faqJsonLd = faqPageJsonLd(faqs);
   <Header current="contacto" />
 
   <main>
-  <section style="padding:80px var(--pad-x) 24px;max-width:760px;">
-    <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(58% 0.09 75);margin:0 0 14px;">Contacto</p>
-    <h1 style="font-family:'Lora',serif;font-size:42px;font-weight:500;margin:0 0 20px;line-height:1.15;">Hablemos de tu departamento</h1>
-    <p style="font-size:16px;line-height:1.7;color:oklch(38% 0.03 75);margin:0;">Agenda una visita, pide el brochure o resuelve tus dudas. Te respondemos a la brevedad.</p>
+  <section class="page-intro" style="padding:clamp(64px,9vw,128px) var(--pad-x) 24px;--intro-w:760px;">
+    <p style="font-size:12px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--c-eyebrow);margin:0 0 14px;">Contacto</p>
+    <h1 style="font-family:var(--font-serif);font-size:clamp(40px,5.6vw,72px);font-weight:300;margin:0 0 28px;line-height:1.04;letter-spacing:-0.02em;">Hablemos de tu departamento</h1>
+    <p style="font-size:16px;line-height:1.7;color:var(--c-text-2);margin:0;">Agenda una visita, pide el brochure o resuelve tus dudas. Te respondemos a la brevedad.</p>
   </section>
 
   <section style="padding:40px var(--pad-x) 88px;display:grid;grid-template-columns:var(--cols-2);gap:40px;max-width:1200px;margin:0 auto;align-items:start;">
     <ContactPageForm />
 
     <div style="display:flex;flex-direction:column;gap:28px;">
-      <div style="border:1px solid oklch(87% 0.014 75);padding:28px;">
-        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.025 75);margin-bottom:16px;">Contacto directo</div>
+      <div style="border:1px solid var(--c-line);padding:28px;">
+        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--c-muted);margin-bottom:16px;">Contacto directo</div>
         <div style="display:flex;flex-direction:column;gap:14px;font-size:15px;">
           {TIENE_WHATSAPP && (
-            <a href={whatsappUrl()} target="_blank" rel="noopener" data-track="whatsapp_contacto" style="display:inline-flex;align-items:center;gap:8px;color:oklch(25% 0.035 75);font-weight:500;">
+            <a href={whatsappUrl()} target="_blank" rel="noopener" data-track="whatsapp_contacto" style="display:inline-flex;align-items:center;gap:8px;color:var(--c-text);font-weight:500;">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.33 4.96L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.84 9.84 0 0 0 12.04 2Zm5.43 12.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.65-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.07 2.86 1.22 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35Z"/></svg>
               WhatsApp {WHATSAPP_DISPLAY}
             </a>
           )}
-          <a href={`mailto:${CONTACT_EMAIL}`} data-track="email_contacto" style="color:oklch(25% 0.035 75);">{CONTACT_EMAIL}</a>
-          <span style="color:oklch(25% 0.035 75);">@patioriquelme — Instagram / TikTok</span>
+          <a href={`mailto:${CONTACT_EMAIL}`} data-track="email_contacto" style="color:var(--c-text);">{CONTACT_EMAIL}</a>
+          <span style="color:var(--c-text);">@patioriquelme — Instagram / TikTok</span>
         </div>
       </div>
-      <div style="border:1px solid oklch(87% 0.014 75);padding:28px;">
-        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.025 75);margin-bottom:16px;">Sala de ventas</div>
+      <div style="border:1px solid var(--c-line);padding:28px;">
+        <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--c-muted);margin-bottom:16px;">Sala de ventas</div>
         <p style="font-size:15px;line-height:1.6;margin:0;">{SALA_VENTAS_DIRECCION}</p>
         {SALA_VENTAS_HORARIO && (
-          <p style="font-size:15px;line-height:1.6;margin:12px 0 0;color:oklch(45% 0.025 75);">{SALA_VENTAS_HORARIO}</p>
+          <p style="font-size:15px;line-height:1.6;margin:12px 0 0;color:var(--c-muted);">{SALA_VENTAS_HORARIO}</p>
         )}
       </div>
     </div>
@@ -71,9 +70,6 @@ const faqJsonLd = faqPageJsonLd(faqs);
 
   <Faq />
 
-  <section style="padding:80px var(--pad-x);background:oklch(97% 0.01 75);text-align:center;">
-    <Image src={logoPatioRiquelme} alt="Patio Riquelme" style="max-width:340px;width:100%;height:auto;display:inline-block;" />
-  </section>
   </main>
 
   <Footer variant="simple" />

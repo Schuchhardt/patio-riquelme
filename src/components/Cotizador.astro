@@ -22,32 +22,32 @@ const data = Object.fromEntries(
 );
 ---
 
-<section style="padding:88px var(--pad-x);background:oklch(19% 0.03 75);color:oklch(94% 0.014 75);">
+<section style="padding:88px var(--pad-x);background:var(--c-dark);color:var(--c-surface);">
   <div style="max-width:760px;margin:0 auto;text-align:center;">
-    <p style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:oklch(68% 0.09 75);margin:0 0 14px;">Cotizador simple</p>
-    <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:500;margin:0 0 12px;color:oklch(98% 0.006 75);">Estima tu departamento</h2>
-    <p style="font-size:15px;color:oklch(80% 0.014 75);margin:0 0 40px;">Selecciona una tipología para ver su metraje y disponibilidad real. El valor final depende de la unidad específica.</p>
+    <p style="font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--c-on-dark-muted);margin:0 0 14px;">Cotizador simple</p>
+    <h2 style="font-family:var(--font-serif);font-size:clamp(30px,3.8vw,46px);font-weight:400;line-height:1.1;margin:0 0 12px;color:var(--c-on-dark);">Estima tu departamento</h2>
+    <p style="font-size:15px;color:var(--c-on-dark-muted);margin:0 0 40px;">Selecciona una tipología para ver su metraje y disponibilidad real. El valor final depende de la unidad específica.</p>
   </div>
 
-  <div style="max-width:760px;margin:0 auto;background:oklch(97% 0.01 75);border:1px solid oklch(38% 0.03 75);padding:clamp(20px, 5vw, 40px);color:oklch(25% 0.035 75);">
+  <div style="max-width:760px;margin:0 auto;background:var(--c-bg);border:1px solid var(--c-dark-line);padding:clamp(20px, 5vw, 40px);color:var(--c-text);">
     <div style="margin-bottom:28px;">
-      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:oklch(45% 0.025 75);margin-bottom:12px;">Tipología</div>
+      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--c-muted);margin-bottom:12px;">Tipología</div>
       <div class="cotiz-group" style="display:flex;gap:12px;flex-wrap:wrap;" data-group="tipologia">
         {options.map(({ value, label }, i) => (
           <button type="button" class={`cotiz-btn${i === 0 ? ' active' : ''}`} data-value={value} aria-pressed={i === 0 ? 'true' : 'false'}>{label}</button>
         ))}
       </div>
     </div>
-    <div style="background:oklch(94% 0.014 75);padding:28px;text-align:center;">
-      <div style="font-size:13px;color:oklch(45% 0.025 75);margin-bottom:8px;">Metraje</div>
-      <div id="m2-text" style="font-family:'Lora',serif;font-size:32px;color:oklch(58% 0.09 75);margin-bottom:12px;">{data['E'].m2}</div>
-      <div id="detalle-text" style="font-size:14px;color:oklch(45% 0.025 75);margin-bottom:14px;">{data['E'].count} unidad{data['E'].count === 1 ? '' : 'es'} disponible{data['E'].count === 1 ? '' : 's'} en {data['E'].pisos}</div>
-      <div style="padding-top:14px;border-top:1px solid oklch(87% 0.014 75);">
-        <span style="font-size:13px;color:oklch(45% 0.025 75);">Desde </span>
-        <span id="uf-text" style="font-family:'Lora',serif;font-size:22px;color:oklch(48% 0.09 75);">{data['E'].desde}</span>
+    <div style="background:var(--c-surface);padding:28px;text-align:center;">
+      <div style="font-size:13px;color:var(--c-muted);margin-bottom:8px;">Metraje</div>
+      <div id="m2-text" style="font-family:var(--font-serif);font-size:32px;color:var(--c-accent);margin-bottom:12px;">{data['E'].m2}</div>
+      <div id="detalle-text" style="font-size:14px;color:var(--c-muted);margin-bottom:14px;">{data['E'].count} unidad{data['E'].count === 1 ? '' : 'es'} disponible{data['E'].count === 1 ? '' : 's'} en {data['E'].pisos}</div>
+      <div style="padding-top:14px;border-top:1px solid var(--c-line);">
+        <span style="font-size:13px;color:var(--c-muted);">Desde </span>
+        <span id="uf-text" style="font-family:var(--font-serif);font-size:22px;color:var(--c-ink);">{data['E'].desde}</span>
       </div>
     </div>
-    <a id="cotizar-link" href="/disponibilidad?tipologia=E" data-track="cotizador_ver_unidades" style="display:block;text-align:center;margin-top:24px;background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);padding:14px 28px;font-size:15px;font-weight:500;">Ver unidades y cotizar</a>
+    <a id="cotizar-link" href="/disponibilidad?tipologia=E" data-track="cotizador_ver_unidades" class="btn btn-dark" style="display:flex;margin-top:24px;">Ver unidades y cotizar</a>
     <a id="contacto-link" href="/contacto?tipologia=E" data-track="cotizador_contacto" style="display:block;text-align:center;margin-top:14px;font-size:14px;font-weight:500;">Prefiero que me contacten →</a>
   </div>
 </section>
@@ -58,23 +58,23 @@ const data = Object.fromEntries(
     min-width: 130px;
     padding: 14px;
     font-size: 15px;
-    font-family: 'Work Sans', sans-serif;
-    border: 1px solid oklch(83% 0.014 75);
+    font-family: var(--font-sans);
+    border: 1px solid var(--c-line-strong);
     cursor: pointer;
-    background: oklch(97% 0.01 75);
-    color: oklch(25% 0.035 75);
+    background: var(--c-bg);
+    color: var(--c-text);
   }
   .cotiz-btn:focus-visible,
   #cotizar-link:focus-visible,
   #contacto-link:focus-visible {
-    outline: 2px solid oklch(48% 0.09 75);
+    outline: 2px solid var(--c-ink);
     outline-offset: 2px;
   }
 
   .cotiz-btn.active {
-    border: 1px solid oklch(58% 0.09 75);
-    background: oklch(58% 0.09 75);
-    color: oklch(98% 0.006 75);
+    border: 1px solid var(--c-accent);
+    background: var(--c-accent);
+    color: var(--c-on-dark);
     font-weight: 500;
   }
 </style>

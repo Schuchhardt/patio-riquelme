@@ -2,21 +2,22 @@
 import { FORMSPREE_ENDPOINT, CONTACT_EMAIL, TIENE_WHATSAPP, WHATSAPP_DISPLAY, whatsappUrl } from '../lib/config';
 
 const inputStyle =
-  "flex:1;min-width:140px;padding:14px 16px;border:1px solid oklch(83% 0.014 75);font-size:15px;font-family:'Work Sans',sans-serif;background:oklch(97% 0.01 75);";
+  "flex:1;min-width:180px;padding:16px 4px;border:none;border-bottom:1px solid var(--c-text);font-size:15px;font-family:var(--font-sans);background:transparent;color:var(--c-text);border-radius:0;";
 ---
 
-<section style="padding:96px var(--pad-x);text-align:center;">
-  <h2 style="font-family:'Lora',serif;font-size:34px;font-weight:500;margin:0 0 16px;">Reserva desde ahora tu departamento</h2>
-  <p style="font-size:16px;color:oklch(45% 0.025 75);max-width:520px;margin:0 auto 36px;">Proyecto en verde: los mejores pisos y orientaciones se reservan primero. Déjanos tus datos y te contactamos.</p>
+<section style="padding:clamp(80px, 11vw, 140px) var(--pad-x);text-align:center;background:var(--c-surface);">
+  <p class="eyebrow">Contacto</p>
+  <h2 class="section-title" style="max-width:720px;margin:0 auto 20px;">Reserva desde ahora tu departamento</h2>
+  <p style="font-size:17px;font-weight:300;line-height:1.7;color:var(--c-text-2);max-width:540px;margin:0 auto 44px;">Proyecto en verde: los mejores pisos y orientaciones se reservan primero. Déjanos tus datos y te contactamos.</p>
 
-  <div id="form-enviado" style="display:none;max-width:420px;margin:0 auto;padding:24px;border:1px solid oklch(58% 0.09 75);background:oklch(94% 0.014 75);">
+  <div id="form-enviado" style="display:none;max-width:420px;margin:0 auto;padding:24px;border:1px solid var(--c-accent);background:var(--c-bg);">
     <p style="margin:0;font-size:15px;">Gracias, recibimos tus datos. Te contactaremos a la brevedad.</p>
   </div>
-  <div id="form-error" role="alert" style="display:none;max-width:420px;margin:0 auto 20px;padding:16px;background:oklch(94% 0.014 75);border:1px solid oklch(55% 0.15 30);">
-    <p id="form-error-texto" style="margin:0;font-size:14px;">Hubo un problema al enviar tu solicitud. Intenta de nuevo o escríbenos directo a <a href={`mailto:${CONTACT_EMAIL}`} style="color:oklch(25% 0.035 75);">{CONTACT_EMAIL}</a>.</p>
+  <div id="form-error" role="alert" style="display:none;max-width:420px;margin:0 auto 20px;padding:16px;background:var(--c-surface);border:1px solid var(--c-error);">
+    <p id="form-error-texto" style="margin:0;font-size:14px;">Hubo un problema al enviar tu solicitud. Intenta de nuevo o escríbenos directo a <a href={`mailto:${CONTACT_EMAIL}`} style="color:var(--c-text);">{CONTACT_EMAIL}</a>.</p>
   </div>
 
-  <form id="contacto-form" action={FORMSPREE_ENDPOINT} method="POST" novalidate style="max-width:520px;margin:0 auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+  <form id="contacto-form" action={FORMSPREE_ENDPOINT} method="POST" novalidate style="max-width:620px;margin:0 auto;display:flex;gap:24px;flex-wrap:wrap;justify-content:center;align-items:flex-end;">
     <input type="hidden" name="_subject" value="Nueva consulta — Patio Riquelme (Home)" />
     <!-- Honeypot anti-spam: Formspree descarta el envío si viene relleno. -->
     <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
@@ -27,13 +28,13 @@ const inputStyle =
     <label for="home-email" class="sr-only">Email</label>
     <input type="email" id="home-email" name="email" required autocomplete="email" placeholder="Email" style={inputStyle} />
 
-    <button type="submit" id="home-submit" style="background:oklch(58% 0.09 75);color:oklch(98% 0.006 75);border:none;padding:14px 28px;font-size:15px;font-weight:500;cursor:pointer;font-family:'Work Sans',sans-serif;">Quiero más información</button>
+    <button type="submit" id="home-submit" class="btn btn-dark" style="flex-basis:100%;max-width:280px;margin-top:16px;">Quiero más información</button>
   </form>
 
   {TIENE_WHATSAPP && (
-    <p style="margin:22px 0 0;font-size:15px;color:oklch(45% 0.025 75);">
+    <p style="margin:22px 0 0;font-size:15px;color:var(--c-muted);">
       ¿Prefieres escribirnos directo?
-      <a href={whatsappUrl()} target="_blank" rel="noopener" data-track="whatsapp_home" style="color:oklch(40% 0.09 75);border-bottom:1px solid oklch(48% 0.09 75);margin-left:4px;">WhatsApp {WHATSAPP_DISPLAY}</a>
+      <a href={whatsappUrl()} target="_blank" rel="noopener" data-track="whatsapp_home" style="color:var(--c-ink);border-bottom:1px solid var(--c-ink);margin-left:4px;">WhatsApp {WHATSAPP_DISPLAY}</a>
     </p>
   )}
 </section>
@@ -52,12 +53,12 @@ const inputStyle =
   }
 
   #contacto-form :is(input, button):focus-visible {
-    outline: 2px solid oklch(48% 0.09 75);
+    outline: 2px solid var(--c-ink);
     outline-offset: 2px;
   }
 
   .campo-invalido {
-    border-color: oklch(55% 0.15 30) !important;
+    border-color: var(--c-error) !important;
   }
 </style>
 

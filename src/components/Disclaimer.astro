@@ -8,15 +8,15 @@ interface Props {
 
 const { tone = 'light' } = Astro.props;
 
-const color = tone === 'dark' ? 'oklch(58% 0.025 75)' : 'oklch(50% 0.025 75)';
-const border = tone === 'dark' ? 'oklch(38% 0.03 75)' : 'oklch(87% 0.014 75)';
+const color = tone === 'dark' ? 'var(--c-on-dark-faint)' : 'var(--c-muted)';
+const border = tone === 'dark' ? 'var(--c-dark-line)' : 'var(--c-line)';
 ---
 
 <aside
   aria-label="Información legal"
   style={`padding:24px var(--pad-x);border-top:1px solid ${border};`}
 >
-  <p style={`max-width:1200px;margin:0 auto;font-size:12px;line-height:1.6;color:${color};`}>
+  <p style={`max-width:1240px;margin:0 auto;font-size:11.5px;line-height:1.6;color:${color};`}>
     {DISCLAIMER_LEY_19472}
   </p>
 </aside>
