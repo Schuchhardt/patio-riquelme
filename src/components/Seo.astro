@@ -5,6 +5,8 @@ interface Props {
   path: string;
   image?: string;
   type?: 'website' | 'article';
+  /** Página no listada: fuera de buscadores (y del sitemap, ver astro.config.mjs). */
+  noindex?: boolean;
 }
 
 const {
@@ -13,6 +15,7 @@ const {
   path,
   image = '/og-image.jpg',
   type = 'website',
+  noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(path, Astro.site);
@@ -21,7 +24,7 @@ const imageURL = new URL(image, Astro.site);
 
 <title>{title}</title>
 <meta name="description" content={description} />
-<meta name="robots" content="index, follow" />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Open Graph -->

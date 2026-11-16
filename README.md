@@ -36,6 +36,7 @@ src/
 │   └── schema.ts         # helpers para generar JSON-LD (breadcrumbs, FAQPage)
 ├── pages/
 │   ├── index.astro         # Inicio
+│   ├── visor-ff7e5d89.astro # Visor 3D NO listado: recorridos 360°, modelos 3D, plantas por unidad, Mi selección
 │   ├── tipologias.astro    # Estudio / 1D / Duplex / Locales + cotizador de m²
 │   ├── disponibilidad.astro # Buscador de las 62 unidades + modal de cotización
 │   ├── ubicacion.astro     # Mapa (OpenStreetMap embed) + conectividad
@@ -118,6 +119,10 @@ conocida, apunta `CHROME_PATH` al ejecutable.
   que cumple el filtro, y que el contador coincide con lo que se ve.
 - [`tests/ocultamiento.test.mjs`](tests/ocultamiento.test.mjs) — guarda estática
   sobre el HTML construido, sin navegador.
+- [`tests/explorar.test.mjs`](tests/explorar.test.mjs) — el visor 3D: que cada
+  archivo de `explorar.json` se publique, los conteos de unidades y tipologías,
+  «Mi selección» hasta `/contacto` y que en celular no haya scroll horizontal.
+  Bloquea la red externa: no depende de los CDN de los visores.
 
 > **Por qué se mide lo renderizado y no la clase `oculta`.** El buscador oculta
 > unidades agregando `.oculta`, pero las tarjetas traían `display:flex` en un
@@ -128,6 +133,47 @@ conocida, apunta `CHROME_PATH` al ejecutable.
 > bug vivo. Por eso la presentación de la tarjeta vive en el bloque `<style>`
 > del componente y ningún elemento que se oculte por clase puede declarar
 > `display` inline.
+
+## Visor 3D (`/visor-ff7e5d89`, no listado)
+
+Por ahora es una **vista previa no listada**: no aparece en el menú, lleva
+`noindex`, está fuera del sitemap y de `llms.txt`, y `public/_headers` le pone
+`X-Robots-Tag: noindex` en Netlify (también a `/explorar/*`). Solo llega quien
+tenga el link. Para publicarlo: renombrar la página a `explorar.astro`, quitar
+`noindex`, el filtro de sitemap en `astro.config.mjs` y las reglas de
+`_headers`, y agregar el link en `Header.astro`.
+
+Visor del proyecto con seis pestañas. Los datos visuales vienen del repositorio
+Blender (`PATIO_RIQUELME_BLENDER`); **superficies y precios siguen saliendo solo
+del CSV**.
+
+| Pieza | Origen |
+|---|---|
+| `src/data/explorar.json` | Generado por `PATIO_RIQUELME_BLENDER/scripts/export_site_assets.py`: recorridos, imágenes, 11 familias de planta con su representante y los 6 locales |
+| `public/explorar/panoramas/` | Panoramas 360° (Cycles, 3072 × 1536, JPEG) |
+| `public/explorar/imagenes/` | Vistas estáticas y miniaturas |
+| `public/explorar/planos/` | Plantas por tipología y por nivel de cada local |
+| `public/explorar/modelos/` | GLB con compresión Draco: edificio (volumetría) e interiores 304 B / 305 B sin cielo |
+
+[`src/lib/explorar.ts`](src/lib/explorar.ts) cruza el JSON con
+`unidades_cotizador.csv`: si una unidad del JSON no existe en el CSV, si una
+familia mezcla tipologías comerciales o si un departamento queda sin planta, el
+build falla. Las familias del cuadro (B-1, B-2, C-1…) se presentan con el código
+comercial del sitio (B2, B1, C2…) que les corresponde por sus unidades.
+
+Los visores se cargan desde CDN y solo al usarlos: Pannellum 2.5.6 (360°) y
+`@google/model-viewer` 3.5.0 (3D). «Mi selección» vive en `localStorage`.
+
+Para actualizar después de nuevos renders o modelos:
+
+```bash
+cd ../PATIO_RIQUELME_BLENDER
+/Applications/Blender.app/Contents/MacOS/Blender -b PATIO_RIQUELME_MASTER.blend -P scripts/export_web.py   # renders + GLB
+python3 scripts/export_site_assets.py                                                                   # copia al sitio
+```
+
+Pendiente: interiores 3D de las otras 9 tipologías y de los 6 locales (hoy se
+muestran con su planta).
 
 ## Tipologías comerciales
 
@@ -210,6 +256,7 @@ El script arma un HTML de 6 páginas (mismo look del sitio: paleta, tipografías
 | Ruta | Contenido |
 |---|---|
 | `/` | Hero, avance de obra, accesos patrimoniales, galería, formulario de reserva |
+| `/visor-ff7e5d89` | **No listada.** Visor: Edificio 3D, Unidades, Tipologías, Locales, Recorridos 360° e Imágenes + «Mi selección» → `/contacto?unidades=` |
 | `/tipologias` | Detalle Estudio / 1D / Duplex / Locales + cotizador con datos reales del CSV |
 | `/disponibilidad` | Inventario unidad por unidad, filtros (tipología, piso, cuerpo, precio) y modal de cotización |
 | `/ubicacion` | Mapa embebido y conectividad del barrio |

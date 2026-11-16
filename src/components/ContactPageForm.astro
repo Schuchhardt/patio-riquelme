@@ -76,6 +76,19 @@ const labelStyle = 'display:block;font-size:13px;color:var(--c-muted);margin-bot
   if (select && tipologia && [...select.options].some((o) => o.value === tipologia)) {
     select.value = tipologia;
   }
+  // /contacto?unidades=304 B,305 B llega desde "Mi selección" de /explorar.
+  const unidadesParam = params
+    .get('unidades')
+    ?.split(',')
+    .map((u) => u.trim())
+    .filter((u) => /^[\w .]{1,20}$/.test(u))
+    .slice(0, 20);
+  if (unidadesParam?.length) {
+    const mensaje = document.getElementById('cp-mensaje') as HTMLTextAreaElement | null;
+    if (mensaje && !mensaje.value) {
+      mensaje.value = `Me interesa cotizar ${unidadesParam.length === 1 ? 'la unidad' : 'las unidades'} ${unidadesParam.join(', ')}.`;
+    }
+  }
   // /contacto?brochure=1 llega desde el CTA "Solicitar brochure".
   if (params.get('brochure')) {
     const brochure = document.getElementById('cp-brochure') as HTMLInputElement | null;

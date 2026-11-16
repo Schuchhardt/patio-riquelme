@@ -6,7 +6,8 @@ export const SITE_URL = 'https://patioriquelme.cl';
 
 export default defineConfig({
   site: SITE_URL,
-  integrations: [sitemap()],
+  // El visor 3D es una página no listada por ahora: fuera del sitemap.
+  integrations: [sitemap({ filter: (page) => !page.includes('/visor-') })],
   server: {
     port: process.env.PORT ? Number(process.env.PORT) : 4321,
   },

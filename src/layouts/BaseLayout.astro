@@ -9,9 +9,10 @@ interface Props {
   path: string;
   image?: string;
   type?: 'website' | 'article';
+  noindex?: boolean;
 }
 
-const { title, description, path, image, type } = Astro.props;
+const { title, description, path, image, type, noindex } = Astro.props;
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -49,7 +50,7 @@ const organizationJsonLd = {
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="manifest" href="/site.webmanifest" />
 
-  <Seo title={title} description={description} path={path} image={image} type={type} />
+  <Seo title={title} description={description} path={path} image={image} type={type} noindex={noindex} />
 
   <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
   <slot name="head" />
