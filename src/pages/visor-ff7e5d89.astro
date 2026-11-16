@@ -2,16 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { breadcrumbJsonLd } from '../lib/schema';
 import { payload, departamentos, locales, recorridos } from '../lib/explorar';
 
 const title = 'Explorar 3D — Recorridos 360°, plantas y modelo | Patio Riquelme';
 const description = `Recorre Patio Riquelme en 360°, revisa la planta de cada una de sus ${departamentos.length} unidades y ${locales.length} locales, y arma tu selección para cotizar.`;
 
-const breadcrumbs = breadcrumbJsonLd([
-  { name: 'Inicio', path: '/' },
-  { name: 'Explorar 3D', path: '/explorar/' },
-]);
+/**
+ * Página NO listada (vista previa): sin link en el menú, noindex, fuera del
+ * sitemap y con X-Robots-Tag en public/_headers. Para publicarla: renombrar a
+ * explorar.astro, quitar `noindex`, el filtro de astro.config.mjs y la regla de
+ * _headers, y agregar el link en Header.astro.
+ */
+const PATH = '/visor-ff7e5d89/';
 
 const tabs = [
   { id: 'edificio', label: 'Edificio 3D' },
@@ -25,11 +27,10 @@ const tabs = [
 const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
 ---
 
-<BaseLayout title={title} description={description} path="/explorar/">
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
+<BaseLayout title={title} description={description} path={PATH} noindex>
   <link slot="head" rel="preload" as="image" href={portada?.vistas[0].pano} />
 
-  <Header current="explorar" />
+  <Header />
 
   <main class="ex">
     <div class="ex-bar">

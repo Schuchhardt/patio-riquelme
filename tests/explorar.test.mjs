@@ -1,5 +1,5 @@
 /**
- * /explorar: que todo archivo referenciado se publique, que las pestañas se
+ * Visor 3D (/visor-ff7e5d89, página no listada): que todo archivo referenciado se publique, que las pestañas se
  * armen con el inventario completo y que "Mi selección" llegue a /contacto.
  * No depende de los CDN de Pannellum ni de model-viewer.
  */
@@ -10,9 +10,10 @@ import path from 'node:path';
 import { dist, raiz, exigirBuild, servirDist, abrirNavegador } from './helpers/entorno.mjs';
 
 exigirBuild();
+const VISOR = '/visor-ff7e5d89/';
 const datos = JSON.parse(fs.readFileSync(path.join(raiz, 'src/data/explorar.json'), 'utf-8'));
 
-describe('/explorar · archivos publicados', () => {
+describe('visor · archivos publicados', () => {
   const rutas = [
     ...datos.recorridos.flatMap((r) => [r.thumb, ...r.vistas.map((v) => v.pano)]),
     ...datos.imagenes.flatMap((i) => [i.img, i.thumb]),
@@ -34,7 +35,27 @@ describe('/explorar · archivos publicados', () => {
   });
 });
 
-describe('/explorar · navegador', () => {
+describe('visor · no listado', () => {
+  const html = fs.readFileSync(path.join(dist, VISOR, 'index.html'), 'utf-8');
+
+  test('lleva noindex', () => {
+    assert.match(html, /<meta name="robots" content="noindex, nofollow"/);
+  });
+
+  test('no está en el sitemap ni en llms.txt', () => {
+    const sitemaps = fs.readdirSync(dist).filter((f) => f.startsWith('sitemap'));
+    for (const f of sitemaps) assert.doesNotMatch(fs.readFileSync(path.join(dist, f), 'utf-8'), /visor-/);
+    assert.doesNotMatch(fs.readFileSync(path.join(dist, 'llms.txt'), 'utf-8'), /visor-|explorar/);
+  });
+
+  test('ninguna otra página enlaza al visor', () => {
+    const paginas = fs.readdirSync(dist, { recursive: true }).filter((f) => f.endsWith('.html') && !f.includes('visor-'));
+    const culpables = paginas.filter((f) => /visor-ff7e5d89/.test(fs.readFileSync(path.join(dist, f), 'utf-8')));
+    assert.deepEqual(culpables, []);
+  });
+});
+
+describe('visor · navegador', () => {
   let srv, browser, page;
 
   before(async () => {
@@ -53,7 +74,7 @@ describe('/explorar · navegador', () => {
 
   test('la pestaña Unidades lista los 56 departamentos y filtra', async () => {
     await page.setViewport({ width: 1366, height: 820 });
-    await page.goto(`${srv.url}/explorar/?tab=unidades`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${srv.url}${VISOR}?tab=unidades`, { waitUntil: 'domcontentloaded' });
     const total = await page.$$eval('.ex-row', (els) => els.length);
     assert.equal(total, 56);
     await page.type('#ex-q', '304');
@@ -62,7 +83,7 @@ describe('/explorar · navegador', () => {
   });
 
   test('tipologías: 11 familias y cada una muestra su planta', async () => {
-    await page.goto(`${srv.url}/explorar/?tab=tipologias&id=C-DUPLEX-301`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${srv.url}${VISOR}?tab=tipologias&id=C-DUPLEX-301`, { waitUntil: 'domcontentloaded' });
     assert.equal(await page.$$eval('[data-familia]', (els) => els.length), 11);
     const src = await page.$eval('#ex-img img', (img) => img.getAttribute('src'));
     assert.match(src, /C-DUPLEX-301_p3\.png$/);
@@ -71,7 +92,7 @@ describe('/explorar · navegador', () => {
   });
 
   test('Mi selección llega a /contacto como mensaje', async () => {
-    await page.goto(`${srv.url}/explorar/?tab=unidades&id=305%20B`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${srv.url}${VISOR}?tab=unidades&id=305%20B`, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => localStorage.removeItem('pr-seleccion'));
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.click('[data-sel="305 B"]');
@@ -86,7 +107,7 @@ describe('/explorar · navegador', () => {
   test('en celular no hay scroll horizontal', async () => {
     await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
     for (const tab of ['edificio', 'unidades', 'tipologias', 'locales', 'recorridos', 'imagenes']) {
-      await page.goto(`${srv.url}/explorar/?tab=${tab}`, { waitUntil: 'domcontentloaded' });
+      await page.goto(`${srv.url}${VISOR}?tab=${tab}`, { waitUntil: 'domcontentloaded' });
       const ancho = await page.evaluate(() => document.documentElement.scrollWidth);
       assert.ok(ancho <= 390, `${tab}: el documento mide ${ancho}px de ancho`);
     }
