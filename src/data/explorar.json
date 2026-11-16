@@ -61,6 +61,50 @@
       ]
     },
     {
+      "id": "304C",
+      "nombre": "Departamento 304 C",
+      "tipo": "Interior 360° · 1D",
+      "thumb": "/explorar/imagenes/304C_thumb.jpg",
+      "unidad": "304 C",
+      "tc": "C2",
+      "modelo": "interior_304C",
+      "nota": "Interior modelado desde la planta CAD de revisión. Alturas de ventanas supuestas; acabados y decoración de presentación.",
+      "vistas": [
+        {
+          "nombre": "Estar y cocina",
+          "pano": "/explorar/panoramas/360_304C.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Dormitorio",
+          "pano": "/explorar/panoramas/360_304C_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "203A",
+      "nombre": "Estudio 203 A",
+      "tipo": "Interior 360° · Estudio",
+      "thumb": "/explorar/imagenes/203A_thumb.jpg",
+      "unidad": "203 A",
+      "tc": "A1",
+      "modelo": "interior_203A",
+      "nota": "Interior modelado desde la planta CAD de revisión, en la Casona Riquelme. Alturas de ventana supuestas; acabados y decoración de presentación.",
+      "vistas": [
+        {
+          "nombre": "Estar y cocina",
+          "pano": "/explorar/panoramas/360_203A.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Dormitorio",
+          "pano": "/explorar/panoramas/360_203A_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
       "id": "pasillo",
       "nombre": "La circulación",
       "tipo": "Panorama 360°",
@@ -88,6 +132,18 @@
       "nombre": "Estar y cocina 305 B",
       "img": "/explorar/imagenes/305B.jpg",
       "thumb": "/explorar/imagenes/305B_thumb.jpg"
+    },
+    {
+      "id": "304C",
+      "nombre": "Estar y cocina 304 C",
+      "img": "/explorar/imagenes/304C.jpg",
+      "thumb": "/explorar/imagenes/304C_thumb.jpg"
+    },
+    {
+      "id": "203A",
+      "nombre": "Estudio 203 A",
+      "img": "/explorar/imagenes/203A.jpg",
+      "thumb": "/explorar/imagenes/203A_thumb.jpg"
     },
     {
       "id": "patio",
@@ -134,8 +190,8 @@
       ],
       "aislada": true,
       "nota": "Se muestra 203 A en su planta. Los estudios 205 A y 301 A tienen variantes de distribución y superficie.",
-      "recorrido": null,
-      "modelo": null
+      "recorrido": "203A",
+      "modelo": "interior_203A"
     },
     {
       "id": "A-1D",
@@ -294,8 +350,8 @@
       ],
       "aislada": true,
       "nota": "Representante 304 C. Terraza de venta 3,39 m² por unidad, según cuadro.",
-      "recorrido": null,
-      "modelo": null
+      "recorrido": "304C",
+      "modelo": "interior_304C"
     },
     {
       "id": "C-2",
@@ -488,8 +544,10 @@
     }
   ],
   "modelos": {
+    "interior_304C": "/explorar/modelos/interior_304C.glb",
     "interior_304B": "/explorar/modelos/interior_304B.glb",
     "interior_305B": "/explorar/modelos/interior_305B.glb",
-    "edificio": "/explorar/modelos/edificio.glb"
+    "edificio": "/explorar/modelos/edificio.glb",
+    "interior_203A": "/explorar/modelos/interior_203A.glb"
   }
 }
