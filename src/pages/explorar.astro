@@ -1,0 +1,916 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { breadcrumbJsonLd } from '../lib/schema';
+import { payload, departamentos, locales, recorridos } from '../lib/explorar';
+
+const title = 'Explorar 3D — Recorridos 360°, plantas y modelo | Patio Riquelme';
+const description = `Recorre Patio Riquelme en 360°, revisa la planta de cada una de sus ${departamentos.length} unidades y ${locales.length} locales, y arma tu selección para cotizar.`;
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: 'Inicio', path: '/' },
+  { name: 'Explorar 3D', path: '/explorar/' },
+]);
+
+const tabs = [
+  { id: 'edificio', label: 'Edificio 3D' },
+  { id: 'unidades', label: 'Unidades' },
+  { id: 'tipologias', label: 'Tipologías' },
+  { id: 'locales', label: 'Locales' },
+  { id: 'recorridos', label: 'Recorridos' },
+  { id: 'imagenes', label: 'Imágenes' },
+];
+
+const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
+---
+
+<BaseLayout title={title} description={description} path="/explorar/">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} />
+  <link slot="head" rel="preload" as="image" href={portada?.vistas[0].pano} />
+
+  <Header current="explorar" />
+
+  <main class="ex">
+    <div class="ex-bar">
+      <div>
+        <p class="ex-eyebrow">Santiago Centro</p>
+        <h1 class="ex-h1">Un lugar para descubrir.</h1>
+      </div>
+      <div class="ex-bar-actions">
+        <button type="button" class="ex-link" id="sel-open" data-track="explorar_seleccion">
+          Mi selección <span class="ex-count" id="sel-count">0</span>
+        </button>
+        <button type="button" class="ex-link" id="about-open">Sobre esta versión</button>
+      </div>
+    </div>
+
+    <div class="ex-body">
+      <aside class="ex-panel" aria-label="Contenido">
+        <div class="ex-tabs" role="tablist">
+          {tabs.map((t) => (
+            <button type="button" role="tab" class="ex-tab" data-tab={t.id} aria-selected="false">{t.label}</button>
+          ))}
+        </div>
+        <div id="ex-content" aria-live="polite">
+          <noscript><p class="ex-note">Activa JavaScript para recorrer el proyecto en 360° y revisar las plantas.</p></noscript>
+        </div>
+        <p class="ex-foot" id="ex-foot"></p>
+      </aside>
+
+      <section class="ex-stage" id="ex-stage" aria-label="Visor">
+        <div id="ex-pano" class="ex-layer"></div>
+        <div id="ex-model" class="ex-layer" hidden></div>
+        <div id="ex-img" class="ex-layer" hidden><img alt="" /></div>
+        <span class="ex-label" id="ex-label"></span>
+        <span class="ex-badge" id="ex-badge"></span>
+        <div class="ex-chips" id="ex-chips"></div>
+        <span class="ex-hint" id="ex-hint"></span>
+        <div class="ex-loading" id="ex-loading" hidden></div>
+        <div class="ex-ctrl">
+          <a class="ex-round" id="ex-open" href="#" target="_blank" rel="noopener" title="Abrir imagen en tamaño completo" hidden>↗</a>
+          <button type="button" class="ex-round" id="ex-home" title="Volver a la vista inicial">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+          </button>
+          <button type="button" class="ex-round" id="ex-fs" title="Pantalla completa">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="sel-dialog" class="ex-dialog">
+    <form method="dialog" class="ex-dialog-close"><button aria-label="Cerrar">×</button></form>
+    <p class="ex-eyebrow">Mi selección</p>
+    <h2 class="ex-dialog-title">Unidades que te interesan</h2>
+    <div id="sel-list"></div>
+    <a id="sel-cta" class="btn btn-dark" href="/contacto" data-track="explorar_cotizar_seleccion">Solicitar cotización</a>
+    <p class="ex-small">Tu selección se guarda solo en este navegador.</p>
+  </dialog>
+
+  <dialog id="about-dialog" class="ex-dialog">
+    <form method="dialog" class="ex-dialog-close"><button aria-label="Cerrar">×</button></form>
+    <p class="ex-eyebrow">Sobre esta versión</p>
+    <h2 class="ex-dialog-title">Qué estás viendo</h2>
+    <ul class="ex-about">
+      <li><b>Recorridos e imágenes.</b> Renderizados en Blender (Cycles) desde las escenas de revisión del proyecto. Materiales, iluminación, decoración y vegetación son de presentación.</li>
+      <li><b>Interiores 3D.</b> Hoy hay interiores modelados para 304 B y 305 B. Sus acabados no se replican automáticamente en otras unidades. Las demás tipologías y los locales se muestran con su planta mientras se modelan.</li>
+      <li><b>Plantas.</b> Recortes de la planimetría de arquitectura vigente. Cada tipología muestra a una unidad representante; otras unidades de la misma familia pueden tener variantes menores. Algunas plantas se muestran con su contexto y no reemplazan los planos de venta.</li>
+      <li><b>Superficies y precios.</b> Los mismos de <a href="/disponibilidad">Disponibilidad</a>: superficie total = útil + terraza. Precios de lista referenciales en UF.</li>
+      <li><b>Modelo del edificio.</b> Volumetría general en revisión frente a los planos definitivos.</li>
+    </ul>
+    <p class="ex-small">Imágenes referenciales. El proyecto puede presentar modificaciones.</p>
+  </dialog>
+
+  <Footer variant="simple" />
+
+  <script type="application/json" id="explorar-data" set:html={JSON.stringify(payload)} />
+</BaseLayout>
+
+<style is:global>
+  .ex { --ex-bar-h: 104px; --ex-panel-w: 420px; background: var(--c-bg); }
+  .ex-bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 var(--pad-x-header); height: var(--ex-bar-h); border-bottom: 1px solid var(--c-line); }
+  .ex-eyebrow { margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: 2.4px; text-transform: uppercase; color: var(--c-eyebrow); }
+  .ex-h1 { margin: 0; font-family: var(--font-serif); font-weight: 300; font-size: 30px; line-height: 1.1; }
+  .ex-bar-actions { display: flex; gap: 28px; align-items: center; }
+  .ex-link { background: none; border: 0; padding: 6px 0; font: inherit; font-size: 14px; color: var(--c-text-2); cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+  .ex-link:hover { color: var(--c-text); }
+  .ex-count { display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: 12px; background: var(--c-dark); color: #fff; font-size: 12px; font-weight: 600; }
+
+  .ex-body { display: flex; height: calc(100vh - var(--header-h) - var(--ex-bar-h)); min-height: 600px; }
+  .ex-panel { width: var(--ex-panel-w); flex: none; overflow-y: auto; padding: 28px 32px 24px; border-right: 1px solid var(--c-line); background: var(--c-bg); }
+  .ex-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 6px; background: var(--c-surface); }
+  .ex-tab { border: 0; background: none; padding: 11px 4px; font: inherit; font-size: 13px; color: var(--c-muted); cursor: pointer; }
+  .ex-tab:hover { color: var(--c-text); }
+  .ex-tab[aria-selected='true'] { background: var(--c-dark); color: #fff; }
+
+  .ex-h2 { margin: 28px 0 14px; font-size: 11px; font-weight: 600; letter-spacing: 2.4px; text-transform: uppercase; color: var(--c-eyebrow); }
+  .ex-list { display: flex; flex-direction: column; gap: 10px; }
+  .ex-item { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; padding: 10px; background: #fff; border: 1px solid var(--c-line); font: inherit; color: inherit; cursor: pointer; transition: border-color .2s, background-color .2s; }
+  .ex-item:hover { border-color: var(--c-line-strong); }
+  .ex-item[aria-current='true'] { background: var(--c-surface); border-color: var(--c-stone); }
+  .ex-item img { width: 84px; height: 68px; object-fit: cover; flex: none; background: var(--c-surface); }
+  .ex-item .plan { object-fit: contain; background: #fff; }
+  .ex-item b { display: block; font-family: var(--font-serif); font-weight: 400; font-size: 20px; line-height: 1.15; }
+  .ex-item small { display: block; margin-top: 4px; font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--c-muted); }
+  .ex-item .tag { margin-left: auto; align-self: flex-start; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 7px; background: var(--c-chip); color: var(--c-chip-ink); white-space: nowrap; }
+
+  .ex-row { display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 10px; width: 100%; padding: 11px 12px; border: 0; border-bottom: 1px solid var(--c-line-soft); background: none; font: inherit; font-size: 13px; color: inherit; text-align: left; cursor: pointer; }
+  .ex-row:hover { background: var(--c-surface); }
+  .ex-row[aria-current='true'] { background: var(--c-selection); }
+  .ex-row b { font-family: var(--font-serif); font-weight: 400; font-size: 18px; }
+  .ex-row span { color: var(--c-muted); }
+  .ex-row em { font-style: normal; font-variant-numeric: tabular-nums; }
+
+  .ex-filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0 12px; }
+  .ex-search { width: 100%; padding: 11px 12px; border: 1px solid var(--c-line); font: inherit; font-size: 14px; margin-top: 20px; background: #fff; }
+  .ex-chip { border: 1px solid var(--c-line); background: #fff; padding: 7px 13px; font: inherit; font-size: 12.5px; cursor: pointer; color: var(--c-text-2); }
+  .ex-chip[aria-pressed='true'] { background: var(--c-dark); color: #fff; border-color: var(--c-dark); }
+
+  .ex-card { margin-top: 22px; padding: 20px; background: var(--c-surface); }
+  .ex-card h3 { margin: 0; font-family: var(--font-serif); font-weight: 400; font-size: 26px; }
+  .ex-card .sub { margin: 4px 0 14px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--c-muted); }
+  .ex-dl { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin: 0 0 16px; }
+  .ex-dl dt { font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--c-muted); }
+  .ex-dl dd { margin: 2px 0 0; font-size: 15px; }
+  .ex-units { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+  .ex-units button { border: 1px solid var(--c-line-strong); background: #fff; padding: 4px 8px; font: inherit; font-size: 12px; cursor: pointer; }
+  .ex-units button:hover { background: var(--c-dark); color: #fff; }
+  .ex-actions { display: flex; flex-direction: column; gap: 8px; }
+  .ex-actions .btn { width: 100%; padding: 13px 18px; font-size: 12px; }
+  .ex-actions .btn-line { background: #fff; color: var(--c-text); border: 1px solid var(--c-line-strong); }
+  .ex-actions .btn-line:hover { border-color: var(--c-dark); }
+  .ex-note { font-size: 13px; line-height: 1.6; color: var(--c-muted); margin: 0 0 16px; }
+  .ex-foot { margin: 24px 0 0; font-size: 11px; line-height: 1.55; color: var(--c-eyebrow); }
+  .ex-empty { padding: 20px 0; font-size: 13px; color: var(--c-muted); }
+
+  .ex-stage { position: relative; flex: 1; min-width: 0; background: #121212; overflow: hidden; }
+  .ex-layer { position: absolute; inset: 0; }
+  .ex-layer[hidden] { display: none; }
+  #ex-img { display: flex; align-items: center; justify-content: center; }
+  #ex-img img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+  #ex-img.is-plan { background: #fff; padding: 64px 32px 96px; }
+  #ex-img.is-plan img { cursor: zoom-in; }
+  #ex-model model-viewer { width: 100%; height: 100%; background: linear-gradient(#f3f0eb, #dcd6cd); --poster-color: transparent; }
+  .ex-label { position: absolute; top: 28px; left: 32px; z-index: 5; color: #fff; font-size: 11.5px; font-weight: 500; letter-spacing: 3.2px; text-transform: uppercase; text-shadow: 0 1px 6px rgb(0 0 0 / .45); pointer-events: none; }
+  .ex-stage.on-light .ex-label { color: var(--c-text); text-shadow: none; }
+  .ex-badge { position: absolute; top: 22px; right: 20px; z-index: 5; max-width: 46%; padding: 8px 14px; background: rgb(255 255 255 / .94); font-size: 11.5px; color: var(--c-text-2); }
+  .ex-badge:empty, .ex-hint:empty { display: none; }
+  .ex-chips { position: absolute; left: 50%; bottom: 76px; transform: translateX(-50%); z-index: 5; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; width: max-content; max-width: calc(100% - 200px); }
+  .ex-chips button { border: 0; padding: 12px 24px; background: #fff; font: inherit; font-size: 14px; cursor: pointer; box-shadow: 0 2px 10px rgb(0 0 0 / .12); }
+  .ex-chips button[aria-pressed='true'] { background: var(--c-dark); color: #fff; }
+  .ex-hint { position: absolute; left: 32px; bottom: 26px; z-index: 5; padding: 9px 18px; background: rgb(255 255 255 / .92); font-size: 10.5px; letter-spacing: 2.6px; text-transform: uppercase; pointer-events: none; }
+  .ex-loading { position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; color: #fff; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; background: rgb(18 18 18 / .55); pointer-events: none; }
+  .ex-loading[hidden] { display: none; }
+  .ex-ctrl { position: absolute; right: 20px; bottom: 20px; z-index: 5; display: flex; gap: 10px; }
+  .ex-round { width: 46px; height: 46px; border-radius: 50%; border: 0; display: grid; place-items: center; background: rgb(255 255 255 / .94); color: var(--c-text); cursor: pointer; font-size: 18px; box-shadow: 0 2px 10px rgb(0 0 0 / .12); }
+  .ex-round[hidden] { display: none; }
+  .ex-stage .pnlm-container { background: #121212; }
+  .ex-stage .pnlm-load-box { background: rgb(0 0 0 / .55); border-radius: 0; }
+
+  .ex-dialog { border: 0; padding: 40px; width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 64px); color: var(--c-text); }
+  .ex-dialog::backdrop { background: rgb(20 20 20 / .55); }
+  .ex-dialog-close { position: absolute; top: 12px; right: 16px; }
+  .ex-dialog-close button { border: 0; background: none; font-size: 28px; cursor: pointer; color: var(--c-muted); }
+  .ex-dialog-title { margin: 0 0 20px; font-family: var(--font-serif); font-weight: 300; font-size: 30px; }
+  .ex-about { padding-left: 18px; margin: 0 0 16px; font-size: 14px; line-height: 1.6; color: var(--c-text-2); }
+  .ex-about li { margin-bottom: 10px; }
+  .ex-small { font-size: 12px; color: var(--c-muted); margin: 14px 0 0; }
+  .ex-sel-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--c-line); font-size: 14px; }
+  .ex-sel-row b { font-family: var(--font-serif); font-weight: 400; font-size: 20px; min-width: 80px; }
+  .ex-sel-row span { color: var(--c-muted); flex: 1; }
+  .ex-sel-row button { border: 0; background: none; color: var(--c-muted); cursor: pointer; font-size: 13px; text-decoration: underline; }
+  #sel-cta { margin-top: 22px; width: 100%; }
+  #sel-cta[aria-disabled='true'] { opacity: .4; pointer-events: none; }
+
+  @media (max-width: 1100px) {
+    .ex { --ex-panel-w: 360px; }
+  }
+  @media (max-width: 860px) {
+    .ex { --ex-bar-h: auto; }
+    .ex-bar { padding: 16px var(--pad-x-header); flex-wrap: wrap; gap: 8px; }
+    .ex-h1 { font-size: 24px; }
+    .ex-body { flex-direction: column; height: auto; min-height: 0; }
+    .ex-stage { order: -1; height: 62vh; min-height: 360px; flex: none; }
+    .ex-panel { width: 100%; border-right: 0; padding: 20px 16px; overflow: visible; }
+    .ex-chips { bottom: 64px; max-width: calc(100% - 32px); }
+    .ex-chips button { padding: 10px 16px; font-size: 13px; }
+    .ex-label { top: 18px; left: 16px; }
+    .ex-badge { top: 44px; left: 16px; right: auto; max-width: calc(100% - 32px); font-size: 11px; }
+    .ex-hint { left: 16px; bottom: 20px; }
+    .ex-ctrl { right: 12px; bottom: 12px; }
+    #ex-img.is-plan { padding: 72px 12px 110px; }
+    .ex-dialog { padding: 28px 20px; }
+  }
+</style>
+
+<script>
+  import type { ExplorarPayload } from '../lib/explorar';
+
+  type Tab = 'edificio' | 'unidades' | 'tipologias' | 'locales' | 'recorridos' | 'imagenes';
+  type Familia = ExplorarPayload['familias'][number];
+  type Depto = ExplorarPayload['departamentos'][number];
+  type Local = ExplorarPayload['locales'][number];
+
+  const D = JSON.parse(document.getElementById('explorar-data')!.textContent!) as ExplorarPayload;
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
+  const content = $('ex-content');
+  const stage = $('ex-stage');
+  const track = (event: string, params?: Record<string, unknown>) =>
+    (window as unknown as { track?: (e: string, p?: unknown) => void }).track?.(event, params);
+
+  // ---------- formato ----------
+  const esc = (s: unknown) =>
+    String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  const m2f = new Intl.NumberFormat('es-CL', { maximumFractionDigits: 2 });
+  const uff = new Intl.NumberFormat('es-CL', { maximumFractionDigits: 0 });
+  const m2 = (n: number) => `${m2f.format(n)} m²`;
+  const uf = (n: number) => `${uff.format(n)} UF`;
+  const rango = (a: number, b: number) => (a === b ? m2(a) : `${m2f.format(a)}–${m2f.format(b)} m²`);
+
+  const familiaPorId = new Map(D.familias.map((f) => [f.id, f]));
+  const deptoPorNombre = new Map(D.departamentos.map((u) => [u.nombre, u]));
+  const localPorId = new Map(D.locales.map((l) => [l.id, l]));
+  const recorridoPorId = new Map(D.recorridos.map((r) => [r.id, r]));
+  const imgPorId = new Map(D.imagenes.map((i) => [i.id, i]));
+  // Las vistas del conjunto son volumetría de revisión: solo en la pestaña Edificio.
+  const galeria = D.imagenes.filter((i) => !i.id.startsWith('conjunto'));
+
+  // ---------- estado ----------
+  const state = {
+    tab: 'recorridos' as Tab,
+    id: '' as string,
+    cuerpo: '' as string,
+    q: '' as string,
+  };
+
+  // ---------- Mi selección ----------
+  const SEL_KEY = 'pr-seleccion';
+  let seleccion: string[] = [];
+  try {
+    seleccion = JSON.parse(localStorage.getItem(SEL_KEY) ?? '[]').filter((n: unknown) => typeof n === 'string');
+  } catch {
+    seleccion = [];
+  }
+  const datosDe = (nombre: string) =>
+    deptoPorNombre.get(nombre) ?? D.locales.find((l) => l.unidad === nombre)?.datos;
+  seleccion = seleccion.filter((n) => datosDe(n));
+
+  function guardarSeleccion() {
+    try {
+      localStorage.setItem(SEL_KEY, JSON.stringify(seleccion));
+    } catch {
+      /* navegación privada: la selección vive solo en esta pestaña */
+    }
+    $('sel-count').textContent = String(seleccion.length);
+  }
+  function toggleSeleccion(nombre: string) {
+    const i = seleccion.indexOf(nombre);
+    if (i >= 0) seleccion.splice(i, 1);
+    else seleccion.push(nombre);
+    track(i >= 0 ? 'explorar_quitar' : 'explorar_agregar', { label: nombre });
+    guardarSeleccion();
+    renderPanel();
+  }
+  const enSeleccion = (n: string) => seleccion.includes(n);
+  const botonSeleccion = (nombre: string) =>
+    `<button type="button" class="btn ${enSeleccion(nombre) ? 'btn-line' : 'btn-dark'}" data-sel="${esc(nombre)}">${
+      enSeleccion(nombre) ? 'Quitar de mi selección' : 'Agregar a mi selección'
+    }</button>`;
+
+  function renderSeleccion() {
+    const list = $('sel-list');
+    const cta = $<HTMLAnchorElement>('sel-cta');
+    if (!seleccion.length) {
+      list.innerHTML = '<p class="ex-empty">Aún no agregas unidades. Usa «Agregar a mi selección» en cualquier unidad, tipología o local.</p>';
+      cta.setAttribute('aria-disabled', 'true');
+      cta.href = '/contacto';
+      return;
+    }
+    list.innerHTML = seleccion
+      .map((n) => {
+        const u = datosDe(n)!;
+        return `<div class="ex-sel-row"><b>${esc(n)}</b><span>${esc(u.tcNombre)} · ${esc(u.piso)} · ${m2(u.m2Total)} · ${uf(u.uf)}</span><button type="button" data-unsel="${esc(n)}">Quitar</button></div>`;
+      })
+      .join('');
+    cta.removeAttribute('aria-disabled');
+    cta.href = `/contacto?unidades=${encodeURIComponent(seleccion.join(','))}`;
+  }
+  $('sel-open').addEventListener('click', () => {
+    renderSeleccion();
+    $<HTMLDialogElement>('sel-dialog').showModal();
+  });
+  $('sel-list').addEventListener('click', (e) => {
+    const b = (e.target as Element).closest<HTMLElement>('[data-unsel]');
+    if (!b) return;
+    toggleSeleccion(b.dataset.unsel!);
+    renderSeleccion();
+  });
+  $('about-open').addEventListener('click', () => $<HTMLDialogElement>('about-dialog').showModal());
+
+  // ---------- carga diferida de librerías ----------
+  const cargados = new Map<string, Promise<void>>();
+  function cargar(src: string, tipo: 'script' | 'module' | 'css'): Promise<void> {
+    if (!cargados.has(src)) {
+      cargados.set(
+        src,
+        new Promise((ok, err) => {
+          const el =
+            tipo === 'css'
+              ? Object.assign(document.createElement('link'), { rel: 'stylesheet', href: src })
+              : Object.assign(document.createElement('script'), { src, type: tipo === 'module' ? 'module' : 'text/javascript' });
+          el.onload = () => ok();
+          el.onerror = () => err(new Error(`No se pudo cargar ${src}`));
+          document.head.appendChild(el);
+        })
+      );
+    }
+    return cargados.get(src)!;
+  }
+  const PANNELLUM = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum';
+  const MODEL_VIEWER = 'https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js';
+
+  // ---------- escenario ----------
+  type PannellumViewer = { destroy(): void; setYaw(y: number): void; setPitch(p: number): void; setHfov(h: number): void };
+  let pano: PannellumViewer | null = null;
+  let panoYaw = 0;
+  let modelEl: HTMLElement | null = null;
+  let token = 0;
+
+  function capas(cual: 'pano' | 'model' | 'img') {
+    $('ex-pano').hidden = cual !== 'pano';
+    $('ex-model').hidden = cual !== 'model';
+    $('ex-img').hidden = cual !== 'img';
+    if (cual !== 'pano' && pano) {
+      pano.destroy();
+      pano = null;
+    }
+    $('ex-open').hidden = cual !== 'img';
+  }
+
+  function rotulos(label: string, badge: string, hint: string, claro = false) {
+    $('ex-label').textContent = label;
+    $('ex-badge').textContent = badge;
+    $('ex-hint').textContent = hint;
+    stage.classList.toggle('on-light', claro);
+  }
+
+  function chips(items: { label: string; on: boolean; go: () => void }[]) {
+    const box = $('ex-chips');
+    box.innerHTML = '';
+    if (items.length < 2) return;
+    items.forEach((it) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = it.label;
+      b.setAttribute('aria-pressed', String(it.on));
+      b.addEventListener('click', () => {
+        box.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+        b.setAttribute('aria-pressed', 'true');
+        it.go();
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function cargando(texto: string | null) {
+    const el = $('ex-loading');
+    el.hidden = texto === null;
+    el.textContent = texto ?? '';
+  }
+
+  async function mostrarPano(url: string, yaw = 0) {
+    const t = ++token;
+    capas('pano');
+    panoYaw = yaw;
+    cargando('Cargando panorama…');
+    try {
+      await Promise.all([cargar(`${PANNELLUM}.css`, 'css'), cargar(`${PANNELLUM}.js`, 'script')]);
+    } catch {
+      cargando('No se pudo cargar el visor 360°');
+      return;
+    }
+    if (t !== token) return;
+    pano?.destroy();
+    const P = (window as unknown as { pannellum: { viewer(el: string, cfg: object): PannellumViewer & { on(e: string, f: () => void): void } } }).pannellum;
+    const v = P.viewer('ex-pano', {
+      type: 'equirectangular',
+      panorama: url,
+      autoLoad: true,
+      showControls: false,
+      showZoomCtrl: false,
+      showFullscreenCtrl: false,
+      yaw,
+      hfov: 100,
+      minHfov: 40,
+      maxHfov: 120,
+      friction: 0.12,
+    });
+    v.on('load', () => t === token && cargando(null));
+    v.on('error', () => t === token && cargando('No se pudo cargar el panorama'));
+    pano = v;
+  }
+
+  function mostrarImagen(url: string, alt: string, plano = false) {
+    ++token;
+    capas('img');
+    cargando(null);
+    const box = $('ex-img');
+    box.classList.toggle('is-plan', plano);
+    const img = box.querySelector('img')!;
+    img.src = url;
+    img.alt = alt;
+    $<HTMLAnchorElement>('ex-open').href = url;
+  }
+
+  async function mostrarModelo(url: string, opciones: { orbit?: string; autoRotate?: boolean } = {}) {
+    const t = ++token;
+    capas('model');
+    cargando('Cargando modelo 3D…');
+    try {
+      await cargar(MODEL_VIEWER, 'module');
+      await customElements.whenDefined('model-viewer');
+    } catch {
+      cargando('No se pudo cargar el visor 3D');
+      return;
+    }
+    if (t !== token) return;
+    const box = $('ex-model');
+    box.innerHTML = '';
+    modelEl = document.createElement('model-viewer');
+    const attrs: Record<string, string> = {
+      src: url,
+      'camera-controls': '',
+      'touch-action': 'pan-y',
+      'shadow-intensity': '0.8',
+      exposure: '0.9',
+      'environment-image': 'neutral',
+      'interaction-prompt': 'none',
+      'camera-orbit': opciones.orbit ?? '35deg 60deg auto',
+      'min-camera-orbit': 'auto 0deg auto',
+      'max-camera-orbit': 'auto 88deg auto',
+      alt: 'Modelo 3D',
+    };
+    if (opciones.autoRotate) attrs['auto-rotate'] = '';
+    Object.entries(attrs).forEach(([k, v]) => modelEl!.setAttribute(k, v));
+    modelEl.addEventListener('progress', (e) => {
+      const p = (e as CustomEvent<{ totalProgress: number }>).detail.totalProgress;
+      if (t !== token) return;
+      cargando(p >= 1 ? null : `Cargando modelo 3D… ${Math.round(p * 100)}%`);
+    });
+    modelEl.addEventListener('error', () => t === token && cargando('No se pudo cargar el modelo'));
+    box.appendChild(modelEl);
+  }
+
+  $('ex-home').addEventListener('click', () => {
+    if (pano) {
+      pano.setYaw(panoYaw);
+      pano.setPitch(0);
+      pano.setHfov(100);
+    } else if (modelEl) {
+      (modelEl as unknown as { cameraOrbit: string; resetTurntableRotation(): void }).resetTurntableRotation?.();
+      modelEl.setAttribute('camera-target', 'auto auto auto');
+      (modelEl as unknown as { jumpCameraToGoal(): void }).jumpCameraToGoal?.();
+    }
+  });
+  $('ex-fs').addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else stage.requestFullscreen?.();
+  });
+  $('ex-img').addEventListener('click', (e) => {
+    if ($('ex-img').classList.contains('is-plan') && (e.target as Element).tagName === 'IMG') {
+      window.open($<HTMLAnchorElement>('ex-open').href, '_blank', 'noopener');
+    }
+  });
+
+  // ---------- vistas por pestaña ----------
+  function verRecorrido(id: string) {
+    const r = recorridoPorId.get(id) ?? D.recorridos[0];
+    if (!r) return;
+    state.id = r.id;
+    const ir = (i: number) => mostrarPano(r.vistas[i].pano, r.vistas[i].yaw);
+    rotulos(r.nombre, 'Desde Blender · escena de revisión', 'Arrastra para mirar en 360°');
+    chips(r.vistas.map((v, i) => ({ label: v.nombre, on: i === 0, go: () => ir(i) })));
+    ir(0);
+  }
+
+  function verImagen(id: string) {
+    const im = imgPorId.get(id) ?? galeria[0];
+    if (!im) return;
+    state.id = im.id;
+    rotulos(im.nombre, 'Render Cycles · imagen referencial', '');
+    chips([]);
+    mostrarImagen(im.img, im.nombre);
+  }
+
+  function verPlanos(label: string, badge: string, niveles: { nombre: string; plano: string }[], alt: string) {
+    rotulos(label, badge, '', true);
+    chips(niveles.map((n, i) => ({ label: n.nombre, on: i === 0, go: () => mostrarImagen(n.plano, `${alt} · ${n.nombre}`, true) })));
+    mostrarImagen(niveles[0].plano, `${alt} · ${niveles[0].nombre}`, true);
+  }
+
+  function verFamilia(id: string) {
+    const f = familiaPorId.get(id) ?? D.familias[0];
+    state.id = f.id;
+    const badge = f.aislada ? `Planta de la unidad ${f.representante}` : `${f.representante} dentro del contexto de su planta`;
+    verPlanos(`Tipología ${f.tc} · ${f.tcNombre}`, badge, f.niveles, `Planta ${f.representante}`);
+  }
+
+  function verUnidad(nombre: string) {
+    const u = deptoPorNombre.get(nombre);
+    if (!u) return;
+    state.id = u.nombre;
+    const f = familiaPorId.get(u.familiaPlanta)!;
+    const badge = f.representante === u.nombre ? `Planta de ${u.nombre}` : `Planta de referencia: ${f.representante}, misma tipología`;
+    verPlanos(`Unidad ${u.nombre}`, badge, f.niveles, `Planta de referencia ${f.representante}`);
+  }
+
+  function verLocal(id: string) {
+    const l = localPorId.get(id) ?? D.locales[0];
+    state.id = l.id;
+    verPlanos(l.titulo, 'Planta de contexto · niveles del local', l.niveles, l.titulo);
+  }
+
+  function verEdificio(modo?: string) {
+    state.id = '';
+    const opciones: { label: string; id: string; go: () => void }[] = [];
+    if (D.modelos.edificio) {
+      opciones.push({
+        label: 'Modelo 3D',
+        id: 'modelo',
+        go: () => {
+          rotulos('El edificio', 'Volumetría en revisión', 'Arrastra para girar · rueda para acercar', true);
+          mostrarModelo(D.modelos.edificio, { orbit: '-30deg 65deg auto', autoRotate: true });
+        },
+      });
+    }
+    for (const id of ['conjunto_aerea', 'conjunto_lateral']) {
+      const im = imgPorId.get(id);
+      if (im)
+        opciones.push({
+          label: id === 'conjunto_aerea' ? 'Vista aérea' : 'Vista lateral',
+          id,
+          go: () => {
+            rotulos('El edificio', 'Render Cycles · volumetría en revisión', '');
+            mostrarImagen(im.img, im.nombre);
+          },
+        });
+    }
+    if (recorridoPorId.has('conjunto')) {
+      opciones.push({
+        label: '360°',
+        id: '360',
+        go: () => {
+          rotulos('El conjunto', 'Desde Blender · escena de revisión', 'Arrastra para mirar en 360°');
+          const r = recorridoPorId.get('conjunto')!;
+          mostrarPano(r.vistas[0].pano, r.vistas[0].yaw);
+        },
+      });
+    }
+    if (!opciones.length) {
+      rotulos('El edificio', '', '');
+      chips([]);
+      const r = recorridoPorId.get('patio');
+      if (r) mostrarPano(r.vistas[0].pano);
+      return;
+    }
+    const i = Math.max(0, opciones.findIndex((o) => o.id === modo));
+    chips(opciones.map((o, j) => ({ label: o.label, on: j === i, go: o.go })));
+    opciones[i].go();
+  }
+
+  function verModeloInterior(r: ExplorarPayload['recorridos'][number]) {
+    const url = r.modelo ? D.modelos[r.modelo] : null;
+    if (!url) return;
+    rotulos(`${r.nombre} · modelo 3D`, 'Interior de presentación · sin cielo para ver la distribución', 'Arrastra para girar · rueda para acercar', true);
+    chips([
+      { label: 'Modelo 3D', on: true, go: () => mostrarModelo(url, { orbit: '20deg 50deg auto' }) },
+      ...r.vistas.map((v) => ({ label: `360° · ${v.nombre}`, on: false, go: () => mostrarPano(v.pano, v.yaw) })),
+    ]);
+    mostrarModelo(url, { orbit: '20deg 50deg auto' });
+    if (window.matchMedia('(max-width: 860px)').matches) stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    track('explorar_modelo_interior', { label: r.id });
+  }
+
+  // ---------- panel ----------
+  const FOOT: Record<Tab, string> = {
+    edificio: 'Volumetría general del conjunto, en revisión frente a los planos definitivos.',
+    unidades: 'Superficies y precios de lista según Disponibilidad. Las plantas son de referencia por tipología.',
+    tipologias: 'Cada tipología se muestra con una unidad representante. Otras unidades de la familia pueden presentar variantes menores.',
+    locales: 'Plantas de contexto. Sus recorridos 3D se incorporarán cuando el modelo de los locales esté conciliado.',
+    recorridos: 'Panoramas renderizados desde escenas del mismo archivo Blender. Su ensamblaje con el modelo general sigue en revisión.',
+    imagenes: 'Imágenes referenciales renderizadas en Cycles. Decoración y vegetación de presentación.',
+  };
+
+  const item = (o: { key: string; val: string; img: string; titulo: string; sub: string; tag?: string; plan?: boolean; on: boolean }) =>
+    `<button type="button" class="ex-item" data-${o.key}="${esc(o.val)}" aria-current="${o.on}">
+       <img src="${esc(o.img)}" alt="" loading="lazy" ${o.plan ? 'class="plan"' : ''} />
+       <div><b>${esc(o.titulo)}</b><small>${esc(o.sub)}</small></div>
+       ${o.tag ? `<span class="tag">${esc(o.tag)}</span>` : ''}
+     </button>`;
+
+  function panelEdificio() {
+    const totalD = D.departamentos.length;
+    const totalL = D.locales.length;
+    return `
+      <h2 class="ex-h2">El edificio</h2>
+      <p class="ex-note">${totalD} departamentos y ${totalL} locales repartidos en tres cuerpos en torno a un patio interior, en Santo Domingo 1720.</p>
+      <div class="ex-list">
+        ${D.cuerpos
+          .map(
+            (c) => `<button type="button" class="ex-item" data-cuerpo="${esc(c.id)}" aria-current="false">
+              <div><b>${esc(c.label)}</b><small>${c.departamentos} departamentos · ${c.locales} locales · ${c.familias} tipologías</small></div>
+              <span class="tag">Ver unidades</span></button>`
+          )
+          .join('')}
+      </div>`;
+  }
+
+  function panelUnidades() {
+    const q = state.q.trim().toLowerCase().replace(/\s+/g, '');
+    const lista = D.departamentos.filter(
+      (u) => (!state.cuerpo || u.cuerpo === state.cuerpo) && (!q || u.nombre.toLowerCase().replace(/\s+/g, '').includes(q))
+    );
+    const sel = deptoPorNombre.get(state.id);
+    return `
+      <input class="ex-search" id="ex-q" type="search" placeholder="Buscar unidad, p. ej. 304 B" value="${esc(state.q)}" aria-label="Buscar unidad" />
+      <div class="ex-filters">
+        ${['', 'A', 'B', 'C']
+          .map((c) => `<button type="button" class="ex-chip" data-fcuerpo="${c}" aria-pressed="${state.cuerpo === c}">${c ? `Cuerpo ${c}` : 'Todos'}</button>`)
+          .join('')}
+      </div>
+      ${sel ? fichaUnidad(sel) : ''}
+      <h2 class="ex-h2">${lista.length} departamento${lista.length === 1 ? '' : 's'}</h2>
+      <div>
+        ${
+          lista
+            .map(
+              (u) => `<button type="button" class="ex-row" data-unidad="${esc(u.nombre)}" aria-current="${u.nombre === state.id}">
+                <b>${esc(u.nombre)}</b><span>${esc(u.tc)} · ${esc(u.piso)} · ${m2(u.m2Total)}</span><em>${uf(u.uf)}</em></button>`
+            )
+            .join('') || '<p class="ex-empty">No hay unidades con ese filtro.</p>'
+        }
+      </div>`;
+  }
+
+  function fichaUnidad(u: Depto) {
+    const f = familiaPorId.get(u.familiaPlanta)!;
+    const r = f.recorrido ? recorridoPorId.get(f.recorrido) : null;
+    return `<div class="ex-card">
+      <h3>Unidad ${esc(u.nombre)}</h3>
+      <p class="sub">Tipología ${esc(u.tc)} · ${esc(u.tcNombre)}</p>
+      <dl class="ex-dl">
+        <div><dt>Ubicación</dt><dd>${esc(u.piso)} · Cuerpo ${esc(u.cuerpo)}</dd></div>
+        <div><dt>Orientación</dt><dd>${esc(u.orientacion || '—')}</dd></div>
+        <div><dt>Superficie útil</dt><dd>${m2(u.m2Util)}</dd></div>
+        <div><dt>Terraza</dt><dd>${u.m2Terraza ? m2(u.m2Terraza) : '—'}</dd></div>
+        <div><dt>Superficie total</dt><dd>${m2(u.m2Total)}</dd></div>
+        <div><dt>Precio de lista</dt><dd>${uf(u.uf)}</dd></div>
+      </dl>
+      <div class="ex-actions">
+        ${botonSeleccion(u.nombre)}
+        ${r ? `<button type="button" class="btn btn-line" data-go-recorrido="${esc(r.id)}">Ver recorrido 360° de ${esc(r.unidad ?? '')}</button>` : ''}
+        <button type="button" class="btn btn-line" data-go-familia="${esc(f.id)}">Ver tipología ${esc(f.tc)}</button>
+      </div>
+    </div>`;
+  }
+
+  function panelTipologias() {
+    const sel = familiaPorId.get(state.id);
+    const grupos = ['A', 'B', 'C']
+      .map((c) => {
+        const fs = D.familias.filter((f) => f.cuerpo === c);
+        return `<h2 class="ex-h2">Cuerpo ${c}</h2><div class="ex-list">${fs
+          .map((f) =>
+            item({
+              key: 'familia',
+              val: f.id,
+              img: f.niveles[0].plano,
+              plan: true,
+              titulo: `${f.tc} · ${f.tcNombre}`,
+              sub: `${f.unidades.length} unidad${f.unidades.length === 1 ? '' : 'es'} · ${rango(f.m2Min, f.m2Max)}`,
+              tag: f.recorrido ? '360°' : f.niveles.length > 1 ? 'Dúplex' : undefined,
+              on: f.id === state.id,
+            })
+          )
+          .join('')}</div>`;
+      })
+      .join('');
+    return (sel ? fichaFamilia(sel) : '') + grupos;
+  }
+
+  function fichaFamilia(f: Familia) {
+    const r = f.recorrido ? recorridoPorId.get(f.recorrido) : null;
+    return `<div class="ex-card">
+      <h3>Tipología ${esc(f.tc)}</h3>
+      <p class="sub">${esc(f.tcNombre)} · Cuerpo ${esc(f.cuerpo)}</p>
+      <dl class="ex-dl">
+        <div><dt>Superficie total</dt><dd>${rango(f.m2Min, f.m2Max)}</dd></div>
+        <div><dt>Desde</dt><dd>${uf(f.ufMin)}</dd></div>
+        <div><dt>Representante</dt><dd>${esc(f.representante)}</dd></div>
+        <div><dt>Interior 3D</dt><dd>${r ? 'Disponible' : 'En preparación'}</dd></div>
+      </dl>
+      <p class="ex-note">${esc(f.nota)}</p>
+      <div class="ex-units">${f.unidades.map((n) => `<button type="button" data-unidad="${esc(n)}">${esc(n)}</button>`).join('')}</div>
+      <div class="ex-actions">
+        ${r ? `<button type="button" class="btn btn-dark" data-go-recorrido="${esc(r.id)}">Ver recorrido 360°</button>` : ''}
+        ${r?.modelo ? `<button type="button" class="btn btn-line" data-modelo="${esc(r.id)}">Ver modelo interior 3D</button>` : ''}
+        <a class="btn btn-line" href="/disponibilidad?tc=${encodeURIComponent(f.tc)}" data-track="explorar_disponibilidad" data-track-label="${esc(f.tc)}">Ver disponibilidad ${esc(f.tc)}</a>
+      </div>
+    </div>`;
+  }
+
+  function panelLocales() {
+    const sel = localPorId.get(state.id);
+    return `${sel ? fichaLocal(sel) : ''}
+      <h2 class="ex-h2">Locales comerciales</h2>
+      <div class="ex-list">${D.locales
+        .map((l) =>
+          item({
+            key: 'local',
+            val: l.id,
+            img: l.niveles[0].plano,
+            plan: true,
+            titulo: l.titulo,
+            sub: `Cuerpo ${l.cuerpo} · ${m2(l.datos.m2Total)}${l.niveles.length > 1 ? ` · ${l.niveles.length} niveles` : ''}`,
+            on: l.id === state.id,
+          })
+        )
+        .join('')}</div>`;
+  }
+
+  function fichaLocal(l: Local) {
+    const u = l.datos;
+    return `<div class="ex-card">
+      <h3>${esc(l.titulo)}</h3>
+      <p class="sub">Cuerpo ${esc(l.cuerpo)} · ${esc(u.piso)}</p>
+      <dl class="ex-dl">
+        <div><dt>Superficie útil</dt><dd>${m2(u.m2Util)}</dd></div>
+        <div><dt>Terraza</dt><dd>${u.m2Terraza ? m2(u.m2Terraza) : '—'}</dd></div>
+        <div><dt>Superficie total</dt><dd>${m2(u.m2Total)}</dd></div>
+        <div><dt>Precio de lista</dt><dd>${uf(u.uf)}</dd></div>
+      </dl>
+      <p class="ex-note">${esc(l.nota)}</p>
+      <div class="ex-actions">${botonSeleccion(l.unidad)}</div>
+    </div>`;
+  }
+
+  function panelRecorridos() {
+    const sel = recorridoPorId.get(state.id);
+    const extra =
+      sel && sel.unidad
+        ? `<div class="ex-actions" style="margin-top:8px">
+            ${sel.modelo ? `<button type="button" class="btn btn-dark" data-modelo="${esc(sel.id)}">Ver modelo interior 3D →</button>` : ''}
+            <button type="button" class="btn btn-line" data-unidad="${esc(sel.unidad)}">Ver ficha del departamento</button>
+            ${botonSeleccion(sel.unidad).replace('btn-dark', 'btn-line')}
+          </div>`
+        : '';
+    return `<h2 class="ex-h2">Espacios para descubrir</h2>
+      <div class="ex-list">${D.recorridos
+        .map((r) => item({ key: 'recorrido', val: r.id, img: r.thumb, titulo: r.nombre, sub: r.tipo, on: r.id === state.id }))
+        .join('')}</div>
+      ${sel ? `<p class="ex-note" style="margin-top:20px">${esc(sel.nota)}</p>${extra}` : ''}`;
+  }
+
+  function panelImagenes() {
+    return `<h2 class="ex-h2">Imágenes</h2>
+      <div class="ex-list">${galeria
+        .map((i) => item({ key: 'imagen', val: i.id, img: i.thumb, titulo: i.nombre, sub: 'Render · Cycles', on: i.id === state.id }))
+        .join('')}</div>`;
+  }
+
+  const PANELES: Record<Tab, () => string> = {
+    edificio: panelEdificio,
+    unidades: panelUnidades,
+    tipologias: panelTipologias,
+    locales: panelLocales,
+    recorridos: panelRecorridos,
+    imagenes: panelImagenes,
+  };
+
+  function renderPanel() {
+    const scroll = content.parentElement!.scrollTop;
+    const foco = document.activeElement?.id;
+    content.innerHTML = PANELES[state.tab]();
+    $('ex-foot').textContent = FOOT[state.tab];
+    document.querySelectorAll<HTMLElement>('.ex-tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === state.tab)));
+    content.parentElement!.scrollTop = scroll;
+    if (foco === 'ex-q') {
+      const q = $<HTMLInputElement>('ex-q');
+      q.focus();
+      q.setSelectionRange(q.value.length, q.value.length);
+    }
+  }
+
+  function syncUrl() {
+    const p = new URLSearchParams();
+    if (state.tab !== 'recorridos') p.set('tab', state.tab);
+    if (state.id) p.set('id', state.id);
+    const qs = p.toString();
+    history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+  }
+
+  function ir(tab: Tab, id = '', opts: { scroll?: boolean } = {}) {
+    state.tab = tab;
+    state.id = id;
+    switch (tab) {
+      case 'edificio':
+        verEdificio(id);
+        state.id = '';
+        break;
+      case 'unidades':
+        if (id && deptoPorNombre.has(id)) verUnidad(id);
+        else if (!id) verUnidad(D.departamentos.find((u) => u.nombre === '304 B')?.nombre ?? D.departamentos[0].nombre), (state.id = '');
+        break;
+      case 'tipologias':
+        verFamilia(id || D.familias[0].id);
+        if (!id) state.id = '';
+        break;
+      case 'locales':
+        verLocal(id || D.locales[0].id);
+        if (!id) state.id = '';
+        break;
+      case 'recorridos':
+        verRecorrido(id || '304B');
+        break;
+      case 'imagenes':
+        verImagen(id || galeria[0]?.id);
+        break;
+    }
+    renderPanel();
+    syncUrl();
+    if (opts.scroll && window.matchMedia('(max-width: 860px)').matches) stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    track('explorar_ver', { label: `${tab}:${state.id}` });
+  }
+
+  document.querySelector('.ex-tabs')!.addEventListener('click', (e) => {
+    const b = (e.target as Element).closest<HTMLElement>('[data-tab]');
+    if (b) ir(b.dataset.tab as Tab);
+  });
+
+  content.addEventListener('click', (e) => {
+    const el = (e.target as Element).closest<HTMLElement>(
+      '[data-sel],[data-unidad],[data-familia],[data-local],[data-recorrido],[data-imagen],[data-cuerpo],[data-fcuerpo],[data-go-recorrido],[data-go-familia],[data-modelo]'
+    );
+    if (!el) return;
+    const d = el.dataset;
+    if (d.sel) return toggleSeleccion(d.sel);
+    if (d.modelo) {
+      const r = recorridoPorId.get(d.modelo);
+      if (r) verModeloInterior(r);
+      return;
+    }
+    if (d.goRecorrido) return ir('recorridos', d.goRecorrido, { scroll: true });
+    if (d.goFamilia) return ir('tipologias', d.goFamilia, { scroll: true });
+    if (d.fcuerpo !== undefined) {
+      state.cuerpo = d.fcuerpo;
+      return renderPanel();
+    }
+    if (d.cuerpo) {
+      state.cuerpo = d.cuerpo;
+      return ir('unidades');
+    }
+    if (d.unidad) {
+      if (localPorId.has(d.unidad)) return ir('locales', d.unidad, { scroll: true });
+      return ir('unidades', d.unidad, { scroll: true });
+    }
+    if (d.familia) return ir('tipologias', d.familia, { scroll: true });
+    if (d.local) return ir('locales', d.local, { scroll: true });
+    if (d.recorrido) return ir('recorridos', d.recorrido, { scroll: true });
+    if (d.imagen) return ir('imagenes', d.imagen, { scroll: true });
+  });
+
+  content.addEventListener('input', (e) => {
+    const t = e.target as HTMLInputElement;
+    if (t.id !== 'ex-q') return;
+    state.q = t.value;
+    renderPanel();
+  });
+
+  // ---------- arranque ----------
+  guardarSeleccion();
+  const params = new URLSearchParams(location.search);
+  const tabInicial = params.get('tab') as Tab | null;
+  ir(tabInicial && tabInicial in PANELES ? tabInicial : 'recorridos', params.get('id') ?? '');
+</script>

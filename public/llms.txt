@@ -14,6 +14,7 @@
 ## Páginas
 
 - [Inicio](/): presentación del proyecto, avance de obra, galería de renders.
+- [Explorar 3D](/explorar): recorridos 360° de 304 B, 305 B, el patio y la circulación; modelos 3D; planta de cada unidad y local.
 - [Tipologías](/tipologias): detalle de Studio y 1 Dormitorio, cotizador de metraje por piso.
 - [Ubicación](/ubicacion): mapa y conectividad del barrio Santo Domingo / Barrio Brasil.
 - [Contacto](/contacto): formulario de contacto y preguntas frecuentes.

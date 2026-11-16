@@ -1,0 +1,495 @@
+{
+  "generado": "scripts/export_site_assets.py desde PATIO_RIQUELME_BLENDER",
+  "recorridos": [
+    {
+      "id": "patio",
+      "nombre": "El patio",
+      "tipo": "Panorama 360°",
+      "thumb": "/explorar/imagenes/patio_thumb.jpg",
+      "nota": "Patio interior con el ajedrez blanco y negro de 40 × 40 cm de las especificaciones técnicas. Vegetación y mobiliario de presentación.",
+      "vistas": [
+        {
+          "nombre": "Patio",
+          "pano": "/explorar/panoramas/360_patio.jpg",
+          "yaw": 0
+        }
+      ],
+      "modelo": null
+    },
+    {
+      "id": "305B",
+      "nombre": "Departamento 305 B",
+      "tipo": "Interior 360° · 1D",
+      "thumb": "/explorar/imagenes/305B_thumb.jpg",
+      "unidad": "305 B",
+      "tc": "B1",
+      "modelo": "interior_305B",
+      "nota": "Interior aportado para esta unidad. Acabados y decoración de presentación, sujetos a validación; no se replican en otras unidades.",
+      "vistas": [
+        {
+          "nombre": "Estar y cocina",
+          "pano": "/explorar/panoramas/360_305B.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Dormitorio",
+          "pano": "/explorar/panoramas/360_305B_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "304B",
+      "nombre": "Departamento 304 B",
+      "tipo": "Interior 360° · 1D",
+      "thumb": "/explorar/imagenes/304B_thumb.jpg",
+      "unidad": "304 B",
+      "tc": "B2",
+      "modelo": "interior_304B",
+      "nota": "Interior aportado para esta unidad. Acabados y decoración de presentación, sujetos a validación; no se replican en otras unidades.",
+      "vistas": [
+        {
+          "nombre": "Estar y cocina",
+          "pano": "/explorar/panoramas/360_304B.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Dormitorio",
+          "pano": "/explorar/panoramas/360_304B_dormitorio.jpg",
+          "yaw": 180
+        }
+      ]
+    },
+    {
+      "id": "pasillo",
+      "nombre": "La circulación",
+      "tipo": "Panorama 360°",
+      "thumb": "/explorar/imagenes/pasillo_thumb.jpg",
+      "nota": "Pasillo de circulación del cuerpo B.",
+      "vistas": [
+        {
+          "nombre": "Pasillo",
+          "pano": "/explorar/panoramas/360_pasillo.jpg",
+          "yaw": 0
+        }
+      ],
+      "modelo": null
+    }
+  ],
+  "imagenes": [
+    {
+      "id": "304B",
+      "nombre": "Estar 304 B",
+      "img": "/explorar/imagenes/304B.jpg",
+      "thumb": "/explorar/imagenes/304B_thumb.jpg"
+    },
+    {
+      "id": "305B",
+      "nombre": "Estar y cocina 305 B",
+      "img": "/explorar/imagenes/305B.jpg",
+      "thumb": "/explorar/imagenes/305B_thumb.jpg"
+    },
+    {
+      "id": "patio",
+      "nombre": "Patio interior",
+      "img": "/explorar/imagenes/patio.jpg",
+      "thumb": "/explorar/imagenes/patio_thumb.jpg"
+    },
+    {
+      "id": "pasillo",
+      "nombre": "Circulación",
+      "img": "/explorar/imagenes/pasillo.jpg",
+      "thumb": "/explorar/imagenes/pasillo_thumb.jpg"
+    },
+    {
+      "id": "conjunto_aerea",
+      "nombre": "Conjunto · vista aérea",
+      "img": "/explorar/imagenes/conjunto_aerea.jpg",
+      "thumb": "/explorar/imagenes/conjunto_aerea_thumb.jpg"
+    },
+    {
+      "id": "conjunto_lateral",
+      "nombre": "Conjunto · vista lateral",
+      "img": "/explorar/imagenes/conjunto_lateral.jpg",
+      "thumb": "/explorar/imagenes/conjunto_lateral_thumb.jpg"
+    }
+  ],
+  "familias": [
+    {
+      "id": "A-ESTUDIO",
+      "cuerpo": "A",
+      "titulo": "Estudio · Casona Riquelme",
+      "representante": "203 A",
+      "unidades": [
+        "203 A",
+        "205 A",
+        "301 A"
+      ],
+      "niveles": [
+        {
+          "nombre": "Planta · piso 2",
+          "plano": "/explorar/planos/A-ESTUDIO_p2.png",
+          "contexto": false
+        }
+      ],
+      "aislada": true,
+      "nota": "Se muestra 203 A en su planta. Los estudios 205 A y 301 A tienen variantes de distribución y superficie.",
+      "recorrido": null,
+      "modelo": null
+    },
+    {
+      "id": "A-1D",
+      "cuerpo": "A",
+      "titulo": "1 dormitorio · Casona Riquelme",
+      "representante": "201 A",
+      "unidades": [
+        "201 A",
+        "202 A",
+        "204 A",
+        "302 A"
+      ],
+      "niveles": [
+        {
+          "nombre": "Planta · piso 2",
+          "plano": "/explorar/planos/A-1D_p2.png",
+          "contexto": true
+        }
+      ],
+      "aislada": false,
+      "nota": "Se muestra 201 A dentro del contexto de su planta. Las demás unidades de la familia presentan variantes de distribución y superficie.",
+      "recorrido": null,
+      "modelo": null
+    },
+    {
+      "id": "B-1",
+      "cuerpo": "B",
+      "titulo": "Planta B-1 · 1 dormitorio",
+      "representante": "304 B",
+      "unidades": [
+        "01 B",
+        "04 B",
+        "07 B",
+        "101 B",
+        "104 B",
+        "107 B",
+        "201 B",
+        "204 B",
+        "207 B",
+        "301 B",
+        "304 B",
+        "307 B",
+        "401 B",
+        "404 B",
+        "407 B"
+      ],
+      "niveles": [
+        {
+          "nombre": "Planta · piso 3",
+          "plano": "/explorar/planos/B-1_p3.png",
+          "contexto": false
+        }
+      ],
+      "aislada": true,
+      "nota": "Representante 304 B. La familia incluye variaciones compactas y orientaciones distintas.",
+      "recorrido": "304B",
+      "modelo": "interior_304B"
+    },
+    {
+      "id": "B-2",
+      "cuerpo": "B",
+      "titulo": "Planta B-2 · 1 dormitorio",
+      "representante": "305 B",
+      "unidades": [
+        "02 B",
+        "03 B",
+        "05 B",
+        "06 B",
+        "102 B",
+        "103 B",
+        "105 B",
+        "106 B",
+        "202 B",
+        "203 B",
+        "205 B",
+        "206 B",
+        "302 B",
+        "303 B",
+        "305 B",
+        "306 B",
+        "402 B",
+        "403 B",
+        "405 B",
+        "406 B"
+      ],
+      "niveles": [
+        {
+          "nombre": "Planta · piso 3",
+          "plano": "/explorar/planos/B-2_p3.png",
+          "contexto": false
+        }
+      ],
+      "aislada": true,
+      "nota": "Representante 305 B. Existen distribuciones en espejo y orientaciones distintas.",
+      "recorrido": "305B",
+      "modelo": "interior_305B"
+    },
+    {
+      "id": "B-3",
+      "cuerpo": "B",
+      "titulo": "Planta B-3 · 1 dormitorio",
+      "representante": "501 B",
+      "unidades": [
+        "501 B",
+        "502 B"
+      ],
+      "niveles": [
+        {
+          "nombre": "Planta · piso 5",
+          "plano": "/explorar/planos/B-3_p5.png",
+          "contexto": false
+        }
+      ],
+      "aislada": true,
+      "nota": "Representante 501 B del piso 5; 502 B es la otra unidad de esta familia.",
+      "recorrido": null,
+      "modelo": null
+    },
+    {
+      "id": "B-4",
+      "cuerpo": "B",
+      "titulo": "Planta B-4 · 1 dormitorio",
+      "representante": "308 B",
+      "unidades": [
+        "308 B"
+      ],
+      "niveles": [
+        {
+          "nombre": "Planta · piso 3",
+          "plano": "/explorar/planos/B-4_p3.png",
+          "contexto": false
+        }
+      ],
+      "aislada": true,
+      "nota": "Unidad 308 B; distribución singular del cuerpo B.",
+      "recorrido": null,
+      "modelo": null
+    },
+    {
+      "id": "C-1",
+      "cuerpo": "C",
+      "titulo": "Planta C-1 · 1 dormitorio y terraza",
+      "representante": "304 C",
+      "unidades": [
+        "201 C",
+        "304 C",
+        "402 C",
+        "504 C"
+      ],
+      "niveles": [
+        {
+          "nombre": "Planta · piso 3",
+          "plano": "/explorar/planos/C-1_p3.png",
+          "contexto": false
+        }
+      ],
+      "aislada": true,
+      "nota": "Representante 304 C. Terraza de venta 3,39 m² por unidad, según cuadro.",
+      "recorrido": null,
+      "modelo": null
+    },
+    {
+      "id": "C-2",
+      "cuerpo": "C",
+      "titulo": "Planta C-2 · 1 dormitorio",
+      "representante": "303 C",
+      "unidades": [
+        "303 C",
+        "401 C",
+        "503 C"
+      ],
+      "niveles": [
+        {
+          "nombre": "Planta · piso 3",
+          "plano": "/explorar/planos/C-2_p3.png",
+          "contexto": false
+        }
+      ],
+      "aislada": true,
+      "nota": "Representante 303 C; 401 C presenta una superficie distinta dentro de esta familia.",
+      "recorrido": null,
+      "modelo": null
+    },
+    {
+      "id": "C-5",
+      "cuerpo": "C",
+      "titulo": "Planta C-5 · 1 dormitorio",
+      "representante": "501 C",
+      "unidades": [
+        "501 C",
+        "502 C"
+      ],
+      "niveles": [
+        {
+          "nombre": "Planta · piso 5",
+          "plano": "/explorar/planos/C-5_p5.png",
+          "contexto": false
+        }
+      ],
+      "aislada": true,
+      "nota": "Representante 501 C del piso 5. Las dos unidades tienen superficies diferentes.",
+      "recorrido": null,
+      "modelo": null
+    },
+    {
+      "id": "C-DUPLEX-301",
+      "cuerpo": "C",
+      "titulo": "Dúplex 301 C · 1½ dormitorio",
+      "representante": "301 C",
+      "unidades": [
+        "301 C"
+      ],
+      "niveles": [
+        {
+          "nombre": "Nivel principal · piso 3",
+          "plano": "/explorar/planos/C-DUPLEX-301_p3.png",
+          "contexto": true
+        },
+        {
+          "nombre": "Altillo · piso 4",
+          "plano": "/explorar/planos/C-DUPLEX-301_p4.png",
+          "contexto": true
+        }
+      ],
+      "aislada": true,
+      "nota": "Se muestran las plantas de los pisos 3 y 4. La superficie total suma ambos niveles; la planta inferior sola no representa la unidad completa.",
+      "recorrido": null,
+      "modelo": null
+    },
+    {
+      "id": "C-DUPLEX-302",
+      "cuerpo": "C",
+      "titulo": "Dúplex 302 C · 1 dormitorio",
+      "representante": "302 C",
+      "unidades": [
+        "302 C"
+      ],
+      "niveles": [
+        {
+          "nombre": "Nivel principal · piso 3",
+          "plano": "/explorar/planos/C-DUPLEX-302_p3.png",
+          "contexto": true
+        },
+        {
+          "nombre": "Altillo · piso 4",
+          "plano": "/explorar/planos/C-DUPLEX-302_p4.png",
+          "contexto": true
+        }
+      ],
+      "aislada": true,
+      "nota": "Se muestran las plantas de los pisos 3 y 4. La superficie total suma ambos niveles; la planta inferior sola no representa la unidad completa.",
+      "recorrido": null,
+      "modelo": null
+    }
+  ],
+  "locales": [
+    {
+      "id": "A1",
+      "cuerpo": "A",
+      "titulo": "Local 1A",
+      "unidad": "LOC.1 A",
+      "niveles": [
+        {
+          "nombre": "Primer piso",
+          "plano": "/explorar/planos/LOCAL_A1_p1.png"
+        }
+      ],
+      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+    },
+    {
+      "id": "A2",
+      "cuerpo": "A",
+      "titulo": "Local 2A",
+      "unidad": "LOC. 2 A",
+      "niveles": [
+        {
+          "nombre": "Primer piso",
+          "plano": "/explorar/planos/LOCAL_A2_p1.png"
+        }
+      ],
+      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+    },
+    {
+      "id": "B1",
+      "cuerpo": "B",
+      "titulo": "Local 1B",
+      "unidad": "LOC. 1 B",
+      "niveles": [
+        {
+          "nombre": "Primer piso",
+          "plano": "/explorar/planos/LOCAL_B1_p1.png"
+        },
+        {
+          "nombre": "Altillo",
+          "plano": "/explorar/planos/LOCAL_B1_p2.png"
+        }
+      ],
+      "nota": "Incluye altillo. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+    },
+    {
+      "id": "B2",
+      "cuerpo": "B",
+      "titulo": "Local 2B",
+      "unidad": "LOC. 2 B",
+      "niveles": [
+        {
+          "nombre": "Primer piso",
+          "plano": "/explorar/planos/LOCAL_B2_p1.png"
+        },
+        {
+          "nombre": "Altillo",
+          "plano": "/explorar/planos/LOCAL_B2_p2.png"
+        }
+      ],
+      "nota": "Incluye altillo. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+    },
+    {
+      "id": "C1",
+      "cuerpo": "C",
+      "titulo": "Local C1",
+      "unidad": "LOC. C1",
+      "niveles": [
+        {
+          "nombre": "Zócalo · cocina y servicios",
+          "plano": "/explorar/planos/LOCAL_C1_p-1.png"
+        },
+        {
+          "nombre": "Primer piso",
+          "plano": "/explorar/planos/LOCAL_C1_p1.png"
+        },
+        {
+          "nombre": "Nivel superior",
+          "plano": "/explorar/planos/LOCAL_C1_p2.png"
+        }
+      ],
+      "nota": "Local distribuido en tres niveles. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+    },
+    {
+      "id": "C2",
+      "cuerpo": "C",
+      "titulo": "Local C2",
+      "unidad": "LOC. C2",
+      "niveles": [
+        {
+          "nombre": "Primer piso",
+          "plano": "/explorar/planos/LOCAL_C2_p1.png"
+        }
+      ],
+      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+    }
+  ],
+  "modelos": {
+    "interior_304B": "/explorar/modelos/interior_304B.glb",
+    "interior_305B": "/explorar/modelos/interior_305B.glb",
+    "edificio": "/explorar/modelos/edificio.glb"
+  }
+}
