@@ -23,6 +23,8 @@ export interface Recorrido {
   nota: string;
   vistas: Vista[];
   unidad?: string;
+  /** Id del local (A1, B2…) si el recorrido es de un local. */
+  local?: string;
   tc?: string;
   modelo?: string | null;
 }

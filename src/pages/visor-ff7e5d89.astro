@@ -96,7 +96,8 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     <h2 class="ex-dialog-title">Qué estás viendo</h2>
     <ul class="ex-about">
       <li><b>Recorridos e imágenes.</b> Renderizados en Blender (Cycles) desde las escenas de revisión del proyecto. Materiales, iluminación, decoración y vegetación son de presentación.</li>
-      <li><b>Interiores 3D.</b> Hoy hay interiores modelados para 304 B y 305 B. Sus acabados no se replican automáticamente en otras unidades. Las demás tipologías y los locales se muestran con su planta mientras se modelan.</li>
+      <li><b>Interiores 3D.</b> Hay un interior modelado por cada planta tipo (una unidad representante por familia) y para los seis locales. Los acabados son de presentación y no se replican automáticamente en otras unidades de la misma familia. Falta la planta 1D de la Casona (201 A) y los altillos de los locales 1B y 2B.</li>
+      <li><b>Locales.</b> Se muestran vacíos, como se entregan. Su perímetro se tomó de plantas de contexto y la altura libre (3,0 m) es supuesta.</li>
       <li><b>Plantas.</b> Recortes de la planimetría de arquitectura vigente. Cada tipología muestra a una unidad representante; otras unidades de la misma familia pueden tener variantes menores. Algunas plantas se muestran con su contexto y no reemplazan los planos de venta.</li>
       <li><b>Superficies y precios.</b> Los mismos de <a href="/disponibilidad">Disponibilidad</a>: superficie total = útil + terraza. Precios de lista referenciales en UF.</li>
       <li><b>Modelo del edificio.</b> Volumetría general en revisión frente a los planos definitivos.</li>
@@ -773,14 +774,23 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
         <div><dt>Precio de lista</dt><dd>${uf(u.uf)}</dd></div>
       </dl>
       <p class="ex-note">${esc(l.nota)}</p>
-      <div class="ex-actions">${botonSeleccion(l.unidad)}</div>
+      <div class="ex-actions">
+        ${l.recorrido ? `<button type="button" class="btn btn-dark" data-go-recorrido="${esc(l.recorrido)}">Ver recorrido 360°</button>` : ''}
+        ${l.recorrido && recorridoPorId.get(l.recorrido)?.modelo ? `<button type="button" class="btn btn-line" data-modelo="${esc(l.recorrido)}">Ver modelo 3D</button>` : ''}
+        ${botonSeleccion(l.unidad)}
+      </div>
     </div>`;
   }
 
   function panelRecorridos() {
     const sel = recorridoPorId.get(state.id);
     const extra =
-      sel && sel.unidad
+      sel && sel.local
+        ? `<div class="ex-actions" style="margin-top:8px">
+            ${sel.modelo ? `<button type="button" class="btn btn-dark" data-modelo="${esc(sel.id)}">Ver modelo 3D →</button>` : ''}
+            <button type="button" class="btn btn-line" data-local="${esc(sel.local)}">Ver ficha del local</button>
+          </div>`
+        : sel && sel.unidad
         ? `<div class="ex-actions" style="margin-top:8px">
             ${sel.modelo ? `<button type="button" class="btn btn-dark" data-modelo="${esc(sel.id)}">Ver modelo interior 3D →</button>` : ''}
             <button type="button" class="btn btn-line" data-unidad="${esc(sel.unidad)}">Ver ficha del departamento</button>
