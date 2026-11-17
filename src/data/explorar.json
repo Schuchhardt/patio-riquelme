@@ -105,6 +105,254 @@
       ]
     },
     {
+      "id": "303C",
+      "nombre": "Departamento 303 C",
+      "tipo": "Interior 360° · 1D",
+      "thumb": "/explorar/imagenes/303C_thumb.jpg",
+      "unidad": "303 C",
+      "tc": "C1",
+      "modelo": "interior_303C",
+      "nota": "Interior modelado desde la planta CAD de revisión. Alturas de ventana supuestas; acabados y decoración de presentación.",
+      "vistas": [
+        {
+          "nombre": "Estar y cocina",
+          "pano": "/explorar/panoramas/360_303C.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Dormitorio",
+          "pano": "/explorar/panoramas/360_303C_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "501C",
+      "nombre": "Departamento 501 C",
+      "tipo": "Interior 360° · 1D",
+      "thumb": "/explorar/imagenes/501C_thumb.jpg",
+      "unidad": "501 C",
+      "tc": "C1",
+      "modelo": "interior_501C",
+      "nota": "Interior modelado desde la planta CAD de revisión, en el piso 5. La entrada se interpretó desde el umbral de la planta; alturas de ventana supuestas.",
+      "vistas": [
+        {
+          "nombre": "Estar y cocina",
+          "pano": "/explorar/panoramas/360_501C.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Dormitorio",
+          "pano": "/explorar/panoramas/360_501C_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "501B",
+      "nombre": "Departamento 501 B",
+      "tipo": "Interior 360° · 1D esquina",
+      "thumb": "/explorar/imagenes/501B_thumb.jpg",
+      "unidad": "501 B",
+      "tc": "B3",
+      "modelo": "interior_501B",
+      "nota": "Interior modelado desde la planta CAD de revisión, en el piso 5, con dos terrazas. Alturas de ventana supuestas; acabados y decoración de presentación.",
+      "vistas": [
+        {
+          "nombre": "Estar y cocina",
+          "pano": "/explorar/panoramas/360_501B.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Dormitorio",
+          "pano": "/explorar/panoramas/360_501B_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "308B",
+      "nombre": "Departamento 308 B",
+      "tipo": "Interior 360° · 1D",
+      "thumb": "/explorar/imagenes/308B_thumb.jpg",
+      "unidad": "308 B",
+      "tc": "B4",
+      "modelo": "interior_308B",
+      "nota": "Interior modelado desde la planta CAD de revisión: planta pasante con estar, cocina, baño y dormitorio hacia la terraza. Alturas de ventana supuestas.",
+      "vistas": [
+        {
+          "nombre": "Estar y cocina",
+          "pano": "/explorar/panoramas/360_308B.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Dormitorio",
+          "pano": "/explorar/panoramas/360_308B_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "301C",
+      "nombre": "Dúplex 301 C",
+      "tipo": "Interior 360° · Dúplex 1D ½",
+      "thumb": "/explorar/imagenes/301C_thumb.jpg",
+      "unidad": "301 C",
+      "tc": "D2",
+      "modelo": "interior_301C",
+      "nota": "Dúplex modelado desde las plantas CAD de los pisos 3 y 4: estar con doble altura, escalera recta, ½ pieza y altillo con dormitorio y baño. Altura entre niveles supuesta (2,70 m).",
+      "vistas": [
+        {
+          "nombre": "Estar · doble altura",
+          "pano": "/explorar/panoramas/360_301C.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Altillo",
+          "pano": "/explorar/panoramas/360_301C_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "302C",
+      "nombre": "Dúplex 302 C",
+      "tipo": "Interior 360° · Dúplex 1D",
+      "thumb": "/explorar/imagenes/302C_thumb.jpg",
+      "unidad": "302 C",
+      "tc": "D1",
+      "modelo": "interior_302C",
+      "nota": "Dúplex modelado desde las plantas CAD de los pisos 3 y 4: estar-comedor con doble altura y altillo con dormitorio y baño. Altura entre niveles supuesta (2,70 m).",
+      "vistas": [
+        {
+          "nombre": "Estar · doble altura",
+          "pano": "/explorar/panoramas/360_302C.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Altillo",
+          "pano": "/explorar/panoramas/360_302C_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "LA1",
+      "nombre": "Local 1A",
+      "tipo": "Local · 360°",
+      "thumb": "/explorar/imagenes/LA1_thumb.jpg",
+      "local": "A1",
+      "modelo": "interior_LA1",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Puerta patrimonial hacia la calle Riquelme.",
+      "vistas": [
+        {
+          "nombre": "Local",
+          "pano": "/explorar/panoramas/360_LA1.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "LA2",
+      "nombre": "Local 2A",
+      "tipo": "Local · 360°",
+      "thumb": "/explorar/imagenes/LA2_thumb.jpg",
+      "local": "A2",
+      "modelo": "interior_LA2",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Tres puertas patrimoniales hacia la calle; la planta de contexto no alcanza a delimitar todo su cuadro.",
+      "vistas": [
+        {
+          "nombre": "Salón",
+          "pano": "/explorar/panoramas/360_LA2.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Cocina",
+          "pano": "/explorar/panoramas/360_LA2_dormitorio.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "LB1",
+      "nombre": "Local 1B",
+      "tipo": "Local · 360°",
+      "thumb": "/explorar/imagenes/LB1_thumb.jpg",
+      "local": "B1",
+      "modelo": "interior_LB1",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Primer piso; el altillo y su escalera están pendientes de un perímetro validado.",
+      "vistas": [
+        {
+          "nombre": "Local",
+          "pano": "/explorar/panoramas/360_LB1.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "LB2",
+      "nombre": "Local 2B",
+      "tipo": "Local · 360°",
+      "thumb": "/explorar/imagenes/LB2_thumb.jpg",
+      "local": "B2",
+      "modelo": "interior_LB2",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Primer piso; el altillo y su escalera están pendientes de un perímetro validado.",
+      "vistas": [
+        {
+          "nombre": "Local",
+          "pano": "/explorar/panoramas/360_LB2.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "LC1",
+      "nombre": "Local C1",
+      "tipo": "Local · 3 niveles · 360°",
+      "thumb": "/explorar/imagenes/LC1_thumb.jpg",
+      "local": "C1",
+      "modelo": "interior_LC1",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Tres niveles: zócalo de cocina y servicios, primer piso con hall en doble altura y nivel superior. Altura entre niveles supuesta (3,30 m).",
+      "vistas": [
+        {
+          "nombre": "Hall · doble altura",
+          "pano": "/explorar/panoramas/360_LC1.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Sector de mesas",
+          "pano": "/explorar/panoramas/360_LC1_dormitorio.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Zócalo",
+          "pano": "/explorar/panoramas/360_LC1_ZOCALO.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "Nivel superior",
+          "pano": "/explorar/panoramas/360_LC1_NIVEL_SUPERIOR.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
+      "id": "LC2",
+      "nombre": "Local C2",
+      "tipo": "Local · 360°",
+      "thumb": "/explorar/imagenes/LC2_thumb.jpg",
+      "local": "C2",
+      "modelo": "interior_LC2",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega.",
+      "vistas": [
+        {
+          "nombre": "Local",
+          "pano": "/explorar/panoramas/360_LC2.jpg",
+          "yaw": 0
+        }
+      ]
+    },
+    {
       "id": "pasillo",
       "nombre": "La circulación",
       "tipo": "Panorama 360°",
@@ -144,6 +392,48 @@
       "nombre": "Estudio 203 A",
       "img": "/explorar/imagenes/203A.jpg",
       "thumb": "/explorar/imagenes/203A_thumb.jpg"
+    },
+    {
+      "id": "303C",
+      "nombre": "Estar y cocina 303 C",
+      "img": "/explorar/imagenes/303C.jpg",
+      "thumb": "/explorar/imagenes/303C_thumb.jpg"
+    },
+    {
+      "id": "501C",
+      "nombre": "Estar y cocina 501 C",
+      "img": "/explorar/imagenes/501C.jpg",
+      "thumb": "/explorar/imagenes/501C_thumb.jpg"
+    },
+    {
+      "id": "501B",
+      "nombre": "Estar y dormitorio 501 B",
+      "img": "/explorar/imagenes/501B.jpg",
+      "thumb": "/explorar/imagenes/501B_thumb.jpg"
+    },
+    {
+      "id": "308B",
+      "nombre": "Estar y cocina 308 B",
+      "img": "/explorar/imagenes/308B.jpg",
+      "thumb": "/explorar/imagenes/308B_thumb.jpg"
+    },
+    {
+      "id": "301C",
+      "nombre": "Dúplex 301 C · doble altura",
+      "img": "/explorar/imagenes/301C.jpg",
+      "thumb": "/explorar/imagenes/301C_thumb.jpg"
+    },
+    {
+      "id": "302C",
+      "nombre": "Dúplex 302 C · doble altura",
+      "img": "/explorar/imagenes/302C.jpg",
+      "thumb": "/explorar/imagenes/302C_thumb.jpg"
+    },
+    {
+      "id": "LC1",
+      "nombre": "Local C1 · hall en doble altura",
+      "img": "/explorar/imagenes/LC1.jpg",
+      "thumb": "/explorar/imagenes/LC1_thumb.jpg"
     },
     {
       "id": "patio",
@@ -307,8 +597,8 @@
       ],
       "aislada": true,
       "nota": "Representante 501 B del piso 5; 502 B es la otra unidad de esta familia.",
-      "recorrido": null,
-      "modelo": null
+      "recorrido": "501B",
+      "modelo": "interior_501B"
     },
     {
       "id": "B-4",
@@ -327,8 +617,8 @@
       ],
       "aislada": true,
       "nota": "Unidad 308 B; distribución singular del cuerpo B.",
-      "recorrido": null,
-      "modelo": null
+      "recorrido": "308B",
+      "modelo": "interior_308B"
     },
     {
       "id": "C-1",
@@ -372,8 +662,8 @@
       ],
       "aislada": true,
       "nota": "Representante 303 C; 401 C presenta una superficie distinta dentro de esta familia.",
-      "recorrido": null,
-      "modelo": null
+      "recorrido": "303C",
+      "modelo": "interior_303C"
     },
     {
       "id": "C-5",
@@ -393,8 +683,8 @@
       ],
       "aislada": true,
       "nota": "Representante 501 C del piso 5. Las dos unidades tienen superficies diferentes.",
-      "recorrido": null,
-      "modelo": null
+      "recorrido": "501C",
+      "modelo": "interior_501C"
     },
     {
       "id": "C-DUPLEX-301",
@@ -418,8 +708,8 @@
       ],
       "aislada": true,
       "nota": "Se muestran las plantas de los pisos 3 y 4. La superficie total suma ambos niveles; la planta inferior sola no representa la unidad completa.",
-      "recorrido": null,
-      "modelo": null
+      "recorrido": "301C",
+      "modelo": "interior_301C"
     },
     {
       "id": "C-DUPLEX-302",
@@ -443,8 +733,8 @@
       ],
       "aislada": true,
       "nota": "Se muestran las plantas de los pisos 3 y 4. La superficie total suma ambos niveles; la planta inferior sola no representa la unidad completa.",
-      "recorrido": null,
-      "modelo": null
+      "recorrido": "302C",
+      "modelo": "interior_302C"
     }
   ],
   "locales": [
@@ -459,7 +749,8 @@
           "plano": "/explorar/planos/LOCAL_A1_p1.png"
         }
       ],
-      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
+      "recorrido": "LA1"
     },
     {
       "id": "A2",
@@ -472,7 +763,8 @@
           "plano": "/explorar/planos/LOCAL_A2_p1.png"
         }
       ],
-      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
+      "recorrido": "LA2"
     },
     {
       "id": "B1",
@@ -489,7 +781,8 @@
           "plano": "/explorar/planos/LOCAL_B1_p2.png"
         }
       ],
-      "nota": "Incluye altillo. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+      "nota": "Incluye altillo. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
+      "recorrido": "LB1"
     },
     {
       "id": "B2",
@@ -506,7 +799,8 @@
           "plano": "/explorar/planos/LOCAL_B2_p2.png"
         }
       ],
-      "nota": "Incluye altillo. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+      "nota": "Incluye altillo. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
+      "recorrido": "LB2"
     },
     {
       "id": "C1",
@@ -527,7 +821,8 @@
           "plano": "/explorar/planos/LOCAL_C1_p2.png"
         }
       ],
-      "nota": "Local distribuido en tres niveles. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+      "nota": "Local distribuido en tres niveles. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
+      "recorrido": "LC1"
     },
     {
       "id": "C2",
@@ -540,14 +835,27 @@
           "plano": "/explorar/planos/LOCAL_C2_p1.png"
         }
       ],
-      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado."
+      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
+      "recorrido": "LC2"
     }
   ],
   "modelos": {
+    "interior_302C": "/explorar/modelos/interior_302C.glb",
+    "interior_LC1": "/explorar/modelos/interior_LC1.glb",
+    "interior_LC2": "/explorar/modelos/interior_LC2.glb",
+    "interior_LB2": "/explorar/modelos/interior_LB2.glb",
+    "interior_LB1": "/explorar/modelos/interior_LB1.glb",
+    "interior_303C": "/explorar/modelos/interior_303C.glb",
+    "interior_308B": "/explorar/modelos/interior_308B.glb",
     "interior_304C": "/explorar/modelos/interior_304C.glb",
     "interior_304B": "/explorar/modelos/interior_304B.glb",
     "interior_305B": "/explorar/modelos/interior_305B.glb",
     "edificio": "/explorar/modelos/edificio.glb",
-    "interior_203A": "/explorar/modelos/interior_203A.glb"
+    "interior_501B": "/explorar/modelos/interior_501B.glb",
+    "interior_501C": "/explorar/modelos/interior_501C.glb",
+    "interior_203A": "/explorar/modelos/interior_203A.glb",
+    "interior_LA1": "/explorar/modelos/interior_LA1.glb",
+    "interior_LA2": "/explorar/modelos/interior_LA2.glb",
+    "interior_301C": "/explorar/modelos/interior_301C.glb"
   }
 }
