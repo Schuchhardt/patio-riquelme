@@ -1,6 +1,6 @@
 # Netlify. El visor 3D y sus archivos son una vista previa no listada:
 # que los buscadores no indexen la página ni los recursos si llegan a verlos.
-/visor-ff7e5d89/*
+/visor-360/*
   X-Robots-Tag: noindex, nofollow
 /explorar/*
   X-Robots-Tag: noindex, nofollow
