@@ -448,6 +448,12 @@
       "thumb": "/explorar/imagenes/pasillo_thumb.jpg"
     },
     {
+      "id": "conjunto_corte",
+      "nombre": "Conjunto · último piso abierto",
+      "img": "/explorar/imagenes/aerea_corte.jpg",
+      "thumb": "/explorar/imagenes/aerea_corte_thumb.jpg"
+    },
+    {
       "id": "conjunto_aerea",
       "nombre": "Conjunto · vista aérea",
       "img": "/explorar/imagenes/conjunto_aerea.jpg",

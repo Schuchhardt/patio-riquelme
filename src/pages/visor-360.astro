@@ -63,6 +63,7 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
         <div id="ex-pano" class="ex-layer"></div>
         <div id="ex-model" class="ex-layer" hidden></div>
         <div id="ex-img" class="ex-layer" hidden><img alt="" /></div>
+        <div id="ex-video" class="ex-layer" hidden><video muted loop playsinline controls preload="none" poster="/explorar/video/sobrevuelo_poster.jpg"></video></div>
         <span class="ex-label" id="ex-label"></span>
         <span class="ex-badge" id="ex-badge"></span>
         <div class="ex-chips" id="ex-chips"></div>
@@ -170,6 +171,8 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
   .ex-stage { position: relative; flex: 1; min-width: 0; background: #121212; overflow: hidden; }
   .ex-layer { position: absolute; inset: 0; }
   .ex-layer[hidden] { display: none !important; }
+  #ex-video { display: flex; align-items: center; justify-content: center; background: #000; }
+  #ex-video video { display: block; max-width: 100%; max-height: 100%; width: 100%; height: auto; object-fit: contain; }
   #ex-img { display: flex; align-items: center; justify-content: center; }
   #ex-img img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
   #ex-img.is-plan { background: #fff; padding: 64px 32px 96px; }
@@ -360,7 +363,10 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
   let modelEl: HTMLElement | null = null;
   let token = 0;
 
-  function capas(cual: 'pano' | 'model' | 'img') {
+  function capas(cual: 'pano' | 'model' | 'img' | 'video') {
+    const vid = $('ex-video').querySelector('video')!;
+    if (cual !== 'video') vid.pause();
+    $('ex-video').hidden = cual !== 'video';
     $('ex-pano').hidden = cual !== 'pano';
     $('ex-model').hidden = cual !== 'model';
     $('ex-img').hidden = cual !== 'img';
@@ -444,6 +450,16 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     img.src = url;
     img.alt = alt;
     $<HTMLAnchorElement>('ex-open').href = url;
+  }
+
+  const SOBREVUELO = '/explorar/video/sobrevuelo.mp4';
+  function mostrarVideo(url: string) {
+    ++token;
+    capas('video');
+    cargando(null);
+    const vid = $('ex-video').querySelector('video')!;
+    if (!vid.src.endsWith(url)) vid.src = url;
+    vid.play().catch(() => {});
   }
 
   async function mostrarModelo(url: string, opciones: { orbit?: string; autoRotate?: boolean } = {}) {
@@ -567,11 +583,24 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
         },
       });
     }
-    for (const id of ['conjunto_aerea', 'conjunto_lateral']) {
+    opciones.push({
+      label: 'Sobrevuelo',
+      id: 'sobrevuelo',
+      go: () => {
+        rotulos('El edificio', 'Animación Cycles · volumetría en revisión', 'Entrada Riquelme 536 → último piso abierto → entrada Santo Domingo');
+        mostrarVideo(SOBREVUELO);
+      },
+    });
+    const NOMBRES: Record<string, string> = {
+      conjunto_corte: 'Último piso abierto',
+      conjunto_aerea: 'Vista aérea',
+      conjunto_lateral: 'Vista lateral',
+    };
+    for (const id of ['conjunto_corte', 'conjunto_aerea', 'conjunto_lateral']) {
       const im = imgPorId.get(id);
       if (im)
         opciones.push({
-          label: id === 'conjunto_aerea' ? 'Vista aérea' : 'Vista lateral',
+          label: NOMBRES[id],
           id,
           go: () => {
             rotulos('El edificio', 'Render Cycles · volumetría en revisión', '');
