@@ -1,5 +1,5 @@
 /**
- * Visor 3D (/visor-ff7e5d89, página no listada): que todo archivo referenciado se publique, que las pestañas se
+ * Visor 3D (/visor-360, página no listada): que todo archivo referenciado se publique, que las pestañas se
  * armen con el inventario completo y que "Mi selección" llegue a /contacto.
  * No depende de los CDN de Pannellum ni de model-viewer.
  */
@@ -10,7 +10,7 @@ import path from 'node:path';
 import { dist, raiz, exigirBuild, servirDist, abrirNavegador } from './helpers/entorno.mjs';
 
 exigirBuild();
-const VISOR = '/visor-ff7e5d89/';
+const VISOR = '/visor-360/';
 const datos = JSON.parse(fs.readFileSync(path.join(raiz, 'src/data/explorar.json'), 'utf-8'));
 
 describe('visor · archivos publicados', () => {
@@ -50,7 +50,7 @@ describe('visor · no listado', () => {
 
   test('ninguna otra página enlaza al visor', () => {
     const paginas = fs.readdirSync(dist, { recursive: true }).filter((f) => f.endsWith('.html') && !f.includes('visor-'));
-    const culpables = paginas.filter((f) => /visor-ff7e5d89/.test(fs.readFileSync(path.join(dist, f), 'utf-8')));
+    const culpables = paginas.filter((f) => /visor-360/.test(fs.readFileSync(path.join(dist, f), 'utf-8')));
     assert.deepEqual(culpables, []);
   });
 });
@@ -102,6 +102,21 @@ describe('visor · navegador', () => {
     await page.goto(`${srv.url}${href}`, { waitUntil: 'domcontentloaded' });
     const mensaje = await page.$eval('#cp-mensaje', (t) => t.value);
     assert.equal(mensaje, 'Me interesa cotizar la unidad 305 B.');
+  });
+
+  test('tras ver un plano, el 360° y el modelo 3D reciben el arrastre', async () => {
+    const encima = () =>
+      page.evaluate(() => {
+        const r = document.querySelector('.ex-stage').getBoundingClientRect();
+        return document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest('.ex-layer')?.id;
+      });
+    await page.goto(`${srv.url}${VISOR}?tab=locales&id=B1`, { waitUntil: 'domcontentloaded' });
+    assert.equal(await encima(), 'ex-img');
+    await page.click('[data-go-recorrido]');
+    assert.equal(await encima(), 'ex-pano');
+    await page.goto(`${srv.url}${VISOR}?tab=locales&id=B1`, { waitUntil: 'domcontentloaded' });
+    await page.click('[data-modelo]');
+    assert.equal(await encima(), 'ex-model');
   });
 
   test('en celular no hay scroll horizontal', async () => {

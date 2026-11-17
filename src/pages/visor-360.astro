@@ -13,7 +13,7 @@ const description = `Recorre Patio Riquelme en 360°, revisa la planta de cada u
  * explorar.astro, quitar `noindex`, el filtro de astro.config.mjs y la regla de
  * _headers, y agregar el link en Header.astro.
  */
-const PATH = '/visor-ff7e5d89/';
+const PATH = '/visor-360/';
 
 const tabs = [
   { id: 'edificio', label: 'Edificio 3D' },
@@ -169,7 +169,7 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
 
   .ex-stage { position: relative; flex: 1; min-width: 0; background: #121212; overflow: hidden; }
   .ex-layer { position: absolute; inset: 0; }
-  .ex-layer[hidden] { display: none; }
+  .ex-layer[hidden] { display: none !important; }
   #ex-img { display: flex; align-items: center; justify-content: center; }
   #ex-img img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
   #ex-img.is-plan { background: #fff; padding: 64px 32px 96px; }

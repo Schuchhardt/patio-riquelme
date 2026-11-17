@@ -36,7 +36,7 @@ src/
 │   └── schema.ts         # helpers para generar JSON-LD (breadcrumbs, FAQPage)
 ├── pages/
 │   ├── index.astro         # Inicio
-│   ├── visor-ff7e5d89.astro # Visor 3D NO listado: recorridos 360°, modelos 3D, plantas por unidad, Mi selección
+│   ├── visor-360.astro # Visor 3D NO listado: recorridos 360°, modelos 3D, plantas por unidad, Mi selección
 │   ├── tipologias.astro    # Estudio / 1D / Duplex / Locales + cotizador de m²
 │   ├── disponibilidad.astro # Buscador de las 62 unidades + modal de cotización
 │   ├── ubicacion.astro     # Mapa (OpenStreetMap embed) + conectividad
@@ -134,7 +134,7 @@ conocida, apunta `CHROME_PATH` al ejecutable.
 > del componente y ningún elemento que se oculte por clase puede declarar
 > `display` inline.
 
-## Visor 3D (`/visor-ff7e5d89`, no listado)
+## Visor 3D (`/visor-360`, no listado)
 
 Por ahora es una **vista previa no listada**: no aparece en el menú, lleva
 `noindex`, está fuera del sitemap y de `llms.txt`, y `public/_headers` le pone
@@ -256,7 +256,7 @@ El script arma un HTML de 6 páginas (mismo look del sitio: paleta, tipografías
 | Ruta | Contenido |
 |---|---|
 | `/` | Hero, avance de obra, accesos patrimoniales, galería, formulario de reserva |
-| `/visor-ff7e5d89` | **No listada.** Visor: Edificio 3D, Unidades, Tipologías, Locales, Recorridos 360° e Imágenes + «Mi selección» → `/contacto?unidades=` |
+| `/visor-360` | **No listada.** Visor: Edificio 3D, Unidades, Tipologías, Locales, Recorridos 360° e Imágenes + «Mi selección» → `/contacto?unidades=` |
 | `/tipologias` | Detalle Estudio / 1D / Duplex / Locales + cotizador con datos reales del CSV |
 | `/disponibilidad` | Inventario unidad por unidad, filtros (tipología, piso, cuerpo, precio) y modal de cotización |
 | `/ubicacion` | Mapa embebido y conectividad del barrio |
