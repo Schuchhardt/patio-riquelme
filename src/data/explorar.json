@@ -200,7 +200,7 @@
       "unidad": "301 C",
       "tc": "D2",
       "modelo": "interior_301C",
-      "nota": "Dúplex modelado desde las plantas CAD de los pisos 3 y 4: estar con doble altura, escalera recta, ½ pieza y altillo con dormitorio y baño. Altura entre niveles supuesta (2,70 m).",
+      "nota": "Dúplex modelado desde las plantas CAD de los pisos 3 y 4: estar con doble altura, escalera de un tramo con descanso y peldaños compensados, ½ pieza con clóset bajo la escalera y altillo con dormitorio y baño. Niveles cada 2,50 m según los cortes del proyecto: escalera de 14 contrahuellas de 17,9 cm y doble altura de 5,0 m.",
       "vistas": [
         {
           "nombre": "Estar · doble altura",
@@ -222,7 +222,7 @@
       "unidad": "302 C",
       "tc": "D1",
       "modelo": "interior_302C",
-      "nota": "Dúplex modelado desde las plantas CAD de los pisos 3 y 4: estar-comedor con doble altura y altillo con dormitorio y baño. Altura entre niveles supuesta (2,70 m).",
+      "nota": "Dúplex modelado desde las plantas CAD de los pisos 3 y 4: estar-comedor con doble altura y altillo con dormitorio y baño. Niveles cada 2,50 m según los cortes del proyecto: doble altura de 5,0 m.",
       "vistas": [
         {
           "nombre": "Estar · doble altura",
@@ -280,7 +280,7 @@
       "thumb": "/explorar/imagenes/LB1_thumb.jpg",
       "local": "B1",
       "modelo": "interior_LB1",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Primer piso; el altillo y su escalera están pendientes de un perímetro validado.",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, piso a piso de 2,50 m según los cortes (altura libre de presentación 2,30 m). Se muestra vacío, como se entrega. Primer piso; el altillo y su escalera están pendientes de un perímetro validado.",
       "vistas": [
         {
           "nombre": "Local",
@@ -296,7 +296,7 @@
       "thumb": "/explorar/imagenes/LB2_thumb.jpg",
       "local": "B2",
       "modelo": "interior_LB2",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Primer piso; el altillo y su escalera están pendientes de un perímetro validado.",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, piso a piso de 2,50 m según los cortes (altura libre de presentación 2,30 m). Se muestra vacío, como se entrega. Primer piso; el altillo y su escalera están pendientes de un perímetro validado.",
       "vistas": [
         {
           "nombre": "Local",
@@ -312,7 +312,7 @@
       "thumb": "/explorar/imagenes/LC1_thumb.jpg",
       "local": "C1",
       "modelo": "interior_LC1",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Tres niveles: zócalo de cocina y servicios, primer piso con hall en doble altura y nivel superior. Altura entre niveles supuesta (3,30 m).",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, niveles según los cortes. Se muestra vacío, como se entrega. Tres niveles: zócalo de cocina y servicios, primer piso con hall en doble altura y nivel superior. Zócalo a −2,70, primer piso a ±0,00 y nivel superior a +2,50.",
       "vistas": [
         {
           "nombre": "Hall · doble altura",
@@ -343,7 +343,7 @@
       "thumb": "/explorar/imagenes/LC2_thumb.jpg",
       "local": "C2",
       "modelo": "interior_LC2",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega.",
+      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, piso a piso de 2,50 m según los cortes (altura libre de presentación 2,30 m). Se muestra vacío, como se entrega.",
       "vistas": [
         {
           "nombre": "Local",
