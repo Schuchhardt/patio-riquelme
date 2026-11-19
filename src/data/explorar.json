@@ -307,34 +307,54 @@
     },
     {
       "id": "LC1",
-      "nombre": "Local C1",
+      "nombre": "Local C1 · restaurante",
       "tipo": "Local · 3 niveles · 360°",
       "thumb": "/explorar/imagenes/LC1_thumb.jpg",
       "local": "C1",
       "modelo": "interior_LC1",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, niveles según los cortes. Se muestra vacío, como se entrega. Tres niveles: zócalo de cocina y servicios, primer piso con hall en doble altura y nivel superior. Zócalo a −2,70, primer piso a ±0,00 y nivel superior a +2,50.",
+      "nota": "Local de tres niveles según las plantas y cortes del proyecto: zócalo a −2,70 (servicio de cocina), primer piso a ±0,00 con hall en doble altura y barra, y nivel superior a +2,50 con galería. Las mesas siguen la planta; la ambientación como restaurante (cocina equipada, barra, mobiliario, materiales e iluminación) es una propuesta de presentación. El local se entrega sin habilitar.",
       "vistas": [
         {
-          "nombre": "Hall · doble altura",
+          "nombre": "Hall y barra",
           "pano": "/explorar/panoramas/360_LC1.jpg",
           "yaw": 0
         },
         {
-          "nombre": "Sector de mesas",
+          "nombre": "Comedor",
           "pano": "/explorar/panoramas/360_LC1_dormitorio.jpg",
           "yaw": 0
         },
         {
-          "nombre": "Zócalo",
+          "nombre": "Cocina · zócalo",
           "pano": "/explorar/panoramas/360_LC1_ZOCALO.jpg",
           "yaw": 0
         },
         {
-          "nombre": "Nivel superior",
+          "nombre": "Comedor superior",
           "pano": "/explorar/panoramas/360_LC1_NIVEL_SUPERIOR.jpg",
           "yaw": 0
         }
       ]
+    },
+    {
+      "id": "patio_palmera",
+      "nombre": "Patio de la palmera",
+      "tipo": "Patio gastronómico · 360°",
+      "thumb": "/explorar/imagenes/patio_palmera_dia_CAM_PATIO_DESDE_FONDO_thumb.jpg",
+      "nota": "Patio de la casona de Riquelme 536, entre los locales 1A, 2A, 1B y 2B, con la palmera y el pavimento ajedrez de las especificaciones técnicas. Mesas, jardineras, guirnaldas y faroles son una propuesta de ambientación.",
+      "vistas": [
+        {
+          "nombre": "De día",
+          "pano": "/explorar/panoramas/patio_palmera_dia_360_PATIO_PALMERA.jpg",
+          "yaw": 0
+        },
+        {
+          "nombre": "De noche",
+          "pano": "/explorar/panoramas/patio_palmera_noche_360_PATIO_PALMERA.jpg",
+          "yaw": 0
+        }
+      ],
+      "modelo": null
     },
     {
       "id": "LC2",
@@ -431,9 +451,63 @@
     },
     {
       "id": "LC1",
-      "nombre": "Local C1 · hall en doble altura",
+      "nombre": "Local C1 · comedor",
       "img": "/explorar/imagenes/LC1.jpg",
       "thumb": "/explorar/imagenes/LC1_thumb.jpg"
+    },
+    {
+      "id": "LC1_BAR",
+      "nombre": "Local C1 · barra en doble altura",
+      "img": "/explorar/imagenes/LC1_BAR.jpg",
+      "thumb": "/explorar/imagenes/LC1_BAR_thumb.jpg"
+    },
+    {
+      "id": "LC1_NIVEL_SUPERIOR",
+      "nombre": "Local C1 · comedor superior",
+      "img": "/explorar/imagenes/LC1_NIVEL_SUPERIOR.jpg",
+      "thumb": "/explorar/imagenes/LC1_NIVEL_SUPERIOR_thumb.jpg"
+    },
+    {
+      "id": "LC1_COCINA",
+      "nombre": "Local C1 · cocina en el zócalo",
+      "img": "/explorar/imagenes/LC1_COCINA.jpg",
+      "thumb": "/explorar/imagenes/LC1_COCINA_thumb.jpg"
+    },
+    {
+      "id": "LC1_corte",
+      "nombre": "Local C1 · corte de los tres niveles",
+      "img": "/explorar/imagenes/LC1_corte_3D.jpg",
+      "thumb": "/explorar/imagenes/LC1_corte_3D_thumb.jpg"
+    },
+    {
+      "id": "palmera_dia",
+      "nombre": "Patio de la palmera · tarde",
+      "img": "/explorar/imagenes/patio_palmera_dia_CAM_PATIO_DESDE_FONDO.jpg",
+      "thumb": "/explorar/imagenes/patio_palmera_dia_CAM_PATIO_DESDE_FONDO_thumb.jpg"
+    },
+    {
+      "id": "palmera_atardecer",
+      "nombre": "Patio de la palmera · atardecer",
+      "img": "/explorar/imagenes/patio_palmera_atardecer_CAM_PATIO_DESDE_FONDO.jpg",
+      "thumb": "/explorar/imagenes/patio_palmera_atardecer_CAM_PATIO_DESDE_FONDO_thumb.jpg"
+    },
+    {
+      "id": "palmera_noche",
+      "nombre": "Patio de la palmera · noche",
+      "img": "/explorar/imagenes/patio_palmera_noche_CAM_PATIO_DESDE_FONDO.jpg",
+      "thumb": "/explorar/imagenes/patio_palmera_noche_CAM_PATIO_DESDE_FONDO_thumb.jpg"
+    },
+    {
+      "id": "palmera_noche_reja",
+      "nombre": "Patio de la palmera · noche desde la reja",
+      "img": "/explorar/imagenes/patio_palmera_noche_CAM_PATIO_DESDE_REJA.jpg",
+      "thumb": "/explorar/imagenes/patio_palmera_noche_CAM_PATIO_DESDE_REJA_thumb.jpg"
+    },
+    {
+      "id": "palmera_picada",
+      "nombre": "Patio de la palmera · vista en altura",
+      "img": "/explorar/imagenes/patio_palmera_dia_CAM_PATIO_PICADA.jpg",
+      "thumb": "/explorar/imagenes/patio_palmera_dia_CAM_PATIO_PICADA_thumb.jpg"
     },
     {
       "id": "patio",
