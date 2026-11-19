@@ -27,8 +27,8 @@ const itemListJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: 'Unidades disponibles — Patio Riquelme',
-  numberOfItems: unidadesPublicas.length,
-  itemListElement: unidadesPublicas.map((u, i) => ({
+  numberOfItems: unidadesPublicas.filter((u) => u.disponible).length,
+  itemListElement: unidadesPublicas.filter((u) => u.disponible).map((u, i) => ({
     '@type': 'ListItem',
     position: i + 1,
     item: {

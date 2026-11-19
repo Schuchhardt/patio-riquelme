@@ -30,7 +30,18 @@ export interface Unidad {
   /** Útil + terraza. Es la superficie sobre la que se cotiza. */
   superficie_total_venta_m2: number;
   precio_estimado_uf: number;
+  /** Estado comercial: disponible, reservada o vendida (columna `estado` del CSV). */
+  estado: EstadoUnidad;
 }
+
+/** Estados válidos de la columna `estado`. Se publica todo; solo las disponibles se cotizan y se cuentan. */
+export const ESTADOS = ['disponible', 'reservada', 'vendida'] as const;
+export type EstadoUnidad = (typeof ESTADOS)[number];
+export const ESTADO_LABELS: Record<EstadoUnidad, string> = {
+  disponible: 'Disponible',
+  reservada: 'Reservada',
+  vendida: 'Vendida',
+};
 
 const NUMERIC_FIELDS = [
   'superficie_total_m2',
@@ -109,6 +120,9 @@ function validarDataset(items: Unidad[]): void {
 
     if (!Number.isFinite(Number(u.piso))) errores.push(`${ref}: piso indefinido ("${u.piso}").`);
     if (!u.tipologia) errores.push(`${ref}: tipología vacía.`);
+    if (!ESTADOS.includes(u.estado)) {
+      errores.push(`${ref}: estado "${u.estado}" inválido (usar ${ESTADOS.join(', ')}).`);
+    }
     if (!(u.superficie_total_m2 > 0)) errores.push(`${ref}: superficie útil <= 0.`);
     if (!(u.superficie_total_venta_m2 > 0)) errores.push(`${ref}: superficie total <= 0.`);
     if (u.superficie_terraza_m2 < 0) errores.push(`${ref}: terraza negativa.`);
@@ -269,6 +283,8 @@ export interface UnidadPublica {
   tcNombre: string;
   /** Familia a la que pertenece la tipología comercial. */
   familia: Familia;
+  estado: EstadoUnidad;
+  disponible: boolean;
 }
 
 /**
@@ -312,6 +328,8 @@ export const unidadesPublicas: UnidadPublica[] = unidades
     tc: clasificar(u)!,
     tcNombre: TIPOLOGIAS_COMERCIALES[clasificar(u)!].nombre,
     familia: TIPOLOGIAS_COMERCIALES[clasificar(u)!].familia,
+    estado: u.estado,
+    disponible: u.estado === 'disponible',
   }))
   .sort((a, b) => a.piso - b.piso || a.nombre.localeCompare(b.nombre, 'es'));
 
@@ -362,7 +380,8 @@ function resumir(tipologia: string, items: UnidadPublica[]): TipologiaSummary {
   const uf = items.map((u) => u.uf);
   return {
     tipologia,
-    count: items.length,
+    /** Solo las disponibles: los rangos de m² y UF describen la tipología completa. */
+    count: items.filter((u) => u.disponible).length,
     minM2: Math.min(...m2),
     maxM2: Math.max(...m2),
     minUF: Math.min(...uf),
