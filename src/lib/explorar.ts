@@ -10,10 +10,34 @@
 import data from '../data/explorar.json';
 import { unidadesPublicas, CUERPO_LABELS, type UnidadPublica } from './unidades';
 
+/** Salto a otra vista del mismo recorrido (hotspot). Grados, convención de Pannellum. */
+export interface Salto {
+  a: number;
+  yaw: number;
+  pitch: number;
+}
+/** Imagen cenital con la posición de la cámara, x/y de 0 a 1 desde la esquina superior izquierda. */
+export interface Ubicacion {
+  img: string;
+  x: number;
+  y: number;
+}
 export interface Vista {
   nombre: string;
   pano: string;
+  /** Versión de 2048 px para celulares. */
+  pano_m?: string;
   yaw: number;
+  saltos?: Salto[];
+  /** Planta 3D amoblada de la unidad o nivel. */
+  planta?: Ubicacion | null;
+  /** Plano de ubicación del conjunto (recorrido del edificio). */
+  mapa?: Ubicacion | null;
+}
+/** Planta 3D amoblada de un nivel. */
+export interface Planta3D {
+  nombre: string;
+  img: string;
 }
 export interface Recorrido {
   id: string;
@@ -63,6 +87,7 @@ function unidadCliente(u: UnidadPublica) {
     m2Terraza: u.m2Terraza,
     m2Total: u.m2Total,
     uf: u.uf,
+    estado: u.estado,
   };
 }
 
@@ -75,6 +100,8 @@ export const familias = data.familias.map((f) => {
   const totales = us.map((u) => u.m2Total);
   return {
     ...f,
+    planta3d: (f.planta3d ?? []) as Planta3D[],
+    iso: (f.iso ?? null) as string | null,
     tc: tcs[0],
     tcNombre: us[0].tcNombre,
     m2Min: Math.min(...totales),
@@ -83,7 +110,12 @@ export const familias = data.familias.map((f) => {
   };
 });
 
-export const locales = data.locales.map((l) => ({ ...l, datos: unidadCliente(unidad(l.unidad, `local ${l.id}`)) }));
+export const locales = data.locales.map((l) => ({
+  ...l,
+  planta3d: (l.planta3d ?? []) as Planta3D[],
+  iso: (l.iso ?? null) as string | null,
+  datos: unidadCliente(unidad(l.unidad, `local ${l.id}`)),
+}));
 
 // Cada departamento pertenece a exactamente una familia (la que tiene su planta).
 const familiaDe = new Map<string, string>();

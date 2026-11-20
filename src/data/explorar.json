@@ -2,6 +2,100 @@
   "generado": "scripts/export_site_assets.py desde PATIO_RIQUELME_BLENDER",
   "recorridos": [
     {
+      "id": "edificio",
+      "nombre": "Recorrido del edificio",
+      "tipo": "Desde Santo Domingo · 360°",
+      "thumb": "/explorar/imagenes/REC_SD_CALLE_thumb.jpg",
+      "nota": "Recorrido desde la vereda de Santo Domingo hasta el patio de la palmera, pasando por la circulación del cuerpo B y el patio interior. Las paradas exteriores se renderizaron en el modelo del conjunto, que sigue en revisión: la fachada patrimonial y el entorno son volumetría de referencia.",
+      "vistas": [
+        {
+          "nombre": "Santo Domingo",
+          "pano": "/explorar/panoramas/REC_SD_CALLE.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/REC_SD_CALLE_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": -24.1,
+              "pitch": -7.4
+            }
+          ],
+          "mapa": {
+            "img": "/explorar/plantas3d/ubicacion.jpg",
+            "x": 0.0723,
+            "y": 0.6458
+          }
+        },
+        {
+          "nombre": "Acceso Santo Domingo",
+          "pano": "/explorar/panoramas/REC_SD_ACCESO.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/REC_SD_ACCESO_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 155.9,
+              "pitch": -9.7
+            }
+          ],
+          "mapa": {
+            "img": "/explorar/plantas3d/ubicacion.jpg",
+            "x": 0.1436,
+            "y": 0.5833
+          }
+        },
+        {
+          "nombre": "Circulación cuerpo B",
+          "pano": "/explorar/panoramas/360_pasillo.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_pasillo_m.jpg"
+        },
+        {
+          "nombre": "Patio interior",
+          "pano": "/explorar/panoramas/360_patio.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_patio_m.jpg"
+        },
+        {
+          "nombre": "Patio de la palmera",
+          "pano": "/explorar/panoramas/patio_palmera_dia_360_PATIO_PALMERA.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/patio_palmera_dia_360_PATIO_PALMERA_m.jpg",
+          "saltos": [
+            {
+              "a": 5,
+              "yaw": -158.2,
+              "pitch": -10.1
+            }
+          ],
+          "mapa": {
+            "img": "/explorar/plantas3d/ubicacion.jpg",
+            "x": 0.8665,
+            "y": 0.4458
+          }
+        },
+        {
+          "nombre": "Acceso Riquelme 536",
+          "pano": "/explorar/panoramas/REC_RIQ_REJA.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/REC_RIQ_REJA_m.jpg",
+          "saltos": [
+            {
+              "a": 4,
+              "yaw": 21.8,
+              "pitch": -10.1
+            }
+          ],
+          "mapa": {
+            "img": "/explorar/plantas3d/ubicacion.jpg",
+            "x": 0.891,
+            "y": 0.326
+          }
+        }
+      ],
+      "modelo": null
+    },
+    {
       "id": "patio",
       "nombre": "El patio",
       "tipo": "Panorama 360°",
@@ -11,7 +105,8 @@
         {
           "nombre": "Patio",
           "pano": "/explorar/panoramas/360_patio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_patio_m.jpg"
         }
       ],
       "modelo": null
@@ -29,12 +124,38 @@
         {
           "nombre": "Estar y cocina",
           "pano": "/explorar/panoramas/360_305B.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_305B_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": 0.0,
+              "pitch": -11.6
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/305B_planta.jpg",
+            "x": 0.5838,
+            "y": 0.797
+          }
         },
         {
           "nombre": "Dormitorio",
           "pano": "/explorar/panoramas/360_305B_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_305B_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 180.0,
+              "pitch": -11.6
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/305B_planta.jpg",
+            "x": 0.5838,
+            "y": 0.2673
+          }
         }
       ]
     },
@@ -51,12 +172,38 @@
         {
           "nombre": "Estar y cocina",
           "pano": "/explorar/panoramas/360_304B.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_304B_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": -34.9,
+              "pitch": -30.2
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/304B_planta.jpg",
+            "x": 0.4943,
+            "y": 0.549
+          }
         },
         {
           "nombre": "Dormitorio",
           "pano": "/explorar/panoramas/360_304B_dormitorio.jpg",
-          "yaw": 180
+          "yaw": 180,
+          "pano_m": "/explorar/panoramas/360_304B_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 145.1,
+              "pitch": -30.2
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/304B_planta.jpg",
+            "x": 0.3574,
+            "y": 0.2871
+          }
         }
       ]
     },
@@ -68,17 +215,43 @@
       "unidad": "304 C",
       "tc": "C2",
       "modelo": "interior_304C",
-      "nota": "Interior modelado desde la planta CAD de revisión. Alturas de ventanas supuestas; acabados y decoración de presentación.",
+      "nota": "Interior modelado desde la planta CAD de revisión. Alturas de ventanas supuestas. Terminaciones según el estándar de presentación del proyecto.",
       "vistas": [
         {
           "nombre": "Estar y cocina",
           "pano": "/explorar/panoramas/360_304C.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_304C_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": 18.4,
+              "pitch": -34.8
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/304C_planta.jpg",
+            "x": 0.3344,
+            "y": 0.5935
+          }
         },
         {
           "nombre": "Dormitorio",
           "pano": "/explorar/panoramas/360_304C_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_304C_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": -161.6,
+              "pitch": -34.8
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/304C_planta.jpg",
+            "x": 0.556,
+            "y": 0.6756
+          }
         }
       ]
     },
@@ -90,17 +263,43 @@
       "unidad": "203 A",
       "tc": "A1",
       "modelo": "interior_203A",
-      "nota": "Interior modelado desde la planta CAD de revisión, en la Casona Riquelme. Alturas de ventana supuestas; acabados y decoración de presentación.",
+      "nota": "Interior modelado desde la planta CAD de revisión, en la Casona Riquelme. Alturas de ventana supuestas. Terminaciones según el estándar de presentación del proyecto.",
       "vistas": [
         {
           "nombre": "Estar y cocina",
           "pano": "/explorar/panoramas/360_203A.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_203A_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": 9.5,
+              "pitch": -35.9
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/203A_planta.jpg",
+            "x": 0.4195,
+            "y": 0.371
+          }
         },
         {
           "nombre": "Dormitorio",
           "pano": "/explorar/panoramas/360_203A_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_203A_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": -170.5,
+              "pitch": -35.9
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/203A_planta.jpg",
+            "x": 0.6388,
+            "y": 0.4158
+          }
         }
       ]
     },
@@ -112,17 +311,43 @@
       "unidad": "303 C",
       "tc": "C1",
       "modelo": "interior_303C",
-      "nota": "Interior modelado desde la planta CAD de revisión. Alturas de ventana supuestas; acabados y decoración de presentación.",
+      "nota": "Interior modelado desde la planta CAD de revisión. Alturas de ventana supuestas. Terminaciones según el estándar de presentación del proyecto.",
       "vistas": [
         {
           "nombre": "Estar y cocina",
           "pano": "/explorar/panoramas/360_303C.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_303C_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": 158.2,
+              "pitch": -45.6
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/303C_planta.jpg",
+            "x": 0.5854,
+            "y": 0.612
+          }
         },
         {
           "nombre": "Dormitorio",
           "pano": "/explorar/panoramas/360_303C_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_303C_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": -21.8,
+              "pitch": -45.6
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/303C_planta.jpg",
+            "x": 0.4361,
+            "y": 0.6774
+          }
         }
       ]
     },
@@ -139,12 +364,38 @@
         {
           "nombre": "Estar y cocina",
           "pano": "/explorar/panoramas/360_501C.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_501C_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": -102.8,
+              "pitch": -44.3
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/501C_planta.jpg",
+            "x": 0.5719,
+            "y": 0.6048
+          }
         },
         {
           "nombre": "Dormitorio",
           "pano": "/explorar/panoramas/360_501C_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_501C_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 77.2,
+              "pitch": -44.3
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/501C_planta.jpg",
+            "x": 0.5389,
+            "y": 0.4322
+          }
         }
       ]
     },
@@ -156,17 +407,43 @@
       "unidad": "501 B",
       "tc": "B3",
       "modelo": "interior_501B",
-      "nota": "Interior modelado desde la planta CAD de revisión, en el piso 5, con dos terrazas. Alturas de ventana supuestas; acabados y decoración de presentación.",
+      "nota": "Interior modelado desde la planta CAD de revisión, en el piso 5, con dos terrazas. Alturas de ventana supuestas. Terminaciones según el estándar de presentación del proyecto.",
       "vistas": [
         {
           "nombre": "Estar y cocina",
           "pano": "/explorar/panoramas/360_501B.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_501B_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": -169.4,
+              "pitch": -15.1
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/501B_planta.jpg",
+            "x": 0.6624,
+            "y": 0.4489
+          }
         },
         {
           "nombre": "Dormitorio",
           "pano": "/explorar/panoramas/360_501B_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_501B_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 10.6,
+              "pitch": -15.1
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/501B_planta.jpg",
+            "x": 0.2651,
+            "y": 0.2957
+          }
         }
       ]
     },
@@ -183,12 +460,38 @@
         {
           "nombre": "Estar y cocina",
           "pano": "/explorar/panoramas/360_308B.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_308B_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": 91.0,
+              "pitch": -11.3
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/308B_planta.jpg",
+            "x": 0.3294,
+            "y": 0.2621
+          }
         },
         {
           "nombre": "Dormitorio",
           "pano": "/explorar/panoramas/360_308B_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_308B_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": -89.0,
+              "pitch": -11.3
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/308B_planta.jpg",
+            "x": 0.3067,
+            "y": 0.7347
+          }
         }
       ]
     },
@@ -205,12 +508,38 @@
         {
           "nombre": "Estar · doble altura",
           "pano": "/explorar/panoramas/360_301C.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_301C_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": -133.9,
+              "pitch": 36.8
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/301C_planta_nivel_1.jpg",
+            "x": 0.6547,
+            "y": 0.6592
+          }
         },
         {
           "nombre": "Altillo",
           "pano": "/explorar/panoramas/360_301C_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_301C_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 46.1,
+              "pitch": -62.5
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/301C_planta_nivel_2.jpg",
+            "x": 0.4861,
+            "y": 0.4443
+          }
         }
       ]
     },
@@ -227,81 +556,154 @@
         {
           "nombre": "Estar · doble altura",
           "pano": "/explorar/panoramas/360_302C.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_302C_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": 144.2,
+              "pitch": 42.3
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/302C_planta_nivel_1.jpg",
+            "x": 0.6141,
+            "y": 0.3476
+          }
         },
         {
           "nombre": "Altillo",
           "pano": "/explorar/panoramas/360_302C_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_302C_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": -35.8,
+              "pitch": -66.8
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/302C_planta_nivel_2.jpg",
+            "x": 0.445,
+            "y": 0.5024
+          }
         }
       ]
     },
     {
       "id": "LA1",
-      "nombre": "Local 1A",
-      "tipo": "Local · 360°",
+      "nombre": "Local 1A · bar de vinos",
+      "tipo": "Local gastronómico · 360°",
       "thumb": "/explorar/imagenes/LA1_thumb.jpg",
       "local": "A1",
       "modelo": "interior_LA1",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Puerta patrimonial hacia la calle Riquelme.",
+      "nota": "Local de la casona de Riquelme 536, con puerta hacia el patio de la palmera. Perímetro desde la planta CAD de contexto y altura libre supuesta de 3,0 m. Ambientado como bar de vinos: barra con botellero, sala poniente con banqueta y mesas de 2 y 4. La ambientación es una propuesta; el local se entrega sin habilitar.",
       "vistas": [
         {
           "nombre": "Local",
           "pano": "/explorar/panoramas/360_LA1.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LA1_m.jpg",
+          "saltos": [],
+          "planta": {
+            "img": "/explorar/plantas3d/LA1_planta.jpg",
+            "x": 0.6582,
+            "y": 0.5249
+          }
         }
       ]
     },
     {
       "id": "LA2",
-      "nombre": "Local 2A",
-      "tipo": "Local · 360°",
+      "nombre": "Local 2A · trattoria",
+      "tipo": "Local gastronómico · 360°",
       "thumb": "/explorar/imagenes/LA2_thumb.jpg",
       "local": "A2",
       "modelo": "interior_LA2",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, altura libre supuesta de 3,0 m. Se muestra vacío, como se entrega. Tres puertas patrimoniales hacia la calle; la planta de contexto no alcanza a delimitar todo su cuadro.",
+      "nota": "Local de la casona de Riquelme 536, con tres puertas hacia el patio de la palmera. Perímetro desde la planta CAD de contexto y altura libre supuesta de 3,0 m. Ambientado como trattoria: comedor de diez mesas con banqueta y cocina en el sector poniente. La ambientación y el equipamiento de cocina son una propuesta pendiente de evaluación técnica; el local se entrega sin habilitar.",
       "vistas": [
         {
-          "nombre": "Salón",
+          "nombre": "Comedor",
           "pano": "/explorar/panoramas/360_LA2.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LA2_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": -164.2,
+              "pitch": -13.0
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/LA2_planta.jpg",
+            "x": 0.6407,
+            "y": 0.5289
+          }
         },
         {
           "nombre": "Cocina",
           "pano": "/explorar/panoramas/360_LA2_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LA2_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 15.8,
+              "pitch": -13.0
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/LA2_planta.jpg",
+            "x": 0.178,
+            "y": 0.4022
+          }
         }
       ]
     },
     {
       "id": "LB1",
-      "nombre": "Local 1B",
-      "tipo": "Local · 360°",
+      "nombre": "Local 1B · café",
+      "tipo": "Local gastronómico · 360°",
       "thumb": "/explorar/imagenes/LB1_thumb.jpg",
       "local": "B1",
       "modelo": "interior_LB1",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, piso a piso de 2,50 m según los cortes (altura libre de presentación 2,30 m). Se muestra vacío, como se entrega. Primer piso; el altillo y su escalera están pendientes de un perímetro validado.",
+      "nota": "Local del cuerpo B con puerta vidriada al patio de la palmera. Perímetro desde la planta CAD de contexto; piso a piso de 2,50 m. Ambientado como café de especialidad: barra con máquina de espresso, vitrina y dos mesas de 2. Se muestra el primer piso; el altillo y su escalera están pendientes de un perímetro validado. La ambientación es una propuesta; el local se entrega sin habilitar.",
       "vistas": [
         {
           "nombre": "Local",
           "pano": "/explorar/panoramas/360_LB1.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LB1_m.jpg",
+          "saltos": [],
+          "planta": {
+            "img": "/explorar/plantas3d/LB1_planta.jpg",
+            "x": 0.5176,
+            "y": 0.4011
+          }
         }
       ]
     },
     {
       "id": "LB2",
-      "nombre": "Local 2B",
-      "tipo": "Local · 360°",
+      "nombre": "Local 2B · pastelería",
+      "tipo": "Local gastronómico · 360°",
       "thumb": "/explorar/imagenes/LB2_thumb.jpg",
       "local": "B2",
       "modelo": "interior_LB2",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, piso a piso de 2,50 m según los cortes (altura libre de presentación 2,30 m). Se muestra vacío, como se entrega. Primer piso; el altillo y su escalera están pendientes de un perímetro validado.",
+      "nota": "Local del cuerpo B con puertas vidriadas al patio de la palmera. Perímetro desde la planta CAD de contexto; piso a piso de 2,50 m. Ambientado como pastelería: vitrina refrigerada, contrabarra de panes y dos mesas de 2. Se muestra el primer piso; el altillo y su escalera están pendientes de un perímetro validado. La ambientación es una propuesta; el local se entrega sin habilitar.",
       "vistas": [
         {
           "nombre": "Local",
           "pano": "/explorar/panoramas/360_LB2.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LB2_m.jpg",
+          "saltos": [],
+          "planta": {
+            "img": "/explorar/plantas3d/LB2_planta.jpg",
+            "x": 0.4837,
+            "y": 0.5306
+          }
         }
       ]
     },
@@ -317,22 +719,114 @@
         {
           "nombre": "Hall y barra",
           "pano": "/explorar/panoramas/360_LC1.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LC1_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": -157.8,
+              "pitch": -11.2
+            },
+            {
+              "a": 2,
+              "yaw": -169.2,
+              "pitch": -30.1
+            },
+            {
+              "a": 3,
+              "yaw": -156.9,
+              "pitch": 14.3
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/LC1_planta_primer_piso.jpg",
+            "x": 0.765,
+            "y": 0.6282
+          }
         },
         {
           "nombre": "Comedor",
           "pano": "/explorar/panoramas/360_LC1_dormitorio.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LC1_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 22.2,
+              "pitch": -11.2
+            },
+            {
+              "a": 2,
+              "yaw": 146.2,
+              "pitch": -67.6
+            },
+            {
+              "a": 3,
+              "yaw": -26.6,
+              "pitch": 85.4
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/LC1_planta_primer_piso.jpg",
+            "x": 0.3337,
+            "y": 0.3683
+          }
         },
         {
           "nombre": "Cocina · zócalo",
           "pano": "/explorar/panoramas/360_LC1_ZOCALO.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LC1_ZOCALO_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 10.8,
+              "pitch": 13.7
+            },
+            {
+              "a": 1,
+              "yaw": -33.8,
+              "pitch": 45.6
+            },
+            {
+              "a": 3,
+              "yaw": -33.3,
+              "pitch": 67.8
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/LC1_planta_zocalo.jpg",
+            "x": 0.2249,
+            "y": 0.476
+          }
         },
         {
           "nombre": "Comedor superior",
           "pano": "/explorar/panoramas/360_LC1_NIVEL_SUPERIOR.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LC1_NIVEL_SUPERIOR_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 23.1,
+              "pitch": -33.3
+            },
+            {
+              "a": 1,
+              "yaw": 153.4,
+              "pitch": -88.2
+            },
+            {
+              "a": 2,
+              "yaw": 146.7,
+              "pitch": -75.1
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/LC1_planta_nivel_superior.jpg",
+            "x": 0.3421,
+            "y": 0.3621
+          }
         }
       ]
     },
@@ -346,29 +840,44 @@
         {
           "nombre": "De día",
           "pano": "/explorar/panoramas/patio_palmera_dia_360_PATIO_PALMERA.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/patio_palmera_dia_360_PATIO_PALMERA_m.jpg",
+          "saltos": [],
+          "mapa": {
+            "img": "/explorar/plantas3d/ubicacion.jpg",
+            "x": 0.8665,
+            "y": 0.4458
+          }
         },
         {
           "nombre": "De noche",
           "pano": "/explorar/panoramas/patio_palmera_noche_360_PATIO_PALMERA.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/patio_palmera_noche_360_PATIO_PALMERA_m.jpg"
         }
       ],
       "modelo": null
     },
     {
       "id": "LC2",
-      "nombre": "Local C2",
-      "tipo": "Local · 360°",
+      "nombre": "Local C2 · café al paso",
+      "tipo": "Local gastronómico · 360°",
       "thumb": "/explorar/imagenes/LC2_thumb.jpg",
       "local": "C2",
       "modelo": "interior_LC2",
-      "nota": "Local modelado desde la planta CAD de contexto: perímetro aproximado, piso a piso de 2,50 m según los cortes (altura libre de presentación 2,30 m). Se muestra vacío, como se entrega.",
+      "nota": "Local del cuerpo C hacia Santo Domingo. Perímetro desde la planta CAD de contexto; piso a piso de 2,50 m. Ambientado como café al paso: barra de despacho, repisa con taburetes y una mesa de 2. La ambientación es una propuesta; el local se entrega sin habilitar.",
       "vistas": [
         {
           "nombre": "Local",
           "pano": "/explorar/panoramas/360_LC2.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_LC2_m.jpg",
+          "saltos": [],
+          "planta": {
+            "img": "/explorar/plantas3d/LC2_planta.jpg",
+            "x": 0.5287,
+            "y": 0.3971
+          }
         }
       ]
     },
@@ -382,7 +891,8 @@
         {
           "nombre": "Pasillo",
           "pano": "/explorar/panoramas/360_pasillo.jpg",
-          "yaw": 0
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_pasillo_m.jpg"
         }
       ],
       "modelo": null
@@ -510,6 +1020,36 @@
       "thumb": "/explorar/imagenes/patio_palmera_dia_CAM_PATIO_PICADA_thumb.jpg"
     },
     {
+      "id": "LA1",
+      "nombre": "Local 1A · bar de vinos",
+      "img": "/explorar/imagenes/LA1.jpg",
+      "thumb": "/explorar/imagenes/LA1_thumb.jpg"
+    },
+    {
+      "id": "LA2",
+      "nombre": "Local 2A · trattoria",
+      "img": "/explorar/imagenes/LA2.jpg",
+      "thumb": "/explorar/imagenes/LA2_thumb.jpg"
+    },
+    {
+      "id": "LB1",
+      "nombre": "Local 1B · café de especialidad",
+      "img": "/explorar/imagenes/LB1.jpg",
+      "thumb": "/explorar/imagenes/LB1_thumb.jpg"
+    },
+    {
+      "id": "LB2",
+      "nombre": "Local 2B · pastelería",
+      "img": "/explorar/imagenes/LB2.jpg",
+      "thumb": "/explorar/imagenes/LB2_thumb.jpg"
+    },
+    {
+      "id": "LC2",
+      "nombre": "Local C2 · café al paso",
+      "img": "/explorar/imagenes/LC2.jpg",
+      "thumb": "/explorar/imagenes/LC2_thumb.jpg"
+    },
+    {
       "id": "patio",
       "nombre": "Patio interior",
       "img": "/explorar/imagenes/patio.jpg",
@@ -561,7 +1101,14 @@
       "aislada": true,
       "nota": "Se muestra 203 A en su planta. Los estudios 205 A y 301 A tienen variantes de distribución y superficie.",
       "recorrido": "203A",
-      "modelo": "interior_203A"
+      "modelo": "interior_203A",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/203A_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/203A_iso.jpg"
     },
     {
       "id": "A-1D",
@@ -584,7 +1131,9 @@
       "aislada": false,
       "nota": "Se muestra 201 A dentro del contexto de su planta. Las demás unidades de la familia presentan variantes de distribución y superficie.",
       "recorrido": null,
-      "modelo": null
+      "modelo": null,
+      "planta3d": [],
+      "iso": null
     },
     {
       "id": "B-1",
@@ -618,7 +1167,14 @@
       "aislada": true,
       "nota": "Representante 304 B. La familia incluye variaciones compactas y orientaciones distintas.",
       "recorrido": "304B",
-      "modelo": "interior_304B"
+      "modelo": "interior_304B",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/304B_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/304B_iso.jpg"
     },
     {
       "id": "B-2",
@@ -657,7 +1213,14 @@
       "aislada": true,
       "nota": "Representante 305 B. Existen distribuciones en espejo y orientaciones distintas.",
       "recorrido": "305B",
-      "modelo": "interior_305B"
+      "modelo": "interior_305B",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/305B_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/305B_iso.jpg"
     },
     {
       "id": "B-3",
@@ -678,7 +1241,14 @@
       "aislada": true,
       "nota": "Representante 501 B del piso 5; 502 B es la otra unidad de esta familia.",
       "recorrido": "501B",
-      "modelo": "interior_501B"
+      "modelo": "interior_501B",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/501B_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/501B_iso.jpg"
     },
     {
       "id": "B-4",
@@ -698,7 +1268,14 @@
       "aislada": true,
       "nota": "Unidad 308 B; distribución singular del cuerpo B.",
       "recorrido": "308B",
-      "modelo": "interior_308B"
+      "modelo": "interior_308B",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/308B_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/308B_iso.jpg"
     },
     {
       "id": "C-1",
@@ -721,7 +1298,14 @@
       "aislada": true,
       "nota": "Representante 304 C. Terraza de venta 3,39 m² por unidad, según cuadro.",
       "recorrido": "304C",
-      "modelo": "interior_304C"
+      "modelo": "interior_304C",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/304C_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/304C_iso.jpg"
     },
     {
       "id": "C-2",
@@ -743,7 +1327,14 @@
       "aislada": true,
       "nota": "Representante 303 C; 401 C presenta una superficie distinta dentro de esta familia.",
       "recorrido": "303C",
-      "modelo": "interior_303C"
+      "modelo": "interior_303C",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/303C_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/303C_iso.jpg"
     },
     {
       "id": "C-5",
@@ -764,7 +1355,14 @@
       "aislada": true,
       "nota": "Representante 501 C del piso 5. Las dos unidades tienen superficies diferentes.",
       "recorrido": "501C",
-      "modelo": "interior_501C"
+      "modelo": "interior_501C",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/501C_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/501C_iso.jpg"
     },
     {
       "id": "C-DUPLEX-301",
@@ -789,7 +1387,18 @@
       "aislada": true,
       "nota": "Se muestran las plantas de los pisos 3 y 4. La superficie total suma ambos niveles; la planta inferior sola no representa la unidad completa.",
       "recorrido": "301C",
-      "modelo": "interior_301C"
+      "modelo": "interior_301C",
+      "planta3d": [
+        {
+          "nombre": "Nivel 1",
+          "img": "/explorar/plantas3d/301C_planta_nivel_1.jpg"
+        },
+        {
+          "nombre": "Nivel 2 · altillo",
+          "img": "/explorar/plantas3d/301C_planta_nivel_2.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/301C_iso.jpg"
     },
     {
       "id": "C-DUPLEX-302",
@@ -814,7 +1423,18 @@
       "aislada": true,
       "nota": "Se muestran las plantas de los pisos 3 y 4. La superficie total suma ambos niveles; la planta inferior sola no representa la unidad completa.",
       "recorrido": "302C",
-      "modelo": "interior_302C"
+      "modelo": "interior_302C",
+      "planta3d": [
+        {
+          "nombre": "Nivel 1",
+          "img": "/explorar/plantas3d/302C_planta_nivel_1.jpg"
+        },
+        {
+          "nombre": "Nivel 2 · altillo",
+          "img": "/explorar/plantas3d/302C_planta_nivel_2.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/302C_iso.jpg"
     }
   ],
   "locales": [
@@ -829,8 +1449,15 @@
           "plano": "/explorar/planos/LOCAL_A1_p1.png"
         }
       ],
-      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
-      "recorrido": "LA1"
+      "nota": "Planta de contexto. Ambientado como propuesta gastronómica: ver su recorrido 360°, planta 3D y modelo.",
+      "recorrido": "LA1",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/LA1_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/LA1_iso.jpg"
     },
     {
       "id": "A2",
@@ -843,8 +1470,15 @@
           "plano": "/explorar/planos/LOCAL_A2_p1.png"
         }
       ],
-      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
-      "recorrido": "LA2"
+      "nota": "Planta de contexto. Ambientado como propuesta gastronómica: ver su recorrido 360°, planta 3D y modelo.",
+      "recorrido": "LA2",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/LA2_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/LA2_iso.jpg"
     },
     {
       "id": "B1",
@@ -861,8 +1495,15 @@
           "plano": "/explorar/planos/LOCAL_B1_p2.png"
         }
       ],
-      "nota": "Incluye altillo. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
-      "recorrido": "LB1"
+      "nota": "Incluye altillo. Ambientado como propuesta gastronómica: ver su recorrido 360°, planta 3D y modelo.",
+      "recorrido": "LB1",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/LB1_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/LB1_iso.jpg"
     },
     {
       "id": "B2",
@@ -879,8 +1520,15 @@
           "plano": "/explorar/planos/LOCAL_B2_p2.png"
         }
       ],
-      "nota": "Incluye altillo. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
-      "recorrido": "LB2"
+      "nota": "Incluye altillo. Ambientado como propuesta gastronómica: ver su recorrido 360°, planta 3D y modelo.",
+      "recorrido": "LB2",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/LB2_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/LB2_iso.jpg"
     },
     {
       "id": "C1",
@@ -901,8 +1549,23 @@
           "plano": "/explorar/planos/LOCAL_C1_p2.png"
         }
       ],
-      "nota": "Local distribuido en tres niveles. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
-      "recorrido": "LC1"
+      "nota": "Local distribuido en tres niveles. Ambientado como propuesta gastronómica: ver su recorrido 360°, planta 3D y modelo.",
+      "recorrido": "LC1",
+      "planta3d": [
+        {
+          "nombre": "Nivel superior",
+          "img": "/explorar/plantas3d/LC1_planta_nivel_superior.jpg"
+        },
+        {
+          "nombre": "Primer piso",
+          "img": "/explorar/plantas3d/LC1_planta_primer_piso.jpg"
+        },
+        {
+          "nombre": "Zócalo",
+          "img": "/explorar/plantas3d/LC1_planta_zocalo.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/LC1_iso.jpg"
     },
     {
       "id": "C2",
@@ -915,8 +1578,15 @@
           "plano": "/explorar/planos/LOCAL_C2_p1.png"
         }
       ],
-      "nota": "Planta de contexto. Su recorrido 3D propio sigue pendiente de un modelo conciliado.",
-      "recorrido": "LC2"
+      "nota": "Planta de contexto. Ambientado como propuesta gastronómica: ver su recorrido 360°, planta 3D y modelo.",
+      "recorrido": "LC2",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/LC2_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/LC2_iso.jpg"
     }
   ],
   "modelos": {
@@ -936,6 +1606,7 @@
     "interior_203A": "/explorar/modelos/interior_203A.glb",
     "interior_LA1": "/explorar/modelos/interior_LA1.glb",
     "interior_LA2": "/explorar/modelos/interior_LA2.glb",
-    "interior_301C": "/explorar/modelos/interior_301C.glb"
+    "interior_301C": "/explorar/modelos/interior_301C.glb",
+    "casa_munecas": "/explorar/modelos/casa_munecas.json"
   }
 }

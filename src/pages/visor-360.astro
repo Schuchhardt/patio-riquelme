@@ -25,10 +25,17 @@ const tabs = [
 ];
 
 const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
+// Sus renders pueden no estar listos todavía: el texto solo aparece cuando el recorrido existe.
+const hayRecorridoEdificio = recorridos.some((r) => r.id === 'edificio');
 ---
 
 <BaseLayout title={title} description={description} path={PATH} noindex>
-  <link slot="head" rel="preload" as="image" href={portada?.vistas[0].pano} />
+  {portada && (
+    <>
+      <link slot="head" rel="preload" as="image" href={portada.vistas[0].pano} media="(min-width: 861px)" />
+      <link slot="head" rel="preload" as="image" href={portada.vistas[0].pano_m ?? portada.vistas[0].pano} media="(max-width: 860px)" />
+    </>
+  )}
 
   <Header />
 
@@ -63,15 +70,44 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
         <div id="ex-pano" class="ex-layer"></div>
         <div id="ex-model" class="ex-layer" hidden></div>
         <div id="ex-img" class="ex-layer" hidden><img alt="" /></div>
+        <div id="ex-casa" class="ex-layer" hidden>
+          <div class="ex-casa-canvas"></div>
+          <div class="ex-casa-labels" aria-hidden="true"></div>
+          <div class="ex-casa-side">
+            <div class="ex-legend" id="ex-legend"></div>
+            <div class="ex-casa-cuerpos" role="group" aria-label="Filtrar por cuerpo"></div>
+          </div>
+          <div class="ex-pisos" role="group" aria-label="Elegir piso"></div>
+          <div class="ex-tip" role="status" hidden></div>
+        </div>
         <div id="ex-video" class="ex-layer" hidden><video muted loop playsinline controls preload="none" poster="/explorar/video/sobrevuelo_poster.jpg"></video></div>
         <span class="ex-label" id="ex-label"></span>
         <span class="ex-badge" id="ex-badge"></span>
         <div class="ex-chips" id="ex-chips"></div>
         <span class="ex-hint" id="ex-hint"></span>
         <div class="ex-loading" id="ex-loading" hidden></div>
+        <div class="ex-mini" id="ex-mini" hidden>
+          <div class="ex-mini-head">
+            <span id="ex-mini-title">Planta</span>
+            <button type="button" id="ex-mini-min" aria-expanded="true" title="Minimizar">–</button>
+            <button type="button" id="ex-mini-close" title="Cerrar">×</button>
+          </div>
+          <div class="ex-mini-body">
+            <img alt="" />
+            <span class="ex-cone" hidden></span>
+            <span class="ex-dot" hidden></span>
+          </div>
+        </div>
         <div class="ex-ctrl">
-          <a class="ex-round" id="ex-open" href="#" target="_blank" rel="noopener" title="Abrir imagen en tamaño completo" hidden>↗</a>
-          <button type="button" class="ex-round" id="ex-home" title="Volver a la vista inicial">
+          <button type="button" class="ex-round ex-ui-only" id="ex-planta" title="Ver planta" aria-pressed="false" hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17"/><path d="M3.5 12h7v8.5M14 3.5v6h6.5"/></svg>
+          </button>
+          <button type="button" class="ex-round" id="ex-ui" title="Ocultar controles" aria-pressed="false">
+            <svg class="ex-eye-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="ex-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 20L20 4"/></svg>
+          </button>
+          <a class="ex-round ex-ui-only" id="ex-open" href="#" target="_blank" rel="noopener" title="Abrir imagen en tamaño completo" hidden>↗</a>
+          <button type="button" class="ex-round ex-ui-only" id="ex-home" title="Volver a la vista inicial">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
           </button>
           <button type="button" class="ex-round" id="ex-fs" title="Pantalla completa">
@@ -96,12 +132,17 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     <p class="ex-eyebrow">Sobre esta versión</p>
     <h2 class="ex-dialog-title">Qué estás viendo</h2>
     <ul class="ex-about">
-      <li><b>Recorridos e imágenes.</b> Renderizados en Blender (Cycles) desde las escenas de revisión del proyecto. Materiales, iluminación, decoración y vegetación son de presentación.</li>
-      <li><b>Interiores 3D.</b> Hay un interior modelado por cada planta tipo (una unidad representante por familia) y para los seis locales. Los acabados son de presentación y no se replican automáticamente en otras unidades de la misma familia. Falta la planta 1D de la Casona (201 A) y los altillos de los locales 1B y 2B.</li>
-      <li><b>Locales.</b> Se muestran vacíos, como se entregan. Su perímetro se tomó de plantas de contexto y la altura libre (3,0 m) es supuesta.</li>
+      <li><b>Recorridos e imágenes.</b> Renderizados en Blender (Cycles) desde las escenas de revisión del proyecto. Iluminación, decoración y vegetación son de presentación.</li>
+      <li><b>Interiores.</b> Hay un interior modelado por cada planta tipo (una unidad representante por familia), con un estándar de terminaciones común de presentación: no corresponde a una especificación de venta ni se replica unidad por unidad. Dentro de cada recorrido puedes pasar de un ambiente a otro con los puntos de navegación.</li>
+      <li><b>Locales.</b> Se muestran ambientados como una propuesta gastronómica, solo como referencia de uso. Se entregan sin habilitar. Su perímetro se tomó de plantas de contexto y la altura libre (3,0 m) es supuesta.</li>
+      <li><b>Plantas 3D.</b> Vistas cenitales e isométricas amobladas, renderizadas del mismo interior de presentación. Están disponibles en las tipologías y locales que ya tienen interior; el mobiliario es referencial.</li>
       <li><b>Plantas.</b> Recortes de la planimetría de arquitectura vigente. Cada tipología muestra a una unidad representante; otras unidades de la misma familia pueden tener variantes menores. Algunas plantas se muestran con su contexto y no reemplazan los planos de venta.</li>
+      {hayRecorridoEdificio && (
+        <li><b>Recorrido desde Santo Domingo.</b> Un recorrido por el acceso y los espacios comunes del edificio, con un plano de ubicación para orientarse.</li>
+      )}
+      <li><b>Unidades 3D.</b> Volumen de cada unidad, piso por piso, trazado desde la planimetría de arquitectura. El color indica la disponibilidad real según la lista de precios vigente (la misma de <a href="/disponibilidad">Disponibilidad</a>).</li>
       <li><b>Superficies y precios.</b> Los mismos de <a href="/disponibilidad">Disponibilidad</a>: superficie total = útil + terraza. Precios de lista referenciales en UF.</li>
-      <li><b>Modelo del edificio.</b> Volumetría general en revisión frente a los planos definitivos.</li>
+      <li><b>Pendiente.</b> Falta el interior de la tipología 1D de la Casona (201 A) y los altillos de los locales 1B y 2B. La volumetría general del conjunto (modelo 3D, sobrevuelo y vistas aéreas) sigue en revisión frente a los planos definitivos.</li>
     </ul>
     <p class="ex-small">Imágenes referenciales. El proyecto puede presentar modificaciones.</p>
   </dialog>
@@ -194,6 +235,57 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
   .ex-stage .pnlm-container { background: #121212; }
   .ex-stage .pnlm-load-box { background: rgb(0 0 0 / .55); border-radius: 0; }
 
+  /* Saltos entre vistas (hotspots de Pannellum): el div mide lo que el círculo, el rótulo cuelga debajo. */
+  .ex-stage .ex-hs { width: 44px; height: 44px; cursor: pointer; }
+  .ex-hs-dot { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid rgb(255 255 255 / .9); background: rgb(20 20 20 / .32); color: #fff; backdrop-filter: blur(2px); transition: background-color .2s, transform .2s; }
+  .ex-hs:hover .ex-hs-dot { background: rgb(20 20 20 / .55); transform: scale(1.08); }
+  .ex-hs-txt { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 4px 9px; background: rgb(20 20 20 / .55); color: #fff; font-size: 10.5px; letter-spacing: 1.6px; text-transform: uppercase; pointer-events: none; }
+
+  /* Ocultar controles */
+  .ex-stage.ui-off :is(.ex-label, .ex-badge, .ex-chips, .ex-hint, .ex-mini, .ex-ui-only, .ex-hs, .ex-casa-side, .ex-pisos, .ex-casa-labels) { display: none !important; }
+  #ex-ui .ex-eye-off, #ex-ui[aria-pressed='true'] .ex-eye-on { display: none; }
+  #ex-ui[aria-pressed='true'] .ex-eye-off { display: block; }
+  .ex-round[aria-pressed='true']:not(#ex-ui) { background: var(--c-dark); color: #fff; }
+
+  /* Recuadro de planta */
+  .ex-mini { position: absolute; left: 32px; top: 64px; z-index: 6; width: 260px; background: rgb(255 255 255 / .96); box-shadow: 0 4px 18px rgb(0 0 0 / .18); }
+  .ex-mini[hidden] { display: none; }
+  .ex-mini-head { display: flex; align-items: center; gap: 4px; padding: 6px 6px 6px 12px; font-size: 10.5px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--c-text-2); }
+  .ex-mini-head span { flex: 1; }
+  .ex-mini-head button { width: 28px; height: 28px; border: 0; background: none; font: inherit; font-size: 17px; line-height: 1; color: var(--c-muted); cursor: pointer; }
+  .ex-mini-head button:hover { color: var(--c-text); }
+  .ex-mini.is-min .ex-mini-body { display: none; }
+  .ex-mini-body { position: relative; line-height: 0; overflow: hidden; }
+  .ex-mini-body img { display: block; width: 100%; height: auto; }
+  .ex-dot { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: #b5532e; box-shadow: 0 0 0 2px #fff; }
+  .ex-dot::after { content: ''; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid #b5532e; animation: ex-pulso 1.8s ease-out infinite; }
+  @keyframes ex-pulso { from { transform: scale(1); opacity: .9; } to { transform: scale(3.2); opacity: 0; } }
+  .ex-cone { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; pointer-events: none;
+    background: conic-gradient(from calc(var(--rumbo, 0deg) - var(--abre, 50deg)), rgb(181 83 46 / .38) 0deg calc(var(--abre, 50deg) * 2), transparent 0);
+    -webkit-mask: radial-gradient(closest-side, #000 55%, transparent); mask: radial-gradient(closest-side, #000 55%, transparent); }
+  .ex-dot[hidden], .ex-cone[hidden] { display: none; }
+  @media (prefers-reduced-motion: reduce) { .ex-dot::after { animation: none; } }
+
+  /* Unidades 3D (casa de muñecas) */
+  #ex-casa { background: linear-gradient(#f5f2ed, #e2ddd5); touch-action: none; -webkit-tap-highlight-color: transparent; }
+  .ex-casa-canvas, .ex-casa-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .ex-casa-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .ex-casa-labels span { position: absolute; left: 0; top: 0; white-space: nowrap; font-size: 10.5px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--c-text-2); padding: 3px 8px; background: rgb(255 255 255 / .7); }
+  .ex-casa-side { position: absolute; left: 32px; top: 64px; z-index: 5; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .ex-legend { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; background: rgb(255 255 255 / .9); font-size: 12px; color: var(--c-text-2); }
+  .ex-legend span { display: flex; align-items: center; gap: 8px; }
+  .ex-legend i { width: 12px; height: 12px; flex: none; }
+  .ex-casa-cuerpos { display: flex; gap: 4px; }
+  .ex-casa-cuerpos button, .ex-pisos button { border: 0; background: rgb(255 255 255 / .94); font: inherit; font-size: 12.5px; color: var(--c-text-2); cursor: pointer; box-shadow: 0 1px 6px rgb(0 0 0 / .1); }
+  .ex-casa-cuerpos button { padding: 6px 10px; }
+  .ex-pisos { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); z-index: 5; display: flex; flex-direction: column; gap: 6px; }
+  .ex-pisos button { min-width: 52px; height: 34px; padding: 0 10px; font-variant-numeric: tabular-nums; }
+  .ex-casa-cuerpos button[aria-pressed='true'], .ex-pisos button[aria-pressed='true'] { background: var(--c-dark); color: #fff; }
+  .ex-tip { position: absolute; z-index: 7; left: 0; top: 0; min-width: 170px; padding: 10px 12px; background: #fff; box-shadow: 0 4px 16px rgb(0 0 0 / .18); font-size: 12px; line-height: 1.5; color: var(--c-text-2); pointer-events: none; }
+  .ex-tip[hidden] { display: none; }
+  .ex-tip b { display: block; font-family: var(--font-serif); font-weight: 400; font-size: 19px; color: var(--c-text); }
+  .ex-tip em { font-style: normal; font-size: 11px; color: var(--c-muted); }
+
   .ex-dialog { border: 0; padding: 40px; width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 64px); color: var(--c-text); }
   .ex-dialog::backdrop { background: rgb(20 20 20 / .55); }
   .ex-dialog-close { position: absolute; top: 12px; right: 16px; }
@@ -227,6 +319,19 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     .ex-ctrl { right: 12px; bottom: 12px; }
     #ex-img.is-plan { padding: 72px 12px 110px; }
     .ex-dialog { padding: 28px 20px; }
+    .ex-mini { left: 12px; top: 84px; width: 46%; max-width: 220px; }
+    /* En celular las instrucciones chocan con los botones; los chips van en una fila desplazable. */
+    .ex-hint { display: none; }
+    .ex-chips { flex-wrap: nowrap; justify-content: safe center; overflow-x: auto; scrollbar-width: none; left: 12px; right: 12px; transform: none; width: auto; max-width: none; padding: 4px 2px 8px; }
+    .ex-chips::-webkit-scrollbar { display: none; }
+    .ex-chips button { flex: none; }
+    .ex-ctrl { gap: 8px; }
+    .ex-round { width: 40px; height: 40px; }
+    .ex-casa-side { left: 12px; top: 44px; gap: 6px; }
+    .ex-legend { flex-direction: row; flex-wrap: wrap; gap: 4px 10px; padding: 6px 8px; font-size: 11px; max-width: calc(100vw - 90px); }
+    .ex-pisos { right: 10px; gap: 4px; }
+    .ex-pisos button { min-width: 44px; height: 30px; font-size: 12px; }
+    .ex-hs-txt { font-size: 9.5px; }
   }
 </style>
 
@@ -355,24 +460,53 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
   }
   const PANNELLUM = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum';
   const MODEL_VIEWER = 'https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js';
+  // three.js como módulo ES: el +esm de jsdelivr reescribe el `import 'three'` de OrbitControls a esta misma URL.
+  const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/+esm';
+  const ORBIT_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js/+esm';
 
   // ---------- escenario ----------
-  type PannellumViewer = { destroy(): void; setYaw(y: number): void; setPitch(p: number): void; setHfov(h: number): void };
+  type Vista = ExplorarPayload['recorridos'][number]['vistas'][number];
+  type Recorrido = ExplorarPayload['recorridos'][number];
+  type PannellumViewer = {
+    destroy(): void;
+    setYaw(y: number): void;
+    setPitch(p: number): void;
+    setHfov(h: number): void;
+    getYaw(): number;
+    getHfov(): number;
+    loadScene(id: string, pitch?: number, yaw?: number, hfov?: number): void;
+    on(e: string, f: (arg?: unknown) => void): void;
+  };
   let pano: PannellumViewer | null = null;
   let panoYaw = 0;
   let modelEl: HTMLElement | null = null;
   let token = 0;
+  /** Vistas cargadas en el visor 360 y la que se está mirando. */
+  let tour: { vistas: Vista[]; i: number; alCambiar?: (i: number) => void } | null = null;
 
-  function capas(cual: 'pano' | 'model' | 'img' | 'video') {
+  const esMovil = () => window.matchMedia('(max-width: 860px)').matches;
+  /** Panorama de 2048 px en celulares o con ahorro de datos. */
+  const panoDe = (v: Vista) => {
+    const ahorro = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    return (esMovil() || ahorro) && v.pano_m ? v.pano_m : v.pano;
+  };
+
+  function capas(cual: 'pano' | 'model' | 'img' | 'video' | 'casa') {
     const vid = $('ex-video').querySelector('video')!;
     if (cual !== 'video') vid.pause();
     $('ex-video').hidden = cual !== 'video';
     $('ex-pano').hidden = cual !== 'pano';
     $('ex-model').hidden = cual !== 'model';
     $('ex-img').hidden = cual !== 'img';
-    if (cual !== 'pano' && pano) {
-      pano.destroy();
-      pano = null;
+    $('ex-casa').hidden = cual !== 'casa';
+    if (cual !== 'casa') cerrarCasa();
+    if (cual !== 'pano') {
+      if (pano) {
+        pano.destroy();
+        pano = null;
+      }
+      tour = null;
+      actualizarPlanta();
     }
     $('ex-open').hidden = cual !== 'img';
   }
@@ -384,22 +518,28 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     stage.classList.toggle('on-light', claro);
   }
 
-  function chips(items: { label: string; on: boolean; go: () => void }[]) {
+  type Chip = { label: string; on: boolean; go: () => void; key?: string };
+  function chips(items: Chip[]) {
     const box = $('ex-chips');
     box.innerHTML = '';
     if (items.length < 2) return;
-    items.forEach((it) => {
+    items.forEach((it, i) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = it.label;
+      b.dataset.key = it.key ?? String(i);
       b.setAttribute('aria-pressed', String(it.on));
       b.addEventListener('click', () => {
-        box.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', 'false'));
-        b.setAttribute('aria-pressed', 'true');
+        marcarChip(b.dataset.key!);
         it.go();
       });
       box.appendChild(b);
     });
+  }
+  function marcarChip(key: string) {
+    $('ex-chips')
+      .querySelectorAll<HTMLElement>('button')
+      .forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.key === key)));
   }
 
   function cargando(texto: string | null) {
@@ -408,10 +548,28 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     el.textContent = texto ?? '';
   }
 
-  async function mostrarPano(url: string, yaw = 0) {
+  function hotspot(div: HTMLElement, nombre: string) {
+    div.innerHTML = `<span class="ex-hs-dot"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 15l6-6 6 6"/></svg></span><span class="ex-hs-txt">${esc(nombre)}</span>`;
+    div.title = `Ir a ${nombre}`;
+    div.setAttribute('role', 'button');
+    div.setAttribute('aria-label', `Ir a ${nombre}`);
+  }
+
+  /**
+   * Muestra un conjunto de vistas 360° como un recorrido de Pannellum: cada salto es un hotspot y
+   * el cambio de vista es un fundido. Si el conjunto ya está cargado, solo cambia de escena.
+   */
+  async function mostrarVistas(vistas: Vista[], i = 0, alCambiar?: (i: number) => void) {
+    if (pano && tour && tour.vistas === vistas) {
+      tour.alCambiar = alCambiar;
+      if (tour.i !== i) pano.loadScene(String(i));
+      return;
+    }
     const t = ++token;
     capas('pano');
-    panoYaw = yaw;
+    tour = { vistas, i, alCambiar };
+    panoYaw = vistas[i].yaw;
+    actualizarPlanta();
     cargando('Cargando panorama…');
     try {
       await Promise.all([cargar(`${PANNELLUM}.css`, 'css'), cargar(`${PANNELLUM}.js`, 'script')]);
@@ -421,24 +579,173 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     }
     if (t !== token) return;
     pano?.destroy();
-    const P = (window as unknown as { pannellum: { viewer(el: string, cfg: object): PannellumViewer & { on(e: string, f: () => void): void } } }).pannellum;
+    const scenes = Object.fromEntries(
+      vistas.map((v, k) => [
+        String(k),
+        {
+          type: 'equirectangular',
+          panorama: panoDe(v),
+          yaw: v.yaw,
+          hotSpots: (v.saltos ?? [])
+            .filter((s) => s.a !== k && vistas[s.a])
+            .map((s) => ({
+              type: 'scene',
+              sceneId: String(s.a),
+              yaw: s.yaw,
+              pitch: s.pitch,
+              // Los panoramas comparten orientación: se llega mirando hacia donde se caminó.
+              targetYaw: 'sameAzimuth',
+              cssClass: 'ex-hs',
+              createTooltipFunc: hotspot,
+              createTooltipArgs: vistas[s.a].nombre,
+            })),
+        },
+      ])
+    );
+    const P = (window as unknown as { pannellum: { viewer(el: string, cfg: object): PannellumViewer } }).pannellum;
     const v = P.viewer('ex-pano', {
-      type: 'equirectangular',
-      panorama: url,
-      autoLoad: true,
-      showControls: false,
-      showZoomCtrl: false,
-      showFullscreenCtrl: false,
-      yaw,
-      hfov: 100,
-      minHfov: 40,
-      maxHfov: 120,
-      friction: 0.12,
+      default: {
+        firstScene: String(i),
+        sceneFadeDuration: 650,
+        autoLoad: true,
+        showControls: false,
+        showZoomCtrl: false,
+        showFullscreenCtrl: false,
+        hfov: 100,
+        minHfov: 40,
+        maxHfov: 120,
+        friction: 0.12,
+      },
+      scenes,
     });
     v.on('load', () => t === token && cargando(null));
     v.on('error', () => t === token && cargando('No se pudo cargar el panorama'));
+    v.on('scenechange', (id) => {
+      if (t !== token || !tour) return;
+      const k = Number(id);
+      tour.i = k;
+      panoYaw = vistas[k].yaw;
+      actualizarPlanta();
+      tour.alCambiar?.(k);
+    });
     pano = v;
   }
+
+  function mostrarPano(url: string, yaw = 0) {
+    return mostrarVistas([{ nombre: '', pano: url, yaw }]);
+  }
+
+  // ---------- planta flotante dentro del 360 ----------
+  const mini = $('ex-mini');
+  const miniImg = mini.querySelector('img')!;
+  const miniDot = mini.querySelector<HTMLElement>('.ex-dot')!;
+  const miniCono = mini.querySelector<HTMLElement>('.ex-cone')!;
+  let plantaAbierta = false;
+  const plantaFallida = new Set<string>();
+  let conoRaf = 0;
+  /** Diferencia entre el yaw de Pannellum y el rumbo en la imagen (grados, horario desde arriba). */
+  let conoDesfase: number | null = null;
+
+  const ubicacionDe = (v: Vista) => v.planta ?? v.mapa ?? null;
+  const dentro = (u: { x: number; y: number }) => u.x >= 0 && u.x <= 1 && u.y >= 0 && u.y <= 1;
+
+  /**
+   * El rumbo de la mirada no viene en los datos, pero se deduce de los saltos: el yaw de un salto
+   * apunta a la posición de la otra vista, que está en la misma imagen.
+   */
+  function calibrarCono(): number | null {
+    if (!tour || !miniImg.naturalWidth) return null;
+    const W = miniImg.naturalWidth;
+    const H = miniImg.naturalHeight;
+    for (const v of tour.vistas) {
+      const a = ubicacionDe(v);
+      if (!a || a.img !== miniImg.getAttribute('src') || !dentro(a)) continue;
+      for (const s of v.saltos ?? []) {
+        const b = tour.vistas[s.a] && ubicacionDe(tour.vistas[s.a]);
+        if (!b || b.img !== a.img || !dentro(b)) continue;
+        const dx = (b.x - a.x) * W;
+        const dy = (b.y - a.y) * H;
+        if (Math.hypot(dx, dy) < 4) continue;
+        return (Math.atan2(dx, -dy) * 180) / Math.PI - s.yaw;
+      }
+    }
+    return null;
+  }
+
+  function pararCono() {
+    cancelAnimationFrame(conoRaf);
+    conoRaf = 0;
+  }
+  function animarCono() {
+    pararCono();
+    if (conoDesfase === null || miniCono.hidden) return;
+    const paso = () => {
+      if (pano && conoDesfase !== null) {
+        miniCono.style.setProperty('--rumbo', `${pano.getYaw() + conoDesfase}deg`);
+        miniCono.style.setProperty('--abre', `${pano.getHfov() / 2}deg`);
+      }
+      conoRaf = requestAnimationFrame(paso);
+    };
+    paso();
+  }
+
+  function actualizarPlanta() {
+    const v = tour ? tour.vistas[tour.i] : null;
+    const u = v ? ubicacionDe(v) : null;
+    const btn = $('ex-planta');
+    btn.hidden = !u || plantaFallida.has(u.img);
+    btn.title = v?.planta ? 'Ver planta' : 'Ver ubicación';
+    btn.setAttribute('aria-pressed', String(plantaAbierta && !btn.hidden));
+    mini.hidden = btn.hidden || !plantaAbierta;
+    if (mini.hidden || !u || !v) return pararCono();
+    $('ex-mini-title').textContent = v.planta ? 'Planta' : 'Ubicación';
+    const cambio = miniImg.getAttribute('src') !== u.img;
+    if (cambio) {
+      miniImg.src = u.img;
+      miniImg.alt = v.planta ? 'Planta 3D amoblada' : 'Plano de ubicación';
+    }
+    const ok = dentro(u);
+    miniDot.hidden = !ok;
+    for (const el of [miniDot, miniCono]) {
+      el.style.left = `${u.x * 100}%`;
+      el.style.top = `${u.y * 100}%`;
+    }
+    const listo = () => {
+      conoDesfase = calibrarCono();
+      miniCono.hidden = !ok || conoDesfase === null;
+      animarCono();
+    };
+    if (miniImg.complete && miniImg.naturalWidth && !cambio) listo();
+    else miniImg.onload = listo;
+  }
+
+  miniImg.addEventListener('error', () => {
+    const src = miniImg.getAttribute('src');
+    if (src) plantaFallida.add(src);
+    actualizarPlanta();
+  });
+  $('ex-planta').addEventListener('click', () => {
+    plantaAbierta = !plantaAbierta;
+    mini.classList.remove('is-min');
+    $('ex-mini-min').setAttribute('aria-expanded', 'true');
+    actualizarPlanta();
+  });
+  $('ex-mini-close').addEventListener('click', () => {
+    plantaAbierta = false;
+    actualizarPlanta();
+  });
+  $('ex-mini-min').addEventListener('click', (e) => {
+    const min = mini.classList.toggle('is-min');
+    (e.currentTarget as HTMLElement).setAttribute('aria-expanded', String(!min));
+    (e.currentTarget as HTMLElement).textContent = min ? '+' : '–';
+    (e.currentTarget as HTMLElement).title = min ? 'Expandir' : 'Minimizar';
+  });
+  $('ex-ui').addEventListener('click', (e) => {
+    const off = stage.classList.toggle('ui-off');
+    const b = e.currentTarget as HTMLElement;
+    b.setAttribute('aria-pressed', String(off));
+    b.title = off ? 'Mostrar controles' : 'Ocultar controles';
+  });
 
   function mostrarImagen(url: string, alt: string, plano = false) {
     ++token;
@@ -501,8 +808,405 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     box.appendChild(modelEl);
   }
 
+  // ---------- Unidades 3D (casa de muñecas, three.js) ----------
+  type PisoCasa = {
+    id: string;
+    cuerpo: string;
+    nivel: number;
+    nombre: string;
+    z: number;
+    alto: number;
+    contorno: [number, number][];
+    unidades: { nombre: string; tipo: 'depto' | 'local'; poly: [number, number][]; centro: [number, number] }[];
+  };
+  type DatosCasa = { fuente: string; pisos: PisoCasa[] };
+
+  const COLOR_ESTADO: Record<string, string> = { disponible: '#aebf9f', reservada: '#e2b25c', vendida: '#bcb8b2' };
+  const COLOR_LOCAL = '#d39778';
+  const ESTADO_TXT: Record<string, string> = { disponible: 'Disponible', reservada: 'Reservada', vendida: 'Vendida' };
+  /** "LOC. 1 B", "1 B" y "1B" son el mismo local; "304 B" y "304B" el mismo depto. */
+  const normal = (s: string) => s.toUpperCase().replace(/^LOC\.?/, '').replace(/[\s.]/g, '');
+  const deptoPorNormal = new Map(D.departamentos.map((u) => [normal(u.nombre), u]));
+  const localPorNormal = new Map(D.locales.map((l) => [normal(l.datos.nombre), l]));
+
+  let casaDatos: Promise<DatosCasa> | null = null;
+  let casa: { cerrar(): void; home(): void } | null = null;
+  const casaVista = { piso: 'todos', cuerpo: '' };
+
+  function cerrarCasa() {
+    casa?.cerrar();
+    casa = null;
+  }
+
+  async function mostrarCasa() {
+    const url = D.modelos.casa_munecas;
+    if (!url) return;
+    const t = ++token;
+    capas('casa');
+    cargando('Cargando unidades 3D…');
+    casaDatos ??= fetch(url).then((r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    });
+    let libs: [any, any, DatosCasa];
+    try {
+      libs = await Promise.all([import(/* @vite-ignore */ THREE_URL), import(/* @vite-ignore */ ORBIT_URL), casaDatos]);
+    } catch {
+      casaDatos = null;
+      if (t === token) cargando('No se pudo cargar el visor 3D');
+      return;
+    }
+    if (t !== token) return;
+    try {
+      casa = crearCasa(libs[0], libs[1].OrbitControls, libs[2]);
+      cargando(null);
+    } catch {
+      cargando('Este navegador no pudo abrir el visor 3D');
+    }
+  }
+
+  function crearCasa(THREE: any, OrbitControls: any, datos: DatosCasa) {
+    const box = $('ex-casa');
+    const host = box.querySelector<HTMLElement>('.ex-casa-canvas')!;
+    const labelsBox = box.querySelector<HTMLElement>('.ex-casa-labels')!;
+    const tip = box.querySelector<HTMLElement>('.ex-tip')!;
+    const pisosBox = box.querySelector<HTMLElement>('.ex-pisos')!;
+    const cuerposBox = box.querySelector<HTMLElement>('.ex-casa-cuerpos')!;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    host.appendChild(renderer.domElement);
+    const canvas: HTMLCanvasElement = renderer.domElement;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(32, 1, 1, 1500);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xcfc6b8, 2.2));
+    const sol = new THREE.DirectionalLight(0xffffff, 1.6);
+    sol.position.set(-40, 80, 50);
+    scene.add(sol);
+
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.maxPolarAngle = Math.PI * 0.49;
+    controls.minDistance = 8;
+    controls.maxDistance = 400;
+    controls.autoRotateSpeed = 0.5;
+
+    // Coordenadas del plano (x, y en metros, z hacia arriba) → three (x, z, −y).
+    const extruir = (poly: [number, number][], alto: number) => {
+      const shape = new THREE.Shape(poly.map(([x, y]) => new THREE.Vector2(x, y)));
+      const g = new THREE.ExtrudeGeometry(shape, { depth: alto, bevelEnabled: false });
+      g.rotateX(-Math.PI / 2);
+      return g;
+    };
+
+    const raiz = new THREE.Group();
+    scene.add(raiz);
+    const lineas = new THREE.LineBasicMaterial({ color: 0x6f6a63, transparent: true, opacity: 0.55 });
+    type Pieza = { mesh: any; nombre: string; tipo: string; info: string; abrir: (() => void) | null };
+    const piezas: Pieza[] = [];
+    const grupos: { p: PisoCasa; g: any; mats: any[]; meshes: any[] }[] = [];
+
+    for (const p of datos.pisos) {
+      const g = new THREE.Group();
+      const mats: any[] = [];
+      const meshes: any[] = [];
+      if (p.contorno?.length > 2) {
+        const mLosa = new THREE.MeshStandardMaterial({ color: 0xc9c5bf, roughness: 0.95, transparent: true });
+        const losa = new THREE.Mesh(extruir(p.contorno, 0.12), mLosa);
+        losa.position.y = p.z - 0.12;
+        g.add(losa);
+        mats.push(mLosa);
+      }
+      for (const u of p.unidades) {
+        if (!u.poly || u.poly.length < 3) continue;
+        const d = u.tipo === 'local' ? null : deptoPorNormal.get(normal(u.nombre));
+        const l = u.tipo === 'local' ? localPorNormal.get(normal(u.nombre)) : null;
+        const datosU = d ?? l?.datos;
+        const estado = datosU?.estado ?? '';
+        const color = l && estado === 'disponible' ? COLOR_LOCAL : COLOR_ESTADO[estado] ?? '#d6d2cc';
+        const geo = extruir(u.poly, Math.max(0.3, p.alto - 0.15));
+        const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.8, transparent: true });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.y = p.z;
+        mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo, 25), lineas));
+        g.add(mesh);
+        mats.push(mat);
+        meshes.push(mesh);
+        const estadoTxt = ESTADO_TXT[estado] ?? '';
+        const info = d
+          ? `<b>${esc(d.nombre)}</b>Tipología ${esc(d.tc)} · ${esc(d.tcNombre)}<br>${m2(d.m2Total)} totales · ${esc(estadoTxt)}`
+          : l
+          ? `<b>${esc(l.titulo)}</b>Local comercial · ${esc(l.datos.piso)}<br>${m2(l.datos.m2Total)} totales · ${esc(estadoTxt)}`
+          : `<b>${esc(u.nombre)}</b>`;
+        piezas.push({
+          mesh,
+          nombre: u.nombre,
+          tipo: u.tipo,
+          info,
+          abrir: d ? () => ir('unidades', d.nombre, { scroll: true }) : l ? () => ir('locales', l.id, { scroll: true }) : null,
+        });
+      }
+      raiz.add(g);
+      grupos.push({ p, g, mats, meshes });
+    }
+
+    // Centrar el conjunto en el origen.
+    const caja = new THREE.Box3().setFromObject(raiz);
+    const centro = caja.getCenter(new THREE.Vector3());
+    raiz.position.set(-centro.x, 0, -centro.z);
+    const cajaTotal = new THREE.Box3().setFromObject(raiz);
+
+    // Rótulos "Cuerpo A/B/C" sobre cada cuerpo (en coordenadas de mundo, ya centradas).
+    raiz.updateMatrixWorld(true);
+    const rotulosCuerpo = [...new Set(datos.pisos.map((p) => p.cuerpo))].sort().map((c) => {
+      const b = new THREE.Box3();
+      grupos.filter((x) => x.p.cuerpo === c).forEach((x) => b.expandByObject(x.g));
+      const pos = b.getCenter(new THREE.Vector3());
+      pos.y = b.max.y + 1.5;
+      const el = document.createElement('span');
+      el.textContent = `Cuerpo ${c}`;
+      labelsBox.appendChild(el);
+      return { c, pos, el };
+    });
+
+    // Leyenda, filtro por cuerpo y selector de piso.
+    $('ex-legend').innerHTML =
+      Object.entries(ESTADO_TXT)
+        .map(([k, txt]) => `<span><i style="background:${COLOR_ESTADO[k]}"></i>${txt}</span>`)
+        .join('') + `<span><i style="background:${COLOR_LOCAL}"></i>Local disponible</span>`;
+    const niveles = [...new Set(datos.pisos.map((p) => p.nivel))].sort((a, b) => b - a);
+    pisosBox.innerHTML = ['todos', ...niveles.map(String)]
+      .map(
+        (n) =>
+          `<button type="button" data-piso="${n}" aria-pressed="${casaVista.piso === n}" title="${n === 'todos' ? 'Ver todo el conjunto' : `Ver el piso ${n}`}">${
+            n === 'todos' ? 'Todos' : n.replace('-', '−')
+          }</button>`
+      )
+      .join('');
+    cuerposBox.innerHTML = rotulosCuerpo
+      .map((r) => `<button type="button" data-ccuerpo="${r.c}" aria-pressed="${casaVista.cuerpo === r.c}" title="Destacar el cuerpo ${r.c}">${r.c}</button>`)
+      .join('');
+
+    // Cámara
+    const ease = (x: number) => (x < 0.5 ? 2 * x * x : 1 - (-2 * x + 2) ** 2 / 2);
+    let anim: { t0: number; dur: number; p0: any; p1: any; q0: any; q1: any } | null = null;
+    function volar(pos: any, target: any, inmediato = false) {
+      if (inmediato) {
+        camera.position.copy(pos);
+        controls.target.copy(target);
+        anim = null;
+        return;
+      }
+      anim = { t0: performance.now(), dur: 750, p0: camera.position.clone(), p1: pos, q0: controls.target.clone(), q1: target };
+    }
+    function encuadre(b: any, polar: number, azimut: number) {
+      const esfera = b.getBoundingSphere(new THREE.Sphere());
+      const vfov = (camera.fov * Math.PI) / 180;
+      const hfov = 2 * Math.atan(Math.tan(vfov / 2) * camera.aspect);
+      // En vertical el selector de piso tapa el borde derecho: se deja más aire.
+      const dist = (esfera.radius / Math.sin(Math.min(vfov, hfov) / 2)) * (camera.aspect < 1 ? 1.2 : 1.02);
+      const c = esfera.center;
+      const pos = new THREE.Vector3(
+        c.x + dist * Math.sin(polar) * Math.sin(azimut),
+        c.y + dist * Math.cos(polar),
+        c.z + dist * Math.sin(polar) * Math.cos(azimut)
+      );
+      return { pos, c };
+    }
+    function aplicar(inmediato = false) {
+      const sel = casaVista.piso === 'todos' ? null : Number(casaVista.piso);
+      const visibles = new THREE.Box3();
+      for (const x of grupos) {
+        const arriba = sel !== null && x.p.nivel > sel;
+        const otroCuerpo = !!casaVista.cuerpo && x.p.cuerpo !== casaVista.cuerpo;
+        x.g.visible = !arriba;
+        const op = otroCuerpo ? 0.12 : 1;
+        for (const m of x.mats) {
+          m.opacity = op;
+          m.depthWrite = op === 1;
+        }
+        x.g.userData.activo = !arriba && !otroCuerpo;
+        if (x.g.userData.activo && (sel === null || x.p.nivel === sel)) visibles.expandByObject(x.g);
+      }
+      rotulosCuerpo.forEach((r) => (r.el.hidden = sel !== null || (!!casaVista.cuerpo && r.c !== casaVista.cuerpo)));
+      pisosBox.querySelectorAll<HTMLElement>('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.piso === casaVista.piso)));
+      cuerposBox.querySelectorAll<HTMLElement>('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ccuerpo === casaVista.cuerpo)));
+      const b = visibles.isEmpty() ? cajaTotal : visibles;
+      const az = anim || inmediato ? 0.6 : Math.atan2(camera.position.x - controls.target.x, camera.position.z - controls.target.z);
+      const { pos, c } = encuadre(b, sel === null ? 1.0 : 0.62, az);
+      controls.autoRotate = sel === null && !casaVista.cuerpo && !interactuado;
+      volar(pos, c, inmediato);
+      ocultarTip();
+    }
+
+    // Selección con mouse o toque
+    const ray = new THREE.Raycaster();
+    const ndc = new THREE.Vector2();
+    let hover: Pieza | null = null;
+    let interactuado = false;
+    function elegir(ev: PointerEvent): Pieza | null {
+      const r = canvas.getBoundingClientRect();
+      ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+      ray.setFromCamera(ndc, camera);
+      const activos = piezas.filter((p) => p.mesh.parent?.visible && p.mesh.parent.userData.activo !== false).map((p) => p.mesh);
+      const hit = ray.intersectObjects(activos, false)[0];
+      return hit ? piezas.find((p) => p.mesh === hit.object) ?? null : null;
+    }
+    function resaltar(p: Pieza | null) {
+      if (hover === p) return;
+      for (const x of piezas) {
+        const on = !!p && x.nombre === p.nombre && x.tipo === p.tipo;
+        x.mesh.material.emissive.setHex(on ? 0x3a2a1a : 0x000000);
+      }
+      hover = p;
+      canvas.style.cursor = p?.abrir ? 'pointer' : '';
+    }
+    function mostrarTip(p: Pieza, ev: PointerEvent, tactil: boolean) {
+      tip.innerHTML = `${p.info}${p.abrir ? `<br><em>${tactil ? 'Toca de nuevo para ver la ficha' : 'Clic para ver la ficha'}</em>` : ''}`;
+      tip.hidden = false;
+      const r = box.getBoundingClientRect();
+      const x = ev.clientX - r.left;
+      const y = ev.clientY - r.top;
+      const w = tip.offsetWidth;
+      const h = tip.offsetHeight;
+      tip.style.transform = `translate(${Math.max(8, Math.min(x + 14, r.width - w - 8))}px, ${Math.max(8, y - h - 14 < 8 ? y + 18 : y - h - 14)}px)`;
+    }
+    function ocultarTip() {
+      tip.hidden = true;
+      resaltar(null);
+    }
+
+    let abajo: { x: number; y: number; t: number } | null = null;
+    const onMove = (ev: PointerEvent) => {
+      if (ev.pointerType !== 'mouse' || abajo) return;
+      const p = elegir(ev);
+      resaltar(p);
+      if (p) mostrarTip(p, ev, false);
+      else tip.hidden = true;
+    };
+    const onDown = (ev: PointerEvent) => {
+      abajo = { x: ev.clientX, y: ev.clientY, t: performance.now() };
+    };
+    const onUp = (ev: PointerEvent) => {
+      const a = abajo;
+      abajo = null;
+      if (!a || Math.hypot(ev.clientX - a.x, ev.clientY - a.y) > 6 || performance.now() - a.t > 600) return;
+      const p = elegir(ev);
+      if (!p) return ocultarTip();
+      if (ev.pointerType === 'mouse' || hover === p) {
+        if (p.abrir) {
+          track('explorar_casa_unidad', { label: p.nombre });
+          p.abrir();
+        }
+        return;
+      }
+      resaltar(p);
+      mostrarTip(p, ev, true);
+    };
+    // En pantallas táctiles el puntero "sale" al levantar el dedo: ahí el tooltip debe quedarse.
+    const onLeave = (ev: PointerEvent) => {
+      if (ev.pointerType === 'mouse' && !abajo) ocultarTip();
+    };
+    canvas.addEventListener('pointermove', onMove);
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointerleave', onLeave);
+    controls.addEventListener('start', () => {
+      interactuado = true;
+      controls.autoRotate = false;
+      anim = null;
+    });
+
+    const onPisos = (e: Event) => {
+      const b = (e.target as Element).closest<HTMLElement>('[data-piso]');
+      if (!b) return;
+      casaVista.piso = b.dataset.piso!;
+      aplicar();
+    };
+    const onCuerpos = (e: Event) => {
+      const b = (e.target as Element).closest<HTMLElement>('[data-ccuerpo]');
+      if (!b) return;
+      casaVista.cuerpo = casaVista.cuerpo === b.dataset.ccuerpo ? '' : b.dataset.ccuerpo!;
+      aplicar();
+    };
+    pisosBox.addEventListener('click', onPisos);
+    cuerposBox.addEventListener('click', onCuerpos);
+
+    // Tamaño y ciclo de dibujo
+    let enMarcha = true;
+    const tam = () => {
+      const w = box.clientWidth;
+      const h = box.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    const ro = new ResizeObserver(tam);
+    ro.observe(box);
+    tam();
+    aplicar(true);
+
+    const v = new THREE.Vector3();
+    let raf = 0;
+    const dibujar = (now: number) => {
+      if (!enMarcha) return;
+      if (anim) {
+        const k = Math.min(1, (now - anim.t0) / anim.dur);
+        const e = ease(k);
+        camera.position.lerpVectors(anim.p0, anim.p1, e);
+        controls.target.lerpVectors(anim.q0, anim.q1, e);
+        if (k >= 1) anim = null;
+      }
+      controls.update();
+      renderer.render(scene, camera);
+      const w = box.clientWidth;
+      const h = box.clientHeight;
+      for (const r of rotulosCuerpo) {
+        if (r.el.hidden) continue;
+        v.copy(r.pos).project(camera);
+        const fuera = v.z > 1 || Math.abs(v.x) > 1.1 || Math.abs(v.y) > 1.1;
+        r.el.style.visibility = fuera ? 'hidden' : '';
+        r.el.style.transform = `translate(${((v.x + 1) / 2) * w}px, ${((1 - v.y) / 2) * h}px) translate(-50%, -100%)`;
+      }
+      raf = requestAnimationFrame(dibujar);
+    };
+    raf = requestAnimationFrame(dibujar);
+
+    return {
+      home() {
+        casaVista.piso = 'todos';
+        casaVista.cuerpo = '';
+        interactuado = false;
+        aplicar();
+      },
+      cerrar() {
+        enMarcha = false;
+        cancelAnimationFrame(raf);
+        ro.disconnect();
+        controls.dispose();
+        pisosBox.removeEventListener('click', onPisos);
+        cuerposBox.removeEventListener('click', onCuerpos);
+        scene.traverse((o: any) => {
+          o.geometry?.dispose();
+          if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m: any) => m.dispose());
+        });
+        renderer.dispose();
+        renderer.forceContextLoss();
+        canvas.remove();
+        labelsBox.innerHTML = '';
+        pisosBox.innerHTML = '';
+        cuerposBox.innerHTML = '';
+        tip.hidden = true;
+      },
+    };
+  }
+
   $('ex-home').addEventListener('click', () => {
-    if (pano) {
+    if (casa) casa.home();
+    else if (pano) {
       pano.setYaw(panoYaw);
       pano.setPitch(0);
       pano.setHfov(100);
@@ -523,14 +1227,20 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
   });
 
   // ---------- vistas por pestaña ----------
+  const tieneSaltos = (r: Recorrido) => r.vistas.some((v) => v.saltos?.length);
+
   function verRecorrido(id: string) {
     const r = recorridoPorId.get(id) ?? D.recorridos[0];
     if (!r) return;
     state.id = r.id;
-    const ir = (i: number) => mostrarPano(r.vistas[i].pano, r.vistas[i].yaw);
-    rotulos(r.nombre, 'Desde Blender · escena de revisión', 'Arrastra para mirar en 360°');
-    chips(r.vistas.map((v, i) => ({ label: v.nombre, on: i === 0, go: () => ir(i) })));
-    ir(0);
+    const badge = r.local
+      ? 'Ambientación gastronómica de referencia · se entrega sin habilitar'
+      : r.unidad
+      ? 'Render Cycles · terminaciones de presentación'
+      : 'Render Cycles · imagen referencial';
+    rotulos(r.nombre, badge, tieneSaltos(r) ? 'Arrastra para mirar · usa los círculos para moverte' : 'Arrastra para mirar en 360°');
+    chips(r.vistas.map((v, i) => ({ label: v.nombre, on: i === 0, go: () => mostrarVistas(r.vistas, i, (k) => marcarChip(String(k))) })));
+    mostrarVistas(r.vistas, 0, (k) => marcarChip(String(k)));
   }
 
   function verImagen(id: string) {
@@ -542,17 +1252,66 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     mostrarImagen(im.img, im.nombre);
   }
 
-  function verPlanos(label: string, badge: string, niveles: { nombre: string; plano: string }[], alt: string) {
+  const BADGE_3D = 'Planta 3D amoblada · mobiliario referencial';
+  const BADGE_ISO = 'Vista isométrica amoblada · mobiliario referencial';
+  type Extra3D = { planta3d: { nombre: string; img: string }[]; iso: string | null };
+  /** Chips de la planta 3D y la isométrica, después de los planos CAD. */
+  const chips3D = (x: Extra3D, alt: string, label: string): Chip[] => [
+    ...x.planta3d.map((p) => ({
+      label: x.planta3d.length > 1 ? `3D · ${p.nombre}` : 'Planta 3D',
+      key: p.img,
+      on: false,
+      go: () => {
+        rotulos(label, BADGE_3D, '', true);
+        mostrarImagen(p.img, `${alt} · planta 3D ${p.nombre}`, true);
+      },
+    })),
+    ...(x.iso
+      ? [
+          {
+            label: 'Isométrica',
+            key: x.iso,
+            on: false,
+            go: () => {
+              rotulos(label, BADGE_ISO, '', true);
+              mostrarImagen(x.iso!, `${alt} · vista isométrica`, true);
+            },
+          },
+        ]
+      : []),
+  ];
+
+  function verPlanos(label: string, badge: string, niveles: { nombre: string; plano: string }[], alt: string, extra?: Extra3D) {
     rotulos(label, badge, '', true);
-    chips(niveles.map((n, i) => ({ label: n.nombre, on: i === 0, go: () => mostrarImagen(n.plano, `${alt} · ${n.nombre}`, true) })));
+    chips([
+      ...niveles.map((n, i) => ({
+        label: n.nombre,
+        key: n.plano,
+        on: i === 0,
+        go: () => {
+          rotulos(label, badge, '', true);
+          mostrarImagen(n.plano, `${alt} · ${n.nombre}`, true);
+        },
+      })),
+      ...(extra ? chips3D(extra, alt, label) : []),
+    ]);
     mostrarImagen(niveles[0].plano, `${alt} · ${niveles[0].nombre}`, true);
+  }
+
+  /** Botones "Planta 3D" e "Isométrica" de las fichas: muestran la imagen y marcan su chip. */
+  function verImagen3D(url: string, alt: string, iso: boolean) {
+    $('ex-badge').textContent = iso ? BADGE_ISO : BADGE_3D;
+    mostrarImagen(url, alt, true);
+    marcarChip(url);
+    if (esMovil()) stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    track('explorar_planta3d', { label: url });
   }
 
   function verFamilia(id: string) {
     const f = familiaPorId.get(id) ?? D.familias[0];
     state.id = f.id;
     const badge = f.aislada ? `Planta de la unidad ${f.representante}` : `${f.representante} dentro del contexto de su planta`;
-    verPlanos(`Tipología ${f.tc} · ${f.tcNombre}`, badge, f.niveles, `Planta ${f.representante}`);
+    verPlanos(`Tipología ${f.tc} · ${f.tcNombre}`, badge, f.niveles, `Planta ${f.representante}`, f);
   }
 
   function verUnidad(nombre: string) {
@@ -561,18 +1320,29 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     state.id = u.nombre;
     const f = familiaPorId.get(u.familiaPlanta)!;
     const badge = f.representante === u.nombre ? `Planta de ${u.nombre}` : `Planta de referencia: ${f.representante}, misma tipología`;
-    verPlanos(`Unidad ${u.nombre}`, badge, f.niveles, `Planta de referencia ${f.representante}`);
+    verPlanos(`Unidad ${u.nombre}`, badge, f.niveles, `Planta de referencia ${f.representante}`, f);
   }
 
   function verLocal(id: string) {
     const l = localPorId.get(id) ?? D.locales[0];
     state.id = l.id;
-    verPlanos(l.titulo, 'Planta de contexto · niveles del local', l.niveles, l.titulo);
+    verPlanos(l.titulo, 'Planta de contexto · niveles del local', l.niveles, l.titulo, l);
   }
 
   function verEdificio(modo?: string) {
     state.id = '';
     const opciones: { label: string; id: string; go: () => void }[] = [];
+    if (D.modelos.casa_munecas) {
+      opciones.push({
+        label: 'Unidades 3D',
+        id: 'unidades3d',
+        go: () => {
+          rotulos('Unidades 3D', '', `Arrastra para girar · ${matchMedia('(hover: none)').matches ? 'toca' : 'clic en'} una unidad para ver su ficha`, true);
+          mostrarCasa();
+          track('explorar_casa', {});
+        },
+      });
+    }
     if (D.modelos.edificio) {
       opciones.push({
         label: 'Modelo 3D',
@@ -608,6 +1378,9 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
           },
         });
     }
+    if (recorridoPorId.has('edificio')) {
+      opciones.push({ label: 'Desde Santo Domingo', id: 'recorrido', go: () => ir('recorridos', 'edificio') });
+    }
     if (recorridoPorId.has('conjunto')) {
       opciones.push({
         label: '360°',
@@ -615,7 +1388,7 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
         go: () => {
           rotulos('El conjunto', 'Desde Blender · escena de revisión', 'Arrastra para mirar en 360°');
           const r = recorridoPorId.get('conjunto')!;
-          mostrarPano(r.vistas[0].pano, r.vistas[0].yaw);
+          mostrarVistas(r.vistas, 0);
         },
       });
     }
@@ -623,34 +1396,35 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
       rotulos('El edificio', '', '');
       chips([]);
       const r = recorridoPorId.get('patio');
-      if (r) mostrarPano(r.vistas[0].pano);
+      if (r) mostrarVistas(r.vistas, 0);
       return;
     }
     const i = Math.max(0, opciones.findIndex((o) => o.id === modo));
-    chips(opciones.map((o, j) => ({ label: o.label, on: j === i, go: o.go })));
+    chips(opciones.map((o, j) => ({ label: o.label, key: o.id, on: j === i, go: o.go })));
     opciones[i].go();
   }
 
-  function verModeloInterior(r: ExplorarPayload['recorridos'][number]) {
+  function verModeloInterior(r: Recorrido) {
     const url = r.modelo ? D.modelos[r.modelo] : null;
     if (!url) return;
     rotulos(`${r.nombre} · modelo 3D`, 'Interior de presentación · sin cielo para ver la distribución', 'Arrastra para girar · rueda para acercar', true);
+    const sincronizar = (k: number) => marcarChip(String(k + 1));
     chips([
       { label: 'Modelo 3D', on: true, go: () => mostrarModelo(url, { orbit: '20deg 50deg auto' }) },
-      ...r.vistas.map((v) => ({ label: `360° · ${v.nombre}`, on: false, go: () => mostrarPano(v.pano, v.yaw) })),
+      ...r.vistas.map((v, i) => ({ label: `360° · ${v.nombre}`, on: false, go: () => mostrarVistas(r.vistas, i, sincronizar) })),
     ]);
     mostrarModelo(url, { orbit: '20deg 50deg auto' });
-    if (window.matchMedia('(max-width: 860px)').matches) stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (esMovil()) stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
     track('explorar_modelo_interior', { label: r.id });
   }
 
   // ---------- panel ----------
   const FOOT: Record<Tab, string> = {
-    edificio: 'Volumetría general del conjunto, en revisión frente a los planos definitivos.',
+    edificio: 'Unidades 3D trazadas desde la planimetría de arquitectura, con la disponibilidad de la lista de precios vigente. La volumetría general del conjunto sigue en revisión frente a los planos definitivos.',
     unidades: 'Superficies y precios de lista según Disponibilidad. Las plantas son de referencia por tipología.',
-    tipologias: 'Cada tipología se muestra con una unidad representante. Otras unidades de la familia pueden presentar variantes menores.',
-    locales: 'Plantas de contexto. Sus recorridos 3D se incorporarán cuando el modelo de los locales esté conciliado.',
-    recorridos: 'Panoramas renderizados desde escenas del mismo archivo Blender. Su ensamblaje con el modelo general sigue en revisión.',
+    tipologias: 'Cada tipología se muestra con una unidad representante; otras unidades de la familia pueden presentar variantes menores. Las plantas 3D son amobladas y de presentación.',
+    locales: 'Plantas de contexto. Los recorridos muestran una ambientación gastronómica de referencia: los locales se entregan sin habilitar. Los altillos de 1B y 2B siguen pendientes.',
+    recorridos: 'Panoramas renderizados en Blender con un estándar de terminaciones común de presentación. Los círculos dentro del 360° llevan de un ambiente a otro.',
     imagenes: 'Imágenes referenciales renderizadas en Cycles. Decoración y vegetación de presentación.',
   };
 
@@ -727,6 +1501,20 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
     </div>`;
   }
 
+  /** Un botón "Planta 3D" por nivel y uno "Isométrica", si existen. */
+  function botones3D(x: Extra3D, alt: string) {
+    const plantas = x.planta3d.map(
+      (p) =>
+        `<button type="button" class="btn btn-line" data-img3d="${esc(p.img)}" data-img3d-alt="${esc(`${alt} · planta 3D ${p.nombre}`)}">${
+          x.planta3d.length > 1 ? `Planta 3D · ${esc(p.nombre)}` : 'Planta 3D'
+        }</button>`
+    );
+    const iso = x.iso
+      ? `<button type="button" class="btn btn-line" data-img3d="${esc(x.iso)}" data-img3d-iso="1" data-img3d-alt="${esc(`${alt} · vista isométrica`)}">Isométrica</button>`
+      : '';
+    return plantas.join('') + iso;
+  }
+
   function panelTipologias() {
     const sel = familiaPorId.get(state.id);
     const grupos = ['A', 'B', 'C']
@@ -737,7 +1525,7 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
             item({
               key: 'familia',
               val: f.id,
-              img: f.niveles[0].plano,
+              img: f.planta3d[0]?.img ?? f.niveles[0].plano,
               plan: true,
               titulo: `${f.tc} · ${f.tcNombre}`,
               sub: `${f.unidades.length} unidad${f.unidades.length === 1 ? '' : 'es'} · ${rango(f.m2Min, f.m2Max)}`,
@@ -767,6 +1555,7 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
       <div class="ex-actions">
         ${r ? `<button type="button" class="btn btn-dark" data-go-recorrido="${esc(r.id)}">Ver recorrido 360°</button>` : ''}
         ${r?.modelo ? `<button type="button" class="btn btn-line" data-modelo="${esc(r.id)}">Ver modelo interior 3D</button>` : ''}
+        ${botones3D(f, `Planta ${f.representante}`)}
         <a class="btn btn-line" href="/disponibilidad?tc=${encodeURIComponent(f.tc)}" data-track="explorar_disponibilidad" data-track-label="${esc(f.tc)}">Ver disponibilidad ${esc(f.tc)}</a>
       </div>
     </div>`;
@@ -781,7 +1570,7 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
           item({
             key: 'local',
             val: l.id,
-            img: l.niveles[0].plano,
+            img: l.planta3d[0]?.img ?? l.niveles[0].plano,
             plan: true,
             titulo: l.titulo,
             sub: `Cuerpo ${l.cuerpo} · ${m2(l.datos.m2Total)}${l.niveles.length > 1 ? ` · ${l.niveles.length} niveles` : ''}`,
@@ -806,6 +1595,7 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
       <div class="ex-actions">
         ${l.recorrido ? `<button type="button" class="btn btn-dark" data-go-recorrido="${esc(l.recorrido)}">Ver recorrido 360°</button>` : ''}
         ${l.recorrido && recorridoPorId.get(l.recorrido)?.modelo ? `<button type="button" class="btn btn-line" data-modelo="${esc(l.recorrido)}">Ver modelo 3D</button>` : ''}
+        ${botones3D(l, l.titulo)}
         ${botonSeleccion(l.unidad)}
       </div>
     </div>`;
@@ -911,11 +1701,12 @@ const portada = recorridos.find((r) => r.id === '304B') ?? recorridos[0];
 
   content.addEventListener('click', (e) => {
     const el = (e.target as Element).closest<HTMLElement>(
-      '[data-sel],[data-unidad],[data-familia],[data-local],[data-recorrido],[data-imagen],[data-cuerpo],[data-fcuerpo],[data-go-recorrido],[data-go-familia],[data-modelo]'
+      '[data-sel],[data-unidad],[data-familia],[data-local],[data-recorrido],[data-imagen],[data-cuerpo],[data-fcuerpo],[data-go-recorrido],[data-go-familia],[data-modelo],[data-img3d]'
     );
     if (!el) return;
     const d = el.dataset;
     if (d.sel) return toggleSeleccion(d.sel);
+    if (d.img3d) return verImagen3D(d.img3d, d.img3dAlt ?? '', d.img3dIso === '1');
     if (d.modelo) {
       const r = recorridoPorId.get(d.modelo);
       if (r) verModeloInterior(r);
