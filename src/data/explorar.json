@@ -661,6 +661,87 @@
       ]
     },
     {
+      "id": "201A",
+      "nombre": "Departamento 201 A",
+      "tipo": "Interior 360° · 1D",
+      "thumb": "/explorar/imagenes/201A_thumb.jpg",
+      "unidad": "201 A",
+      "tc": "A2",
+      "modelo": "interior_201A",
+      "nota": "Interior modelado desde la planta CAD de la Casona Riquelme, piso 2. En el CAD la unidad no está aislada: la huella se trazó sobre las caras interiores de sus muros (dormitorio y baño hacia el patio de luz, estar-cocina hacia la calle) y algunos muros cortados se completaron. Alturas de ventana supuestas. Terminaciones según el estándar de presentación del proyecto.",
+      "vistas": [
+        {
+          "nombre": "Estar y cocina",
+          "pano": "/explorar/panoramas/360_201A.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_201A_m.jpg",
+          "saltos": [
+            {
+              "a": 1,
+              "yaw": -87.1,
+              "pitch": -11.8
+            },
+            {
+              "a": 2,
+              "yaw": -103.5,
+              "pitch": -18.4
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/201A_planta.jpg",
+            "x": 0.515,
+            "y": 0.7458
+          }
+        },
+        {
+          "nombre": "Dormitorio",
+          "pano": "/explorar/panoramas/360_201A_dormitorio.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_201A_dormitorio_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 92.9,
+              "pitch": -11.8
+            },
+            {
+              "a": 2,
+              "yaw": 119.5,
+              "pitch": -27.7
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/201A_planta.jpg",
+            "x": 0.5713,
+            "y": 0.254
+          }
+        },
+        {
+          "nombre": "Baño",
+          "pano": "/explorar/panoramas/360_201A_BANO.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_201A_BANO_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 76.5,
+              "pitch": -16.9
+            },
+            {
+              "a": 1,
+              "yaw": -60.5,
+              "pitch": -25.6
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/201A_planta.jpg",
+            "x": 0.3466,
+            "y": 0.4319
+          }
+        }
+      ]
+    },
+    {
       "id": "303C",
       "nombre": "Departamento 303 C",
       "tipo": "Interior 360° · 1D",
@@ -1607,7 +1688,7 @@
       "thumb": "/explorar/imagenes/LB1_thumb.jpg",
       "local": "B1",
       "modelo": "interior_LB1",
-      "nota": "Local del cuerpo B con puerta vidriada al patio de la palmera. Perímetro desde la planta CAD de contexto; piso a piso de 2,50 m. Ambientado como café de especialidad: barra con máquina de espresso, vitrina y dos mesas de 2. Se muestra el primer piso; el altillo y su escalera están pendientes de un perímetro validado. La ambientación es una propuesta; el local se entrega sin habilitar.",
+      "nota": "Local del cuerpo B con puerta vidriada al patio de la palmera. Perímetro desde la planta CAD de contexto; piso a piso de 2,50 m. Ambientado como café de especialidad: barra con máquina de espresso, vitrina y dos mesas de 2. Altillo con baño sobre la escalera en L de la lámina del proyecto; el resto del local tiene doble altura. La ambientación es una propuesta; el local se entrega sin habilitar.",
       "vistas": [
         {
           "nombre": "Local",
@@ -1616,7 +1697,7 @@
           "pano_m": "/explorar/panoramas/360_LB1_m.jpg",
           "saltos": [],
           "planta": {
-            "img": "/explorar/plantas3d/LB1_planta.jpg",
+            "img": "/explorar/plantas3d/LB1_planta_primer_piso.jpg",
             "x": 0.5176,
             "y": 0.4011
           }
@@ -1630,7 +1711,7 @@
       "thumb": "/explorar/imagenes/LB2_thumb.jpg",
       "local": "B2",
       "modelo": "interior_LB2",
-      "nota": "Local del cuerpo B con puertas vidriadas al patio de la palmera. Perímetro desde la planta CAD de contexto; piso a piso de 2,50 m. Ambientado como pastelería: vitrina refrigerada, contrabarra de panes y dos mesas de 2. Se muestra el primer piso; el altillo y su escalera están pendientes de un perímetro validado. La ambientación es una propuesta; el local se entrega sin habilitar.",
+      "nota": "Local del cuerpo B con puertas vidriadas al patio de la palmera. Perímetro desde la planta CAD de contexto; piso a piso de 2,50 m. Ambientado como pastelería: vitrina refrigerada, contrabarra de panes y dos mesas de 2. Altillo con baño sobre la escalera en L de la lámina del proyecto; el resto del local tiene doble altura. La ambientación es una propuesta; el local se entrega sin habilitar.",
       "vistas": [
         {
           "nombre": "Local",
@@ -1639,7 +1720,7 @@
           "pano_m": "/explorar/panoramas/360_LB2_m.jpg",
           "saltos": [],
           "planta": {
-            "img": "/explorar/plantas3d/LB2_planta.jpg",
+            "img": "/explorar/plantas3d/LB2_planta_primer_piso.jpg",
             "x": 0.4837,
             "y": 0.5306
           }
@@ -1863,6 +1944,12 @@
       "thumb": "/explorar/imagenes/203A_thumb.jpg"
     },
     {
+      "id": "201A",
+      "nombre": "Estar y cocina 201 A",
+      "img": "/explorar/imagenes/201A.jpg",
+      "thumb": "/explorar/imagenes/201A_thumb.jpg"
+    },
+    {
       "id": "303C",
       "nombre": "Estar y cocina 303 C",
       "img": "/explorar/imagenes/303C.jpg",
@@ -2069,10 +2156,15 @@
       ],
       "aislada": false,
       "nota": "Se muestra 201 A dentro del contexto de su planta. Las demás unidades de la familia presentan variantes de distribución y superficie.",
-      "recorrido": null,
-      "modelo": null,
-      "planta3d": [],
-      "iso": null
+      "recorrido": "201A",
+      "modelo": "interior_201A",
+      "planta3d": [
+        {
+          "nombre": "Planta",
+          "img": "/explorar/plantas3d/201A_planta.jpg"
+        }
+      ],
+      "iso": "/explorar/plantas3d/201A_iso.jpg"
     },
     {
       "id": "B-1",
@@ -2438,8 +2530,12 @@
       "recorrido": "LB1",
       "planta3d": [
         {
-          "nombre": "Planta",
-          "img": "/explorar/plantas3d/LB1_planta.jpg"
+          "nombre": "Primer piso",
+          "img": "/explorar/plantas3d/LB1_planta_primer_piso.jpg"
+        },
+        {
+          "nombre": "Altillo",
+          "img": "/explorar/plantas3d/LB1_planta_altillo.jpg"
         }
       ],
       "iso": "/explorar/plantas3d/LB1_iso.jpg"
@@ -2463,8 +2559,12 @@
       "recorrido": "LB2",
       "planta3d": [
         {
-          "nombre": "Planta",
-          "img": "/explorar/plantas3d/LB2_planta.jpg"
+          "nombre": "Primer piso",
+          "img": "/explorar/plantas3d/LB2_planta_primer_piso.jpg"
+        },
+        {
+          "nombre": "Altillo",
+          "img": "/explorar/plantas3d/LB2_planta_altillo.jpg"
         }
       ],
       "iso": "/explorar/plantas3d/LB2_iso.jpg"
@@ -2492,16 +2592,16 @@
       "recorrido": "LC1",
       "planta3d": [
         {
-          "nombre": "Nivel superior",
-          "img": "/explorar/plantas3d/LC1_planta_nivel_superior.jpg"
+          "nombre": "Zócalo",
+          "img": "/explorar/plantas3d/LC1_planta_zocalo.jpg"
         },
         {
           "nombre": "Primer piso",
           "img": "/explorar/plantas3d/LC1_planta_primer_piso.jpg"
         },
         {
-          "nombre": "Zócalo",
-          "img": "/explorar/plantas3d/LC1_planta_zocalo.jpg"
+          "nombre": "Nivel superior",
+          "img": "/explorar/plantas3d/LC1_planta_nivel_superior.jpg"
         }
       ],
       "iso": "/explorar/plantas3d/LC1_iso.jpg"
@@ -2540,6 +2640,7 @@
     "interior_304B": "/explorar/modelos/interior_304B.glb",
     "interior_305B": "/explorar/modelos/interior_305B.glb",
     "edificio": "/explorar/modelos/edificio.glb",
+    "interior_201A": "/explorar/modelos/interior_201A.glb",
     "interior_501B": "/explorar/modelos/interior_501B.glb",
     "interior_501C": "/explorar/modelos/interior_501C.glb",
     "interior_203A": "/explorar/modelos/interior_203A.glb",

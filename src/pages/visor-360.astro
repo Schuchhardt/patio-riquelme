@@ -133,7 +133,7 @@ const hayRecorridoEdificio = recorridos.some((r) => r.id === 'edificio');
     <h2 class="ex-dialog-title">Qué estás viendo</h2>
     <ul class="ex-about">
       <li><b>Recorridos e imágenes.</b> Renderizados en Blender (Cycles) desde las escenas de revisión del proyecto. La luz del sol de cada departamento sigue la orientación de su fachada principal según el cuadro de superficies (con sol de invierno en las orientaciones norte); decoración y vegetación son de presentación.</li>
-      <li><b>Interiores.</b> Hay un interior modelado por cada planta tipo (una unidad representante por familia), con un estándar de terminaciones común de presentación: no corresponde a una especificación de venta ni se replica unidad por unidad. Cada recorrido incluye estar, dormitorio y, según la unidad, cocina, baño y acceso; puedes pasar de un ambiente a otro con los puntos de navegación. Las terrazas aún no están modeladas en los interiores.</li>
+      <li><b>Interiores.</b> Hay un interior modelado por cada planta tipo (una unidad representante por cada una de las 11 familias, incluida la 1D de la Casona, 201 A), con un estándar de terminaciones común de presentación: no corresponde a una especificación de venta ni se replica unidad por unidad. Cada recorrido incluye estar, dormitorio y, según la unidad, cocina, baño y acceso; puedes pasar de un ambiente a otro con los puntos de navegación. Las terrazas aún no están modeladas en los interiores.</li>
       <li><b>Locales.</b> Se muestran ambientados como una propuesta gastronómica, solo como referencia de uso. Se entregan sin habilitar. Las figuras humanas son siluetas neutras de maqueta, para dar escala y sentido de uso. Su perímetro se tomó de plantas de contexto y la altura libre (3,0 m) es supuesta.</li>
       <li><b>Plantas 3D.</b> Vistas cenitales e isométricas amobladas, renderizadas del mismo interior de presentación. Están disponibles en las tipologías y locales que ya tienen interior; el mobiliario es referencial.</li>
       <li><b>Plantas.</b> Recortes de la planimetría de arquitectura vigente. Cada tipología muestra a una unidad representante; otras unidades de la misma familia pueden tener variantes menores. Algunas plantas se muestran con su contexto y no reemplazan los planos de venta.</li>
@@ -142,7 +142,7 @@ const hayRecorridoEdificio = recorridos.some((r) => r.id === 'edificio');
       )}
       <li><b>Unidades 3D.</b> Volumen de cada unidad, piso por piso, trazado desde la planimetría de arquitectura. El color indica la disponibilidad real según la lista de precios vigente (la misma de <a href="/disponibilidad">Disponibilidad</a>).</li>
       <li><b>Superficies y precios.</b> Los mismos de <a href="/disponibilidad">Disponibilidad</a>: superficie total = útil + terraza. Precios de lista referenciales en UF.</li>
-      <li><b>Pendiente.</b> Falta el interior de la tipología 1D de la Casona (201 A) y los altillos de los locales 1B y 2B. La volumetría general del conjunto (modelo 3D, sobrevuelo y vistas aéreas) sigue en revisión frente a los planos definitivos.</li>
+      <li><b>Pendiente.</b> Las terrazas no están modeladas dentro de los interiores, el recorrido desde Santo Domingo pasa del acceso al pasillo sin un zaguán modelado (los planos no lo detallan) y los patios de luz aún no tienen ambientación. La volumetría general del conjunto (modelo 3D, sobrevuelo y vistas aéreas) sigue en revisión frente a los planos definitivos.</li>
     </ul>
     <p class="ex-small">Imágenes referenciales. El proyecto puede presentar modificaciones.</p>
   </dialog>
