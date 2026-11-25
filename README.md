@@ -36,7 +36,7 @@ src/
 │   └── schema.ts         # helpers para generar JSON-LD (breadcrumbs, FAQPage)
 ├── pages/
 │   ├── index.astro         # Inicio
-│   ├── visor-360.astro # Visor 3D NO listado: recorridos 360°, modelos 3D, plantas por unidad, Mi selección
+│   ├── explorar.astro      # Explorar 3D: recorridos 360°, modelos 3D, plantas por unidad, Mi selección, cotizar desde el 360°
 │   ├── tipologias.astro    # Estudio / 1D / Duplex / Locales + cotizador de m²
 │   ├── disponibilidad.astro # Buscador de las 62 unidades + modal de cotización
 │   ├── ubicacion.astro     # Mapa (OpenStreetMap embed) + conectividad
@@ -134,14 +134,19 @@ conocida, apunta `CHROME_PATH` al ejecutable.
 > del componente y ningún elemento que se oculte por clase puede declarar
 > `display` inline.
 
-## Visor 3D (`/visor-360`, no listado)
+## Explorar 3D (`/explorar/`)
 
-Por ahora es una **vista previa no listada**: no aparece en el menú, lleva
-`noindex`, está fuera del sitemap y de `llms.txt`, y `public/_headers` le pone
-`X-Robots-Tag: noindex` en Netlify (también a `/explorar/*`). Solo llega quien
-tenga el link. Para publicarlo: renombrar la página a `explorar.astro`, quitar
-`noindex`, el filtro de sitemap en `astro.config.mjs` y las reglas de
-`_headers`, y agregar el link en `Header.astro`.
+Página pública: link «Explorar 3D» en el menú, indexable, en el sitemap y en
+`llms.txt`. Las URLs de la vista previa (`/visor-360/…`, `/visor-ff7e5d89/…`)
+redirigen con 301 en `public/_redirects`.
+
+**Cotizar desde el 360°.** Sobre un recorrido aparece «Cotizar esta tipología»
+o «Cotizar este local» ([`src/lib/cotizar360.ts`](src/lib/cotizar360.ts)). Un
+recorrido de local agrega ese local a «Mi selección» y abre el diálogo; uno de
+departamento es el interior de una planta tipo (la familia cuyo `recorrido` es
+ese id) y ofrece sus unidades `disponible` para agregar, con el link a
+`/contacto?unidades=…`. Edificio, patio y circulación no llevan botón, y
+tampoco una planta o local sin unidades disponibles.
 
 Visor del proyecto con seis pestañas. Los datos visuales vienen del repositorio
 Blender (`PATIO_RIQUELME_BLENDER`); **superficies y precios siguen saliendo solo
@@ -256,7 +261,7 @@ El script arma un HTML de 6 páginas (mismo look del sitio: paleta, tipografías
 | Ruta | Contenido |
 |---|---|
 | `/` | Hero, avance de obra, accesos patrimoniales, galería, formulario de reserva |
-| `/visor-360` | **No listada.** Visor: Edificio 3D, Unidades, Tipologías, Locales, Recorridos 360° e Imágenes + «Mi selección» → `/contacto?unidades=` |
+| `/explorar/` | Explorar 3D: Edificio 3D, Unidades, Tipologías, Locales, Recorridos 360° e Imágenes + «Mi selección» y cotizar desde el 360° → `/contacto?unidades=` |
 | `/tipologias` | Detalle Estudio / 1D / Duplex / Locales + cotizador con datos reales del CSV |
 | `/disponibilidad` | Inventario unidad por unidad, filtros (tipología, piso, cuerpo, precio) y modal de cotización |
 | `/ubicacion` | Mapa embebido y conectividad del barrio |

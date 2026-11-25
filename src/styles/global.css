@@ -280,6 +280,22 @@ a:hover {
   }
 }
 
+/* Con cinco links el menú no cabe con 36px entre ellos en pantallas medianas;
+   bajo 1040px tampoco cabe el nombre junto al isotipo. */
+@media (min-width: 861px) and (max-width: 1100px) {
+  .nav-links {
+    gap: 22px !important;
+  }
+  .nav-links a {
+    white-space: nowrap;
+  }
+}
+@media (min-width: 861px) and (max-width: 1040px) {
+  .site-header .logo-word {
+    display: none;
+  }
+}
+
 .nav-links a {
   position: relative;
   font-size: 14px;

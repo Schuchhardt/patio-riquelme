@@ -1,1 +1,5 @@
-/visor-ff7e5d89/*  /visor-360/:splat  301
+# La vista previa del visor vivía en /visor-360/ (y antes en /visor-ff7e5d89/): hoy es /explorar/.
+/visor-360            /explorar/         301
+/visor-360/*          /explorar/:splat   301
+/visor-ff7e5d89       /explorar/         301
+/visor-ff7e5d89/*     /explorar/:splat   301
