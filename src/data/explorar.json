@@ -398,7 +398,7 @@
           ],
           "planta": {
             "img": "/explorar/plantas3d/304C_planta.jpg",
-            "x": 0.3344,
+            "x": 0.3983,
             "y": 0.5935
           }
         },
@@ -431,8 +431,8 @@
           ],
           "planta": {
             "img": "/explorar/plantas3d/304C_planta.jpg",
-            "x": 0.556,
-            "y": 0.6756
+            "x": 0.5986,
+            "y": 0.6757
           }
         },
         {
@@ -464,8 +464,8 @@
           ],
           "planta": {
             "img": "/explorar/plantas3d/304C_planta.jpg",
-            "x": 0.2062,
-            "y": 0.2986
+            "x": 0.2824,
+            "y": 0.2985
           }
         },
         {
@@ -497,8 +497,8 @@
           ],
           "planta": {
             "img": "/explorar/plantas3d/304C_planta.jpg",
-            "x": 0.748,
-            "y": 0.2305
+            "x": 0.7722,
+            "y": 0.2303
           }
         },
         {
@@ -530,8 +530,8 @@
           ],
           "planta": {
             "img": "/explorar/plantas3d/304C_planta.jpg",
-            "x": 0.4307,
-            "y": 0.7144
+            "x": 0.4853,
+            "y": 0.7145
           }
         }
       ]
@@ -682,9 +682,14 @@
               "pitch": -11.8
             },
             {
-              "a": 2,
+              "a": 3,
               "yaw": -103.5,
               "pitch": -18.4
+            },
+            {
+              "a": 2,
+              "yaw": -98.1,
+              "pitch": -41.1
             }
           ],
           "planta": {
@@ -705,15 +710,48 @@
               "pitch": -11.8
             },
             {
-              "a": 2,
+              "a": 3,
               "yaw": 119.5,
               "pitch": -27.7
+            },
+            {
+              "a": 2,
+              "yaw": 96.6,
+              "pitch": -16.1
             }
           ],
           "planta": {
             "img": "/explorar/plantas3d/201A_planta.jpg",
             "x": 0.5713,
             "y": 0.254
+          }
+        },
+        {
+          "nombre": "Cocina",
+          "pano": "/explorar/panoramas/360_201A_COCINA.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_201A_COCINA_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 81.9,
+              "pitch": -38.5
+            },
+            {
+              "a": 1,
+              "yaw": -83.4,
+              "pitch": -14.8
+            },
+            {
+              "a": 3,
+              "yaw": -106.8,
+              "pitch": -27.2
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/201A_planta.jpg",
+            "x": 0.4761,
+            "y": 0.6238
           }
         },
         {
@@ -731,6 +769,11 @@
               "a": 1,
               "yaw": -60.5,
               "pitch": -25.6
+            },
+            {
+              "a": 2,
+              "yaw": 73.2,
+              "pitch": -27.2
             }
           ],
           "planta": {
@@ -1216,7 +1259,7 @@
           "planta": {
             "img": "/explorar/plantas3d/308B_planta.jpg",
             "x": 0.3294,
-            "y": 0.2621
+            "y": 0.2447
           }
         },
         {
@@ -1249,7 +1292,7 @@
           "planta": {
             "img": "/explorar/plantas3d/308B_planta.jpg",
             "x": 0.3067,
-            "y": 0.7347
+            "y": 0.686
           }
         },
         {
@@ -1282,7 +1325,7 @@
           "planta": {
             "img": "/explorar/plantas3d/308B_planta.jpg",
             "x": 0.3543,
-            "y": 0.3878
+            "y": 0.3621
           }
         },
         {
@@ -1315,7 +1358,7 @@
           "planta": {
             "img": "/explorar/plantas3d/308B_planta.jpg",
             "x": 0.6636,
-            "y": 0.6062
+            "y": 0.5661
           }
         },
         {
@@ -1348,7 +1391,7 @@
           "planta": {
             "img": "/explorar/plantas3d/308B_planta.jpg",
             "x": 0.2419,
-            "y": 0.1375
+            "y": 0.1284
           }
         }
       ]
@@ -1375,9 +1418,14 @@
               "pitch": 36.8
             },
             {
-              "a": 2,
+              "a": 3,
               "yaw": -122.0,
               "pitch": -21.6
+            },
+            {
+              "a": 2,
+              "yaw": -141.4,
+              "pitch": 20.0
             }
           ],
           "planta": {
@@ -1398,15 +1446,48 @@
               "pitch": -62.5
             },
             {
-              "a": 2,
+              "a": 3,
               "yaw": -102.2,
               "pitch": -72.7
+            },
+            {
+              "a": 2,
+              "yaw": -147.2,
+              "pitch": -21.5
             }
           ],
           "planta": {
             "img": "/explorar/plantas3d/301C_planta_nivel_2.jpg",
             "x": 0.4861,
             "y": 0.4443
+          }
+        },
+        {
+          "nombre": "Baño",
+          "pano": "/explorar/panoramas/360_301C_BANO.jpg",
+          "yaw": 0,
+          "pano_m": "/explorar/panoramas/360_301C_BANO_m.jpg",
+          "saltos": [
+            {
+              "a": 0,
+              "yaw": 38.6,
+              "pitch": -41.4
+            },
+            {
+              "a": 1,
+              "yaw": 32.8,
+              "pitch": -27.4
+            },
+            {
+              "a": 3,
+              "yaw": 6.3,
+              "pitch": -64.7
+            }
+          ],
+          "planta": {
+            "img": "/explorar/plantas3d/301C_planta_nivel_2.jpg",
+            "x": 0.2237,
+            "y": 0.2365
           }
         },
         {
@@ -1424,6 +1505,11 @@
               "a": 1,
               "yaw": 77.8,
               "pitch": 51.9
+            },
+            {
+              "a": 2,
+              "yaw": -173.7,
+              "pitch": 41.7
             }
           ],
           "planta": {

@@ -153,3 +153,5 @@ export const cuerpos = Object.entries(CUERPO_LABELS).map(([id, label]) => {
 
 export const payload = { familias, locales, departamentos, recorridos, imagenes, modelos, cuerpos };
 export type ExplorarPayload = typeof payload;
+
+export { cotizacion360, hrefCotizacion, type Cotizacion360 } from './cotizar360';

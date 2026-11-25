@@ -1,6 +1,7 @@
 /**
- * Visor 3D (/visor-360, página no listada): que todo archivo referenciado se publique, que las pestañas se
- * armen con el inventario completo y que "Mi selección" llegue a /contacto.
+ * Explorar 3D (/explorar/): que todo archivo referenciado se publique, que las pestañas se
+ * armen con el inventario completo, que "Mi selección" y "Cotizar desde el 360°" lleguen a /contacto
+ * y que la página esté publicada (menú, sitemap, redirección de /visor-360/).
  * No depende de los CDN de Pannellum ni de model-viewer.
  */
 import test, { describe, before, after } from 'node:test';
@@ -8,9 +9,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { dist, raiz, exigirBuild, servirDist, abrirNavegador } from './helpers/entorno.mjs';
+import { cotizacion360, hrefCotizacion } from '../src/lib/cotizar360.ts';
 
 exigirBuild();
-const VISOR = '/visor-360/';
+const VISOR = '/explorar/';
 const datos = JSON.parse(fs.readFileSync(path.join(raiz, 'src/data/explorar.json'), 'utf-8'));
 
 const vistas = datos.recorridos.flatMap((r) => r.vistas.map((v, i) => ({ r, v, i })));
@@ -78,23 +80,75 @@ describe('visor · datos nuevos', () => {
   });
 });
 
-describe('visor · no listado', () => {
+describe('visor · publicado', () => {
   const html = fs.readFileSync(path.join(dist, VISOR, 'index.html'), 'utf-8');
 
-  test('lleva noindex', () => {
-    assert.match(html, /<meta name="robots" content="noindex, nofollow"/);
+  test('no lleva noindex ni X-Robots-Tag', () => {
+    assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
+    const headers = path.join(raiz, 'public/_headers');
+    if (fs.existsSync(headers)) assert.doesNotMatch(fs.readFileSync(headers, 'utf-8'), /explorar|visor-/);
   });
 
-  test('no está en el sitemap ni en llms.txt', () => {
+  test('está en el sitemap y en llms.txt', () => {
     const sitemaps = fs.readdirSync(dist).filter((f) => f.startsWith('sitemap'));
-    for (const f of sitemaps) assert.doesNotMatch(fs.readFileSync(path.join(dist, f), 'utf-8'), /visor-/);
-    assert.doesNotMatch(fs.readFileSync(path.join(dist, 'llms.txt'), 'utf-8'), /visor-|explorar/);
+    assert.ok(sitemaps.some((f) => /\/explorar\//.test(fs.readFileSync(path.join(dist, f), 'utf-8'))));
+    assert.match(fs.readFileSync(path.join(dist, 'llms.txt'), 'utf-8'), /\(\/explorar\/\)/);
   });
 
-  test('ninguna otra página enlaza al visor', () => {
-    const paginas = fs.readdirSync(dist, { recursive: true }).filter((f) => f.endsWith('.html') && !f.includes('visor-'));
-    const culpables = paginas.filter((f) => /visor-360/.test(fs.readFileSync(path.join(dist, f), 'utf-8')));
-    assert.deepEqual(culpables, []);
+  test('el menú enlaza a Explorar 3D en todas las páginas', () => {
+    const paginas = fs.readdirSync(dist, { recursive: true }).filter((f) => f.endsWith('index.html'));
+    const sinLink = paginas.filter((f) => !/<a href="\/explorar\/"[^>]*>Explorar 3D<\/a>/.test(fs.readFileSync(path.join(dist, f), 'utf-8')));
+    assert.deepEqual(sinLink, []);
+    assert.match(html, /<a href="\/explorar\/" aria-current="page">Explorar 3D<\/a>/);
+  });
+
+  test('/visor-360/ redirige con 301 y nadie enlaza a la URL vieja', () => {
+    const reglas = fs.readFileSync(path.join(dist, '_redirects'), 'utf-8').split('\n').map((l) => l.trim().split(/\s+/));
+    assert.ok(reglas.some(([de, a, c]) => de === '/visor-360' && a === '/explorar/' && c === '301'));
+    assert.ok(reglas.some(([de, a, c]) => de === '/visor-360/*' && a === '/explorar/:splat' && c === '301'));
+    assert.ok(!fs.existsSync(path.join(dist, 'visor-360')));
+    const paginas = fs.readdirSync(dist, { recursive: true }).filter((f) => f.endsWith('.html'));
+    assert.deepEqual(paginas.filter((f) => /visor-360/.test(fs.readFileSync(path.join(dist, f), 'utf-8'))), []);
+  });
+});
+
+describe('cotizar desde el 360° · cotizacion360', () => {
+  const familias = [
+    { id: 'B-1', recorrido: '304B', tc: 'B2', tcNombre: '1D compacto' },
+    { id: 'B-2', recorrido: '305B', tc: 'B1', tcNombre: '1D con terraza' },
+  ];
+  const locales = [
+    { id: 'B1', unidad: 'LOC. 1 B', titulo: 'Local 1B', recorrido: 'LB1', datos: { estado: 'disponible' } },
+    { id: 'B2', unidad: 'LOC. 2 B', titulo: 'Local 2B', recorrido: 'LB2', datos: { estado: 'vendida' } },
+  ];
+  const departamentos = [
+    { nombre: '104 B', estado: 'disponible', familiaPlanta: 'B-1' },
+    { nombre: '204 B', estado: 'reservada', familiaPlanta: 'B-1' },
+    { nombre: '304 B', estado: 'disponible', familiaPlanta: 'B-1' },
+    { nombre: '305 B', estado: 'vendida', familiaPlanta: 'B-2' },
+  ];
+  const D = { familias, locales, departamentos };
+
+  test('un recorrido de departamento ofrece las unidades disponibles de su planta', () => {
+    assert.deepEqual(cotizacion360({ id: '304B', unidad: '304 B' }, D), {
+      tipo: 'tipologia', familia: 'B-1', tc: 'B2', tcNombre: '1D compacto', unidades: ['104 B', '304 B'],
+    });
+    // Sin `recorrido` en la familia, manda la planta de la unidad del recorrido.
+    const sinRecorrido = { ...D, familias: familias.map((f) => ({ ...f, recorrido: null })) };
+    assert.equal(cotizacion360({ id: '304B', unidad: '304 B' }, sinRecorrido)?.familia, 'B-1');
+  });
+
+  test('un recorrido de local cotiza ese local; vendido o sin unidades, no hay botón', () => {
+    assert.deepEqual(cotizacion360({ id: 'LB1', local: 'B1' }, D), { tipo: 'local', local: 'B1', unidad: 'LOC. 1 B', titulo: 'Local 1B' });
+    assert.equal(cotizacion360({ id: 'LB2', local: 'B2' }, D), null);
+    assert.equal(cotizacion360({ id: '305B', unidad: '305 B' }, D), null);
+    assert.equal(cotizacion360({ id: 'edificio' }, D), null);
+    assert.equal(cotizacion360(undefined, D), null);
+  });
+
+  test('hrefCotizacion arma el link a /contacto', () => {
+    assert.equal(hrefCotizacion([]), '/contacto');
+    assert.equal(hrefCotizacion(['304 B', 'LOC. 1 B']), '/contacto?unidades=304%20B%2CLOC.%201%20B');
   });
 });
 
@@ -219,6 +273,46 @@ describe('visor · navegador', () => {
     assert.equal(await encima(), 'ex-model');
   });
 
+  const disponiblesDe = (familia) =>
+    page.$eval('#explorar-data', (s, f) => JSON.parse(s.textContent).departamentos.filter((u) => u.familiaPlanta === f && u.estado === 'disponible').map((u) => u.nombre), familia);
+
+  test('cotizar desde el 360°: una tipología lista sus unidades disponibles y las agrega', async () => {
+    const f = datos.familias.find((x) => x.recorrido);
+    await page.goto(`${srv.url}${VISOR}?tab=recorridos&id=${f.recorrido}`, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => localStorage.removeItem('pr-seleccion'));
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    const esperadas = await disponiblesDe(f.id);
+    if (!esperadas.length) {
+      assert.equal(await page.$eval('#ex-cot', (b) => b.hidden), true);
+      return;
+    }
+    assert.equal(await page.$eval('#ex-cot', (b) => b.hidden), false);
+    await page.click('#ex-cot');
+    assert.equal(await page.$eval('#cot-dialog', (d) => d.open), true);
+    assert.deepEqual(await page.$$eval('#cot-list [data-cot-sel]', (els) => els.map((e) => e.dataset.cotSel)), esperadas);
+    assert.equal(await page.$eval('#cot-cta', (a) => a.getAttribute('aria-disabled')), 'true');
+    await page.click(`#cot-list [data-cot-sel="${esperadas[0]}"]`);
+    assert.equal(await page.$eval('#sel-count', (e) => e.textContent), '1');
+    assert.equal(await page.$eval(`#cot-list [data-cot-sel="${esperadas[0]}"]`, (b) => b.getAttribute('aria-pressed')), 'true');
+    assert.equal(await page.$eval('#cot-cta', (a) => a.getAttribute('href')), `/contacto?unidades=${encodeURIComponent(esperadas[0])}`);
+  });
+
+  test('cotizar desde el 360°: un local se agrega a Mi selección; el edificio no tiene botón', async () => {
+    await page.goto(`${srv.url}${VISOR}?tab=recorridos&id=edificio`, { waitUntil: 'domcontentloaded' });
+    assert.equal(await page.$eval('#ex-cot', (b) => b.hidden), true);
+    const disponibles = await page.$eval('#explorar-data', (s) =>
+      JSON.parse(s.textContent).locales.filter((l) => l.recorrido && l.datos.estado === 'disponible').map((l) => [l.recorrido, l.unidad])
+    );
+    if (!disponibles.length) return;
+    const [recorrido, unidad] = disponibles[0];
+    await page.evaluate(() => localStorage.removeItem('pr-seleccion'));
+    await page.goto(`${srv.url}${VISOR}?tab=recorridos&id=${recorrido}`, { waitUntil: 'domcontentloaded' });
+    await page.click('#ex-cot');
+    assert.equal(await page.$eval('#sel-dialog', (d) => d.open), true);
+    assert.deepEqual(await page.$$eval('#sel-list [data-unsel]', (els) => els.map((e) => e.dataset.unsel)), [unidad]);
+    assert.equal(await page.$eval('#sel-cta', (a) => a.getAttribute('href')), `/contacto?unidades=${encodeURIComponent(unidad)}`);
+  });
+
   test('en celular no hay scroll horizontal', async () => {
     await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
     for (const tab of ['edificio', 'unidades', 'tipologias', 'locales', 'recorridos', 'imagenes']) {
@@ -226,5 +320,18 @@ describe('visor · navegador', () => {
       const ancho = await page.evaluate(() => document.documentElement.scrollWidth);
       assert.ok(ancho <= 390, `${tab}: el documento mide ${ancho}px de ancho`);
     }
+  });
+
+  test('en celular el botón Cotizar cabe en el visor y abre el diálogo', async () => {
+    await page.goto(`${srv.url}${VISOR}?tab=recorridos&id=304B`, { waitUntil: 'domcontentloaded' });
+    if (await page.$eval('#ex-cot', (b) => b.hidden)) return;
+    const caja = await page.$eval('#ex-cot', (b) => {
+      const r = b.getBoundingClientRect();
+      const s = document.getElementById('ex-stage').getBoundingClientRect();
+      return { dentro: r.left >= s.left && r.right <= s.right && r.bottom <= s.bottom, ancho: r.width };
+    });
+    assert.ok(caja.dentro && caja.ancho > 0, JSON.stringify(caja));
+    await page.tap('#ex-cot');
+    assert.equal(await page.$eval('#cot-dialog', (d) => d.open), true);
   });
 });
