@@ -2162,6 +2162,30 @@
       "thumb": "/explorar/imagenes/LC2_thumb.jpg"
     },
     {
+      "id": "acc_umbral",
+      "nombre": "Acceso Santo Domingo · portón abierto",
+      "img": "/explorar/imagenes/ACC_SD_UMBRAL.jpg",
+      "thumb": "/explorar/imagenes/ACC_SD_UMBRAL_thumb.jpg"
+    },
+    {
+      "id": "acc_vestibulo",
+      "nombre": "Acceso Santo Domingo · zaguán en doble altura",
+      "img": "/explorar/imagenes/ACC_SD_VESTIBULO.jpg",
+      "thumb": "/explorar/imagenes/ACC_SD_VESTIBULO_thumb.jpg"
+    },
+    {
+      "id": "acc_conserjeria",
+      "nombre": "Galería hacia la conserjería",
+      "img": "/explorar/imagenes/ACC_SD_CONSERJERIA.jpg",
+      "thumb": "/explorar/imagenes/ACC_SD_CONSERJERIA_thumb.jpg"
+    },
+    {
+      "id": "acc_ascensor",
+      "nombre": "Hall del ascensor · cuerpo B",
+      "img": "/explorar/imagenes/ACC_SD_ASCENSOR.jpg",
+      "thumb": "/explorar/imagenes/ACC_SD_ASCENSOR_thumb.jpg"
+    },
+    {
       "id": "patio",
       "nombre": "Patio interior",
       "img": "/explorar/imagenes/patio.jpg",
