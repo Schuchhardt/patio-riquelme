@@ -154,7 +154,7 @@ const hayRecorridoEdificio = recorridos.some((r) => r.id === 'edificio');
       {hayRecorridoEdificio && (
         <li><b>Recorrido desde Santo Domingo.</b> Un recorrido por el acceso y los espacios comunes del edificio, con un plano de ubicación para orientarse.</li>
       )}
-      <li><b>Acceso por Santo Domingo.</b> Las imágenes del portón, el zaguán en doble altura, la galería hacia la conserjería y el hall del ascensor salen del modelo del conjunto y de las láminas de abril. Las puertas abiertas, las puertas del ascensor (en la cara que indica la planta) y la iluminación son de presentación.</li>
+      <li><b>Acceso por Santo Domingo.</b> Las imágenes del portón, el zaguán en doble altura, la galería hacia la conserjería y el hall del ascensor salen del modelo del conjunto y de las láminas de abril. El video «De la calle al depto» sigue ese mismo camino y, tras un fundido, entra al 304 B: el pasillo de los pisos superiores aún no está modelado en detalle, por eso no se muestra. Las puertas abiertas, la cabina y las puertas del ascensor (en la cara que indica la planta) y la iluminación son de presentación.</li>
       <li><b>Unidades 3D.</b> Volumen de cada unidad, piso por piso, trazado desde la planimetría de arquitectura. El color indica la disponibilidad real según la lista de precios vigente (la misma de <a href="/disponibilidad">Disponibilidad</a>).</li>
       <li><b>Superficies y precios.</b> Los mismos de <a href="/disponibilidad">Disponibilidad</a>: superficie total = útil + terraza. Precios de lista referenciales en UF.</li>
       <li><b>Pendiente.</b> Los patios de luz aún no tienen ambientación: el volumen del conjunto todavía no trae sus fachadas interiores. La volumetría general del conjunto (modelo 3D, sobrevuelo y vistas aéreas) sigue en revisión frente a los planos definitivos.</li>
@@ -835,12 +835,16 @@ const hayRecorridoEdificio = recorridos.some((r) => r.id === 'edificio');
   }
 
   const SOBREVUELO = '/explorar/video/sobrevuelo.mp4';
+  const RECORRIDO_ACCESO = '/explorar/video/recorrido_acceso.mp4';
   function mostrarVideo(url: string) {
     ++token;
     capas('video');
     cargando(null);
     const vid = $('ex-video').querySelector('video')!;
-    if (!vid.src.endsWith(url)) vid.src = url;
+    if (!vid.src.endsWith(url)) {
+      vid.poster = url.replace(/\.mp4$/, '_poster.jpg');
+      vid.src = url;
+    }
     vid.play().catch(() => {});
   }
 
@@ -1436,6 +1440,15 @@ const hayRecorridoEdificio = recorridos.some((r) => r.id === 'edificio');
       go: () => {
         rotulos('El edificio', 'Animación Cycles · volumetría en revisión', 'Entrada Riquelme 536 → último piso abierto → entrada Santo Domingo');
         mostrarVideo(SOBREVUELO);
+      },
+    });
+    opciones.push({
+      label: 'De la calle al depto',
+      id: 'recorrido_acceso',
+      go: () => {
+        rotulos('El edificio', 'Animación Cycles · acceso según láminas de abril', 'Portón de Santo Domingo → zaguán y conserjería → ascensor del cuerpo B → depto 304 B');
+        mostrarVideo(RECORRIDO_ACCESO);
+        track('explorar_video', { video: 'recorrido_acceso' });
       },
     });
     const NOMBRES: Record<string, string> = {
